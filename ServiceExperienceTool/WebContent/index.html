@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>TestPage</h1>
+	<form action="newsServlet" method="GET">
+		<label for="resultsPerPage-field">entriesPerPage</label>
+		<br />
+		<input id="resultsPerPage-field" type="Number" name="resultsPerPage" min="1" value="15" />
+		<br />
+		<label for="selectedPage-field">selectedPage</label>
+		<br />
+		<input id="selectedPage-field" type="Number" name="selectedPage" min="1" value="1" />
+		<br />
+		<label for="request-field">Enter action(getNews)</label>
+		<br />
+		<input id="request-field" type="text" name="action" value="getNews" />
+		<input id="btn-submit" type="submit" />
+	</form>
+</body>
+</html>
