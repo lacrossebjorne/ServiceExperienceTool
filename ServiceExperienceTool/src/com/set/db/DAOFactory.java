@@ -2,10 +2,13 @@ package com.set.db;
 
 public class DAOFactory {
 	
-	public static NewsFetcher getNewsFetcher() {
+	public static NewsPublisherDAO getNewsPublisher() {
 		
-		NewsDAO newsDAO = new NewsDAO();
+		return new NewsPublisherDAO();
+	}
+	
+	public static NewsReader getNewsFetcher() {
 		
-		return newsDAO;
+		return new NewsReaderDAO();
 	}
 }

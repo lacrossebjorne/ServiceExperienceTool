@@ -10,10 +10,10 @@ import javax.sql.DataSource;
 
 public abstract class AbstractDAO {
 
-	private Context initCtx = null;
-	private Context envCtx = null;
-	private DataSource ds = null;
-	private Connection connection;
+	protected InitialContext initCtx = null;
+	protected Context envCtx = null;
+	protected DataSource ds = null;
+	protected Connection connection;
 
 	public Connection getConnection() throws NamingException, SQLException {
 
@@ -36,7 +36,7 @@ public abstract class AbstractDAO {
 		if (ds == null) {
 			ds = (DataSource) envCtx.lookup("jdbc/setdb");
 		}
-		if (connection == null)
+		if (connection == null || connection.isClosed())
 			connection = ds.getConnection();
 	}
 

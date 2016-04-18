@@ -11,14 +11,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.set.data_containers.News;
 import com.set.db.DAOFactory;
-import com.set.db.NewsFetcher;
+import com.set.db.NewsReader;
+import com.set.db.NewsPublisher;
 
 /**
  * Servlet implementation class NewsServlet
  */
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Override
 	public void init() throws ServletException {
 		super.init();
@@ -39,6 +40,7 @@ public class NewsServlet extends HttpServlet {
 	/**
 	 * Parameters to put in request:<br>
 	 * action: getNews; resultsPerPage: number, selectedPage: number.<br>
+	 * action: publishNews; newsHeader: text, newsContent: text
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -54,6 +56,9 @@ public class NewsServlet extends HttpServlet {
 			case "getNews":
 				getNews(request, response);
 				break;
+			case "publishNews":
+				publishNews(request, response);
+				break;
 			default:
 				response.getWriter().println("An invalid value was set to the action-parameter!");
 				break;
@@ -61,7 +66,55 @@ public class NewsServlet extends HttpServlet {
 		}
 	}
 	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
+	
+	/**
+	 * This method is not finished, please do not add modifications to it
+	 * @param request
+	 * @param response
+	 */
+	private void publishNews(HttpServletRequest request, HttpServletResponse response) {
+		
+		NewsPublisher newsPublisher = DAOFactory.getNewsPublisher();
+		
+		String subject = request.getParameter("newsHeader");
+		String content = request.getParameter("newsContent");
+		
+		int primaryKey = newsPublisher.publishNews(subject, content);
+		if (primaryKey > -1) {
+			try {
+				//after publishing news, get help from additional servlet to post pictures and update references in db
+				response.getWriter().println("<h3>NEWS ARE PUBLISHED, NOW IMPLEMENT AJAX!</h3>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void getNews(HttpServletRequest request, HttpServletResponse response) {
+		
+		Integer selectedPage = 1;
+		Integer resultsPerPage = 5;
+
+		try {
+			String selectedPageParameter = request.getParameter("selectedPage");
+			String resultsPerPageParameter = request.getParameter("resultsPerPage");
+			if (selectedPageParameter != null)
+				selectedPage = Integer.parseInt(selectedPageParameter);
+			if (resultsPerPageParameter != null)
+				resultsPerPage = Integer.parseInt(resultsPerPageParameter);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+ 
+		// LIMIT = entriesPerPage
+		// OFFSET = (selectedPage - 1) * entriesPerPage = (3-1)*5 = 2 *
+		// an OFFSET of 10 means start from row 11 of ResultSet)
+		// LIMIT means: show up to x entriesPerPage
+		Integer offset = (selectedPage - 1) * resultsPerPage;
 		
 		List<News> allNews = null;
 
@@ -69,8 +122,8 @@ public class NewsServlet extends HttpServlet {
 		try {
 			out = response.getWriter();
 			
-			NewsFetcher newsFetcher = DAOFactory.getNewsFetcher();
-			allNews = newsFetcher.getNews(request);
+			NewsReader newsFetcher = DAOFactory.getNewsFetcher();
+			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 			
 			if (allNews != null) {
 				for (News news : allNews) {
@@ -89,10 +142,5 @@ public class NewsServlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 }

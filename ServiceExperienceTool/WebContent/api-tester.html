@@ -2,10 +2,19 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<style>
+table, th, td {
+	border: 3px solid black;
+	border-collapse: collapse;
+}
+</style>
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>TestPage</h1>
+<table style="input-type:display; border: 5px solid black;">
+<tr> 
+<td>
+<h1>see news</h1>
 	<form action="newsServlet" method="GET">
 		<label for="resultsPerPage-field">entriesPerPage</label>
 		<br />
@@ -20,5 +29,37 @@
 		<input id="request-field" type="text" name="action" value="getNews" />
 		<input id="btn-submit" type="submit" />
 	</form>
+</td>
+</tr>
+<tr>
+<td>
+<h1>upload news</h1>
+	<form id="news-publish-form" action="newsServlet" method="GET" enctype="multipart/form-data">
+		<label for="news-header-field">Subject: </label>
+		<input id="news-header-field" type="text" name="newsHeader" placeholder="write a subject" required autofocus />
+		<br />
+		<label for="news-content-field">Content:</label>
+		<br />
+		<textarea form="news-publish-form" id="news-content-field" name="newsContent" rows="4" cols="50" placeholder="write the news" required></textarea>
+		<br />
+		<table style="input-type:display; border: 1px solid black; border-collapse: collapse;">
+			<tr><td>filename.png</td><td class="remove_picture"><font style="color:#ff0000">X</font></td></tr>
+			<tr><td>filename2.gif</td><td><font class="remove_picture" style="color:#ff0000">X</font></td></tr>
+		</table>
+		<br />
+		<label for="file-input-field">Choose one or more images to upload</label>
+		<br />
+		<input id="file-input-field" type="file" name="uploadImage" accept=".jpg,.jpeg,.png,.gif" multiple />
+		<br />
+		<input id="image-upload-button" type="button" name="uploadImageButton" value="upload image" />
+		<input id="image-gallery-button" type="button" name="imageGalleryButton" value="choose from gallery" />
+		<br />
+		<input type="hidden" name="action" value="publishNews" />
+		<input id="upload-submit-button" type="submit" value="Publish" />
+	</form>
+</td>
+</tr>
+</table>
+	
 </body>
 </html>

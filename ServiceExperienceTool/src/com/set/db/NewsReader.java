@@ -2,10 +2,8 @@ package com.set.db;
 
 import java.util.List;
 
-import javax.servlet.ServletRequest;
-
 import com.set.data_containers.News;
 
-public interface NewsFetcher {
-	public List<News> getNews(ServletRequest request);
+public interface NewsReader {
+	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset);
 }
