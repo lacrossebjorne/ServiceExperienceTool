@@ -10,4 +10,7 @@
 	url="jdbc:mysql://78.68.50.137:3306/setdb"
 	maxActive="15"
 	maxIdle="3" />
+	<Environment name="appHomePath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool" type="java.lang.String"/>
+	<Environment name="imageNewsExtension" value="\images\news" type="java.lang.String"/>
+	<Environment name="imageNewsPath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\images\news" type="java.lang.String"/>
 </Context>

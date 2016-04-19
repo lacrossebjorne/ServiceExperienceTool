@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Context>
+	<Resource name="jdbc/setdb"
+	auth="Container"
+	type="javax.sql.DataSource"
+	username="master"
+	password="nosecrets#"
+	driverClassName="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://78.68.50.137:3306/setdb"
+	maxActive="15"
+	maxIdle="3" />
+</Context>

@@ -27,12 +27,4 @@
     <servlet-name>NewsServlet</servlet-name>
     <url-pattern>/newsServlet</url-pattern>
   </servlet-mapping>
-  <servlet>
-  	<servlet-name>UploadServlet</servlet-name>
-  	<servlet-class>com.set.servlets.UploadServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>UploadServlet</servlet-name>
-  	<url-pattern>/uploadServlet</url-pattern>
-  </servlet-mapping>
 </web-app>

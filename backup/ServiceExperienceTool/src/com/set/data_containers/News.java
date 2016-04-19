@@ -56,10 +56,4 @@ public class News {
 	public void setImgUriList(List<String> imgUriList) {
 		this.imgUriList = imgUriList;
 	}
-
-	@Override
-	public String toString() {
-		return "News [id=" + id + ", header=" + header + ", content=" + content + ", createdAt=" + createdAt
-				+ ", imgUriList=" + imgUriList + "]";
-	}
 }
