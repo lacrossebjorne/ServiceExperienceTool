@@ -19,6 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+/**
+ * this class is not finished, please do not add modifications to it
+ * @author Emil
+ *
+ */
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
 
@@ -26,6 +31,7 @@ public class UploadServlet extends HttpServlet {
 //	private static final int MEMORY_TRESHHOLD = 1024 * 1024 * 3; // 3mb
 //	private static final int MAX_FILE_SIZE = 1024 * 1024 * 40;
 //	private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50;
+	private final String IMAGES_NEWS_PATH = "images/news";
 
 	private PrintWriter writer;
 
@@ -42,14 +48,16 @@ public class UploadServlet extends HttpServlet {
 		}
 		writer = response.getWriter();
 
-		String imageNewsPath = "images/news";
+		String homePath = "images/news";
 		try {
-			imageNewsPath = InitialContext.doLookup("java:comp/env/imageNewsPath");
+			homePath = InitialContext.doLookup("java:comp/env/homePath");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 
-		File uploadDir = new File(imageNewsPath);
+		//todo this fileuploader is generic, so it should not only upload images
+		//make some kind of check that determines where the file should be saved
+		File uploadDir = new File(homePath, IMAGES_NEWS_PATH);
 		if (!uploadDir.exists()) {
 			uploadDir.mkdirs();
 		}
@@ -91,7 +99,8 @@ public class UploadServlet extends HttpServlet {
 
 			int read = 0;
 			final byte[] bytes = new byte[1024];
-
+			
+			//read content and write to disk
 			while ((read = fileIn.read(bytes)) != -1) {
 				fileOut.write(bytes, 0, read);
 			}

@@ -2,23 +2,18 @@ package com.set.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.List;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.set.data_containers.News;
 import com.set.db.DAOFactory;
-import com.set.db.NewsReader;
 import com.set.db.NewsPublisher;
+import com.set.db.NewsReader;
 
 /**
  * Servlet implementation class NewsServlet
@@ -153,12 +148,6 @@ public class NewsServlet extends HttpServlet {
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {
-//				String imageNewsPath = "";
-//				try {
-//					imageNewsPath = InitialContext.doLookup("java:comp/env/imageNewsPath");
-//				} catch (NamingException e) {
-//					e.printStackTrace();
-//				}
 
 				if (type == null || type.equals("html")) {
 					for (News news : allNews) {
@@ -168,10 +157,6 @@ public class NewsServlet extends HttpServlet {
 						out.println(news.getContent());
 						out.println("<br />");
 						if (news.getImgUriList() != null) {
-
-//							for (String uri : news.getImgUriList()) {
-//								out.format("<img src='%s/%s' width='150' height='150' />", imageNewsPath, uri);
-//							}
 							for (String uri : news.getImgUriList()) {
 								out.format("<img src='images/news/%s' width='150' height='150' />", uri);
 							}
@@ -183,7 +168,6 @@ public class NewsServlet extends HttpServlet {
 					response.setContentType("application/json");
 					out.append(gson.toJson(newsJsonString));
 				}
-
 			}
 
 		} catch (IOException e) {
