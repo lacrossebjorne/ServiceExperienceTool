@@ -2,12 +2,13 @@
   Loading results...
 </div>
 
-<div ng-if="details.status==='OK'" class="animate-repeat" ng-repeat="x in details.results | limitTo:limit">
+<div ng-if="details.statusText==='OK'" class="animate-repeat" ng-repeat="x in details.data | limitTo:limit">
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-left w3-margin-bottom w3-margin-right"><br>
     <div class="w3-row">
         <img ng-src="{{ x.multimedia=='' ? 'http://placehold.it/477x318&text=noImage' : x.multimedia[3].url }}" alt="No image avail." class="w3-margin-bottom w3-margin-right" style="width: 100%">
-        <h4 class="w3-margin-0">{{ x.section }}</h4>
-        <p>{{ x.abstract }}</p>
+        <h4 class="w3-margin-0">{{ x.header }}</h4>
+        <p>Date: {{ x.createdAt }}</p>
+        <p>{{ x.content }}</p>
     </div>
     <div id="full-article-container" class="w3-accordion-content w3-container">
       <p>Some text..</p>

@@ -2,6 +2,7 @@ package com.set.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -177,10 +178,10 @@ public class NewsServlet extends HttpServlet {
 						}
 					}
 				} else if (type.equals("json")) {
-					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					Gson gson = new Gson();
 					String newsJsonString = gson.toJson(allNews);
 					response.setContentType("application/json");
-					out.println(newsJsonString);
+					out.append(gson.toJson(newsJsonString));
 				}
 
 			}
