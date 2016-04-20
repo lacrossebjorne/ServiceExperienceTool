@@ -16,10 +16,9 @@ app.controller('MyController', function($scope, $http) {
 
   // Makes AJAX-call to API and sets response to 'details'
   function fetch() {
-    $http.get("http://localhost:8080/ServiceExperienceTool/newsServlet?action=getNews&type=json")
+    $http.get("http://78.68.50.137:8080//ServiceExperienceTool/newsServlet?action=getNews&type=json")
       .then(function(response) {
     	  $scope.details = response;
-        $scope.details.data = JSON.parse(response.data);
         console.log("--------------response.data--------------");
         console.log($scope.details.data);
         console.log("--------------response--------------");

@@ -2,6 +2,7 @@ package com.set.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -163,10 +164,10 @@ public class NewsServlet extends HttpServlet {
 						}
 					}
 				} else if (type.equals("json")) {
-					Gson gson = new Gson();
-					String newsJsonString = gson.toJson(allNews);
+					HashMap<String, List<News>> jsonMap = new HashMap<String, List<News>>();
+					jsonMap.put("news", allNews);
 					response.setContentType("application/json");
-					out.append(gson.toJson(newsJsonString));
+					response.getWriter().write(new Gson().toJson(jsonMap));
 				}
 			}
 
