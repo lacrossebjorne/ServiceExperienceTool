@@ -28,7 +28,7 @@ public class ImageServlet extends HttpServlet {
 	public void init() {
 		try {
 			//looks up the path-name from context.xml
-			imagePath = InitialContext.doLookup("java:comp/env/imagesPath");
+			imagePath = InitialContext.doLookup("java:comp/env/imagesUploadPath");
 		} catch (NamingException e) {
 			e.printStackTrace();
 		}

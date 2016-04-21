@@ -11,5 +11,7 @@
 	maxActive="15"
 	maxIdle="3" />
 	<Environment name="homePath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool" type="java.lang.String"/>
-	<Environment name="imagesPath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\images" type="java.lang.String"/>
+		<Environment name="generalUploadPath" 
+		value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\generalUpload" type="java.lang.String"/>
+	<Environment name="imagesUploadPath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\images" type="java.lang.String"/>
 </Context>

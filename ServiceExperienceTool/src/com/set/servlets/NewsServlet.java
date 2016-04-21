@@ -1,24 +1,34 @@
 package com.set.servlets;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.set.data_containers.News;
 import com.set.db.DAOFactory;
 import com.set.db.NewsPublisher;
 import com.set.db.NewsReader;
+import com.set.uploaders.FileUploader;
+import com.set.uploaders.FileUploaderFactory;
 
 /**
  * Servlet implementation class NewsServlet
  */
+@MultipartConfig
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -50,6 +60,7 @@ public class NewsServlet extends HttpServlet {
 
 		String action = (String) request.getParameter("action");
 		System.out.println("Incoming request: " + request.getMethod() + ", parameter-name action=" + action);
+		
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
 			return;
@@ -62,7 +73,7 @@ public class NewsServlet extends HttpServlet {
 				publishNews(request, response);
 				break;
 			case "fileUpload":
-				testFileUpload(request, response);
+				uploadFile(request, response);
 				break;
 			default:
 				response.getWriter().println("An invalid value was set to the action-parameter!");
@@ -73,44 +84,53 @@ public class NewsServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+
 		doGet(request, response);
 	}
 
-	/**
-	 * this method is not finished, please do not add modifications to it
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws ServletException
-	 * @throws IOException
-	 */
-	private void testFileUpload(HttpServletRequest request, HttpServletResponse response)
+	private void uploadFile(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		UploadServlet us = new UploadServlet();
-
 		us.doPost(request, response);
-
 	}
 
-	/**
-	 * This method is not finished, please do not add modifications to it
-	 * 
-	 * @param request
-	 * @param response
-	 */
-	private void publishNews(HttpServletRequest request, HttpServletResponse response) {
+	private void publishNews(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
+		String[] imageUris = null;
+		Collection<Part> allParts = request.getParts();
+		if (allParts != null) {
+			Set<InputStream> streams = new HashSet<InputStream>();
+			for (Part part : allParts) {
+				if (part.getName().equals("file")) {
+					streams.add(part.getInputStream());
+					inputstreamFilenames.put(part.getInputStream(), part.getSubmittedFileName());
+				}
+			}
+
+			if (inputstreamFilenames.size() > 0) {
+
+				FileUploader imageUploader = FileUploaderFactory.getNewsImageUploader();
+				boolean filesAreUploaded = imageUploader.uploadFiles(inputstreamFilenames);
+				if (filesAreUploaded) {
+					imageUris = imageUploader.getRecentlyUploadedFileNames();
+
+				}
+			}
+
+		}
 
 		NewsPublisher newsPublisher = DAOFactory.getNewsPublisher();
 
 		String subject = request.getParameter("newsHeader");
 		String content = request.getParameter("newsContent");
 
-		int primaryKey = newsPublisher.publishNews(subject, content);
+		int primaryKey = newsPublisher.publishNews(subject, content, imageUris);
+
 		if (primaryKey > -1) {
 			try {
-				// after publishing news, get help from additional servlet to
-				// post pictures and update references in db
-				response.getWriter().println("<h3>NEWS ARE PUBLISHED, NOW IMPLEMENT AJAX!</h3>");
+				response.getWriter().println("News are published!");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -159,7 +179,7 @@ public class NewsServlet extends HttpServlet {
 						out.println("<br />");
 						if (news.getImgUriList() != null) {
 							for (String uri : news.getImgUriList()) {
-								out.format("<img src='images/news/%s' width='150' height='150' />", uri);
+								out.format("<img src=\"images/news/%s\" width=\"150\" height=\"150\" />", uri);
 							}
 						}
 					}

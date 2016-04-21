@@ -2,82 +2,133 @@
 <html>
 <head>
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-<script src="scripts/api-tester-script.js"></script>
+  <script src="js/api-tester.js"></script>
+<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
+<link rel="stylesheet"
+	href="http://www.w3schools.com/lib/w3-theme-blue-grey.css">
 <meta charset="ISO-8859-1">
 <style>
+<!--
+-->
 table, th, td {
-	border: 3px solid black;
-	border-collapse: collapse;
+	border: 0px solid black;
+	border-collapse: separate;
+	vertical-align: top;
+	border-spacing: 15px;
+}
+td {
+border: 2px solid #888888;
+border-spacing: 15px;
+box-shadow: 0px 5px 20px #AAAAAA;
+height: 10px;
+}
+
+table {
+padding: 10px;}
+
+tr {
+margin: 30px;
 }
 </style>
 <title>Insert title here</title>
 </head>
 <body>
-<table style="input-type:display; border: 5px solid black;">
-<tr>
-<td>
-<h1>see news</h1>
-	<form action="newsServlet" method="GET">
-		<label for="resultsPerPageField">entriesPerPage</label>
-		<br />
-		<input id="resultsPerPageField" type="Number" name="resultsPerPage" min="1" value="15" />
-		<br />
-		<label for="selectedPageField">selectedPage</label>
-		<br />
-		<input id="selectedPageField" type="Number" name="selectedPage" min="1" value="3" />
-		<br />
-		<label for="requestField">Enter action(getNews)</label>
-		<br />
-		<input id="requestField" type="text" name="action" value="getNews" />
-		<input type="hidden" name="type" value="html" />
-		<input id="btn-submit" type="submit" />
-	</form>
-</td>
-</tr>
-<tr>
-<td>
-<h1>upload news</h1>
-	<form id="newsPublishForm" action="newsServlet" method="GET" enctype="multipart/form-data" accept="text/html">
-		<label for="newsHeaderField">Subject: </label>
-		<input id="newsHeaderField" type="text" name="newsHeader" placeholder="write a subject" required autofocus />
-		<br />
-		<label for="newsContentField">Content:</label>
-		<br />
-		<textarea form="newsPublishForm" id="newsContentField" name="newsContent" rows="4" cols="50" placeholder="write the news" required></textarea>
-		<br />
-		<table style="input-type:display; border: 1px solid black; border-collapse: collapse;">
-			<tr><td>filename.png</td><td class="remove_picture"><font style="color:#ff0000">X</font></td></tr>
-			<tr><td>filename2.gif</td><td><font class="remove_picture" style="color:#ff0000">X</font></td></tr>
-		</table>
-		<br />
-		<label for="FileInputField">Choose one or more images to upload</label>
-		<br />
-		<input id="FileInputField" type="file" name="uploadImage" accept=".jpg,.jpeg,.png,.gif" multiple />
-		<br />
-		<input id="ImageUploadButton" type="button" name="uploadImageButton" value="upload image" />
-		<input id="imageGalleryButton" type="button" name="imageGalleryButton" value="choose from gallery" />
-		<br />
-		<input type="hidden" id="publishNewsAction" name="action" value="publishNews" />
-		<input id="publishSubmitButton" type="submit" value="Publish" />
-		<br />
-		<div id="publishStatusMessage"></div>
-	</form>
-</td>
-</tr>
-<tr>
-<td>
-<h1>upload files</h1>
-	<form id="fileUploadForm" action="uploadServlet" method="POST" enctype="multipart/form-data" accept="text/html">
-		<label for="fileInputField2">Choose one or more images to upload</label>
-		<br />
-		<input id="fileInputFIeld2" type="file" name="uploadFile" accept=".jpg,.jpeg,.png,.gif" multiple />
-		<br />
-		<input type="hidden" id="uploadFileAction" name="action" value="fileUpload" />
-		<input id="uploadSubmitButton" type="submit" value="Publish" />
-	</form>
-</td>
-</tr>
-</table>
+	<table>
+		<!-- style="input-type: display; border: 5px solid black;" -->
+
+
+		<tr>
+			<td>
+			<div class="w3-container">
+				<div class="w3-blue-grey w3-padding-ver-16">
+					<h1>see news</h1>
+				</div>
+				
+					<form action="newsServlet" method="GET">
+						<label for="resultsPerPageField">entriesPerPage</label> <br /> <input
+							id="resultsPerPageField" type="Number" name="resultsPerPage"
+							min="1" value="15"
+							class="w3-input w3-border w3-hover-border-black" /> <br /> <label
+							for="selectedPageField">selectedPage</label> <br /> <input
+							id="selectedPageField" type="Number" name="selectedPage" min="1"
+							value="1" class="w3-input w3-border w3-hover-border-black" /> <br />
+						<label for="requestField">Enter action(getNews)</label> <br /> <input
+							id="requestField" type="text" name="action" value="getNews"
+							class="w3-input w3-border w3-hover-border-black" /> <input
+							type="hidden" name="type" value="html" />
+						<button class="w3-btn w3-btn-block w3-blue-grey w3-section">See
+							news</button>
+					</form>
+				</div>
+			</td>
+
+
+
+			<td>
+			<div class="w3-container">
+				<div class="w3-blue-grey w3-padding-ver-16">
+					<h1>upload news</h1>
+				</div>
+
+				<form id="newsPublishForm" action="newsServlet" method="POST"
+					enctype="multipart/form-data" accept="text/html">
+					<label for="newsHeaderField">Subject: </label> <input
+						id="newsHeaderField" type="text" name="newsHeader"
+						placeholder="write a subject" required autofocus
+						class="w3-input w3-border w3-hover-border-black" /> <br /> <label
+						for="newsContentField">Content:</label> <br />
+					<textarea form="newsPublishForm" id="newsContentField"
+						name="newsContent" rows="4" cols="50" placeholder="write the news"
+						required class="w3-input w3-border w3-hover-border-black"></textarea>
+					<br />
+					<table
+						style="display: display; border: 0px solid black; border-collapse: collapse; box-shadow: none;">
+						<tr>
+							<td>filename.png</td>
+							<td class="remove_picture"><font style="color: #ff0000">X</font></td>
+						</tr>
+						<tr>
+							<td>filename2.gif</td>
+							<td><font class="remove_picture" style="color: #ff0000">X</font></td>
+						</tr>
+					</table>
+					<br /> <label for="FileInputField">Choose one or more
+						images to upload</label> <br /> <input id="FileInputField" type="file"
+						name="file" accept=".jpg,.jpeg,.png,.gif" multiple /> <br /> <input
+						id="ImageUploadButton" type="button" name="uploadImageButton"
+						value="upload image" /> <input id="imageGalleryButton"
+						type="button" name="imageGalleryButton"
+						value="choose from gallery" /> <br /> <input type="hidden"
+						id="publishNewsAction" name="action" value="publishNews" /> <input
+						id="publishSubmitButton" type="submit" value="Publish"
+						class="w3-btn w3-btn-block w3-blue-grey w3-section" /> <br />
+					<div id="publishStatusMessage"></div>
+				</form>
+				</div>
+			</td>
+			
+		</tr>
+		<tr>
+		
+			<td><div class="w3-container">
+				<div class="w3-blue-grey w3-padding-ver-16">
+					<h1>upload files</h1>
+				</div>
+				<form id="fileUploadForm" action="newsServlet" method="POST"
+					enctype="multipart/form-data" accept="text/html">
+					<label for="fileInputField2">Choose one or more images to
+						upload</label> <br /> <input id="fileInputFIeld2" type="file" name="file"
+						accept=".jpg,.jpeg,.png,.gif" multiple /> <br /> <input
+						type="hidden" id="uploadFileAction" name="action"
+						value="fileUpload" /> <input id="uploadSubmitButton"
+						type="submit" value="Publish"
+						class="w3-btn w3-btn-block w3-blue-grey w3-section" />
+				</form>
+				</div>
+			</td>
+			
+		</tr>
+	</table>
 
 </body>
 </html>

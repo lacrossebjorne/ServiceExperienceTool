@@ -13,22 +13,23 @@ import com.set.data_containers.News;
 
 public class NewsReaderDAO extends AbstractDAO implements NewsReader {
 
+	private final String SQL_NEWS_SELECT = "SELECT news_id, header, content, created_at FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
+	private final String SQL_IMAGE_SELECT = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
+
 	@Override
 	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset) {
 
 		List<News> allNews = null;
-		
+
 		try {
 			connection = getConnection();
 
-			String newsQry = "SELECT news_id, header, content, created_at FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
-			PreparedStatement newsPs = connection.prepareStatement(newsQry);
+			PreparedStatement newsPs = connection.prepareStatement(SQL_NEWS_SELECT);
 			newsPs.setInt(1, resultsPerPage);
 			newsPs.setInt(2, offset);
 			ResultSet newsRs = newsPs.executeQuery();
 
-			String imgQry = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
-			PreparedStatement imgPs = connection.prepareStatement(imgQry);
+			PreparedStatement imgPs = connection.prepareStatement(SQL_IMAGE_SELECT);
 
 			allNews = new LinkedList<News>();
 			while (newsRs.next()) {
