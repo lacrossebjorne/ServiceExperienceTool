@@ -61,6 +61,10 @@ public class NewsServlet extends HttpServlet {
 		String action = (String) request.getParameter("action");
 		System.out.println("Incoming request: " + request.getMethod() + ", parameter-name action=" + action);
 		
+		String subject = request.getParameter("newsHeader");
+		String content = request.getParameter("newsContent");
+		System.out.println(subject + " " + content);
+		
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
 			return;
