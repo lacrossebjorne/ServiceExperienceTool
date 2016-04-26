@@ -1,0 +1,27 @@
+<div ng-if="!newsobject" class="w3-container w3-center">
+  <span>Loading results...</span>
+</div>
+<!-- animate-repeat -->
+
+<div ng-if="newsobject.status==='OK'" class="dn-fade-down-big" ng-repeat="x in newsobject.results | limitTo:limit">
+  <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-right w3-margin-bottom w3-margin-left">
+    <br>
+    <img ng-src="{{ x.multimedia=='' ? 'http://placehold.it/477x318&text=noImage' : x.multimedia[3].url }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">
+    <h4>{{ x.title }}</h4>
+    <span>Date: {{ x.published_date }}</span>
+    <p>{{ x.abstract | limitTo:articleTextLimit}}</p>
+    <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
+      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
+    </button>
+  </div>
+</div>
+
+<div class="w3-container w3-center">
+  <button type="button" ng-show="limit < newsobject.results.length" ng-click='expandList()' class="w3-btn w3-margin">Load more</button>
+</div>
+
+<!-- RAW JSON
+  <pre>
+  {{newsobject | json : spacing}}
+</pre>
+-->
