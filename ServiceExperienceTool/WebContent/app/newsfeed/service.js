@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('newsfeedService', ['ngResource'])
+angular.module('newsfeed')
 
 .factory('NewsfetchService', ['$resource',
   function($resource) {

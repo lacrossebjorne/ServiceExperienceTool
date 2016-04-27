@@ -2,8 +2,7 @@
 
 angular.module('newsfeed', [
   'ngRoute',
-  'newsfeedController',
-  'newsfeedService'
+  'ngResource'
 ])
 
 .config(['$routeProvider', function($routeProvider) {

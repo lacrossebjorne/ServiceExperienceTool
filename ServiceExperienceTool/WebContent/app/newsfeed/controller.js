@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('newsfeedController', [])
+angular.module('newsfeed')
 
 .controller('NewsfeedController', ['$scope', 'NewsfetchService', function($scope, Newsfetch) {
   var minArticleTextLimit = 50;
+  $scope.TEST = "JS updated";
   $scope.limit = 5;
   $scope.articleTextLimit = minArticleTextLimit;
 
