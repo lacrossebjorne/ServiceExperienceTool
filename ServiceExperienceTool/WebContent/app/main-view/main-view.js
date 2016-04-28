@@ -8,17 +8,16 @@ angular.module('mainView', [
   'newspublish'
 ])
 
+/* 
+ * This routing should only redirect on '.otherwise'.
+ * Separate routing in corresponding module.
+ *  */
+
 .config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.when('/menu', {
         templateUrl: 'app/menu/menu.html'
-          //, controller: 'ScheduleController'
-      })
-      .when('/newspublish', {
-  	  	templateUrl: 'app/newspublish/newspublish.html',
-	  	controller: 'NewspublishController',
-	    service: 'multipartForm',
-	    directive: 'fileModel'	
+          //, controller: 'MenuController'
       })
       .otherwise({
         redirectTo: '/newsfeed'
