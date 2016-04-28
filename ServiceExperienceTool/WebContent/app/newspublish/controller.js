@@ -1,6 +1,6 @@
-'use scrict';
+'use strict';
 
-angular.module('newspublishController', [])
+angular.module('newspublish')
 
 .controller('NewspublishController', ['$scope', 'multipartForm', function($scope, multipartForm) {
   $scope.newsHeader = "";

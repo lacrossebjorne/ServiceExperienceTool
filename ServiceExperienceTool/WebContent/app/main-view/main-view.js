@@ -5,9 +5,7 @@
 angular.module('mainView', [
   'ngRoute',
   'newsfeed',
-  'newspublish',
-  'newsPublishService',
-  'filePublishDirective'
+  'newspublish'
 ])
 
 .config(['$routeProvider',
@@ -19,9 +17,11 @@ angular.module('mainView', [
       .when('/newspublish', {
     	  templateUrl: 'app/newspublish/newspublish.html',
     	  controller: 'NewspublishController',
-        service: 'multipartForm',
-        directive: 'fileModel'
-//        redirectTo: '/newspublish'
+          service: 'multipartForm',
+          directive: 'fileModel'
+      })
+      .when('/newspublish2', {
+    	  redirectTo: '/newspublish'
       })
       .otherwise({
         redirectTo: '/newsfeed'

@@ -1,21 +1,12 @@
 'use strict';
 
-angular.module('newspublish', [
-  'ngRoute',
-  'newspublishController'
-])
+angular.module('newspublish', [ 'ngRoute', 'ngResource' ])
 
-.config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/newspublish', {
-    templateUrl: 'app/newspublish/newspublish.html',
-    controller: 'NewsPublishController'
-  });
-}]);
-
-
-//.config(['$routeProvider', function($routeProvider) {
-//  $routeProvider.when('/newsfeed', {
-//    templateUrl: 'app/newsfeed/newsfeed.html',
-//    controller: 'NewsfeedController'
-//  });
-//}]);
+.config([ '$routeProvider', function($routeProvider) {
+	$routeProvider.when('/newspublish', {
+		templateUrl : 'app/newspublish/newspublish.html',
+		controller : 'NewspublishController',
+		service : 'multipartForm',
+		directive : 'fileModel'
+	});
+} ]);

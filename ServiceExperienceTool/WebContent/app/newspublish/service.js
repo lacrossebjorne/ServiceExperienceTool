@@ -1,14 +1,8 @@
 'use strict';
 
-var module = angular.module('newsPublishService', ['ngResource'])
-/*
-module.factory('newsPublishService ', ['$resource',
-  function($resource) {
+angular.module('newspublish')
 
-  }
-]);*/
-
-module.service('multipartForm', ['$http', function($http) {
+.service('multipartForm', ['$http', function($http) {
   this.post = function(uploadUrl, data) {
     var fd = new FormData();
     for (var key in data) {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('filePublishDirective', [])
+angular.module('newspublish', [])
 
 .directive('fileModel', ['$parse', function($parse) {
   return {
