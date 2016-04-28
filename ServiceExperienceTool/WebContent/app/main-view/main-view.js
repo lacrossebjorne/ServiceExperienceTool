@@ -15,12 +15,6 @@ angular.module('mainView', [
           //, controller: 'ScheduleController'
       })
       .when('/newspublish', {
-    	  templateUrl: 'app/newspublish/newspublish.html',
-    	  controller: 'NewspublishController',
-          service: 'multipartForm',
-          directive: 'fileModel'
-      })
-      .when('/newspublish2', {
     	  redirectTo: '/newspublish'
       })
       .otherwise({
