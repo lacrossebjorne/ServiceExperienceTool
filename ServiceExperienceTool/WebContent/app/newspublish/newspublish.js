@@ -5,6 +5,7 @@ angular.module('newspublish', [
   'ngResource'
 ])
 
+/*
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/newspublish', {
 	  	templateUrl: 'app/newspublish/newspublish.html',
@@ -13,3 +14,4 @@ angular.module('newspublish', [
 	    directive: 'fileModel'	
   });
 }]);
+*/
