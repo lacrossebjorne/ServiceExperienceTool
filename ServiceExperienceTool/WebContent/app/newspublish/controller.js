@@ -2,21 +2,45 @@
 
 angular.module('newspublish')
 
-.controller('NewspublishController', ['$scope', 'multipartForm', function($scope, multipartForm) {
-  $scope.newsHeader = "";
-  $scope.newsContent = "";
-  $scope.customer = {};
+.controller('NewspublishController', ['$scope', 'NewsPublishService', function($scope, Publisher) {
+  $scope.newsHeader = "subject";
+  $scope.newsContent = "content";
+  $scope.customer = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent };
+  $scope.statusMessage = "Please write news."
   $scope.publishNews = function() {
 	  console.log('Publishing: ' + $scope.newsSubject + ", " + $scope.newsContent);
 	  //alert('Publishing: ' + $scope.newsSubject + ", " + $scope.newsContent);
   };
 
   $scope.submit = function() {
-    var uploadUrl = 'http://78.68.50.137:8080/ServiceExperienceTool/newsServlet?action=publishNews';
-    uploadUrl += "&newsHeader=" + $scope.newsHeader;
-    uploadUrl += "&newsContent=" + $scope.newsContent;
+    if (!validateFormInput()) {
+      return;
+    }
+
+    $scope.customer.newsHeader = $scope.newsHeader;
+    $scope.customer.newsContent = $scope.newsContent;
+    //$scope.customer.file = null;
     console.log($scope.customer);
-    console.log(uploadUrl);
-    multipartForm.post(uploadUrl, $scope.customer);
+    Publisher.save($scope.customer).$promise.then(function(result) {
+      console.log("Success? " + result);
+      $scope.statusMessage = "Succesfully posted news!"
+    })
+    .catch(function(errorMsg) {
+      $scope.statusMessage = "Couldn't post news!"
+      console.log("Error: " + errorMsg);
+    });
+  }
+
+  var validateFormInput = function() {
+    console.log($scope.newsHeader);
+    console.log($scope.newsContent);
+
+    if ($scope.newsHeader != undefined && $scope.newsHeader.length >= 3 &&
+      $scope.newsContent != null && $scope.newsContent.length >= 12) {
+      return true;
+    } else {
+      $scope.statusMessage = "Either you typed to little or to much!";
+      return false;
+    }
   }
 }]);

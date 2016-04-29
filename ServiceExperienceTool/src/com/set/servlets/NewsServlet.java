@@ -57,14 +57,16 @@ public class NewsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
-
+		String fullPath = request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+		System.out.println(request.getProtocol());
+		System.out.println(fullPath);
 		String action = (String) request.getParameter("action");
 		System.out.println("Incoming request: " + request.getMethod() + ", parameter-name action=" + action);
-		
+
 		String subject = request.getParameter("newsHeader");
 		String content = request.getParameter("newsContent");
-		System.out.println(subject + " " + content);
-		
+		System.out.println("subject: " + subject + ", content: " + content + "//For publishNews only");
+
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
 			return;
@@ -107,9 +109,19 @@ public class NewsServlet extends HttpServlet {
 		if (allParts != null) {
 			Set<InputStream> streams = new HashSet<InputStream>();
 			for (Part part : allParts) {
+
 				if (part.getName().equals("file")) {
+					InputStream inputStream = part.getInputStream();
+					String fileName = part.getSubmittedFileName();
+
+					if (fileName == null) {
+						System.out.println("Sending Response 400: Bad request");
+						response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+						return;
+					}
+
 					streams.add(part.getInputStream());
-					inputstreamFilenames.put(part.getInputStream(), part.getSubmittedFileName());
+					inputstreamFilenames.put(inputStream, fileName);
 				}
 			}
 
@@ -119,7 +131,9 @@ public class NewsServlet extends HttpServlet {
 				boolean filesAreUploaded = imageUploader.uploadFiles(inputstreamFilenames);
 				if (filesAreUploaded) {
 					imageUris = imageUploader.getRecentlyUploadedFileNames();
-
+				} else {
+					System.out.println("Sending Response 415: Unsupported media type");
+					response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
 				}
 			}
 
@@ -169,7 +183,14 @@ public class NewsServlet extends HttpServlet {
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
+			
+			
+			String serverPath = getRequestServerPath(request);
+			//e.g: http://78.68.50.137:8080/ServiceExperienceTool/images/news/
+			String fullPath = serverPath + "/images/news/";
+			
 			NewsReader newsFetcher = DAOFactory.getNewsFetcher();
+			newsFetcher.setRequestPath(fullPath);
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {
@@ -183,7 +204,7 @@ public class NewsServlet extends HttpServlet {
 						out.println("<br />");
 						if (news.getImgUriList() != null) {
 							for (String uri : news.getImgUriList()) {
-								out.format("<img src=\"images/news/%s\" width=\"150\" height=\"150\" />", uri);
+								out.format("<img src=\"%s\" width=\"150\" height=\"150\" />", uri);
 							}
 						}
 					}
@@ -198,5 +219,20 @@ public class NewsServlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private String getRequestServerPath(HttpServletRequest request) {
+		String protocol = "";
+		//todo add support for more protocols
+		if (request.getProtocol().equals("HTTP/1.1")) {
+			protocol = "http://";
+		}
+		String server = request.getServerName();
+		String port = Integer.toString(request.getServerPort());
+		String contextPath = request.getContextPath();
+		
+		String fullPath = protocol + server + ":" + port + contextPath;
+		
+		return fullPath;
 	}
 }

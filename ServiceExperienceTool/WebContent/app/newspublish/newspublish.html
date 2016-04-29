@@ -2,15 +2,16 @@
 	<div class="w3-blue-grey w3-padding-ver-16">
 		<h1>upload news</h1>
 	</div>
-	<label>Subject: </label> <input ng-model="newsHeader" type="text"
-		placeholder="write a subject" required autofocus
+	<label>Subject: </label>
+	<input ng-model="newsHeader" type="text" pattern=".{3,}"
+		placeholder="write a subject(minimum 3 characters)" required autofocus
 		class="w3-input w3-border w3-hover-border-black" /> <br /> <label
 		for="newsContentField">Content:</label> <br />
-	<textarea ng-model="newsContent" rows="4" cols="50"
-		placeholder="write the news" required
-		class="w3-input w3-border w3-hover-border-black"></textarea>
+	<textarea pattern=".{12,}" ng-model="newsContent" rows="4" cols="50"
+		placeholder="write the news(minimum 12 characters)" required
+		class="w3-input w3-border w3-hover-border-black" ></textarea>
 	<br /> <br /> <label>Choose one or more images to upload</label> <br />
-	<input type="file" name="file" file-model="customer.file" accept=".jpg,.jpeg,.png,.gif" multiple"/>
+	<input type="file" name="file" file-model="customer.file" accept=".jpg,.jpeg,.png,.gif" multiple />
 	<br />
 	<button ng-click="submit()"
 		class="w3-btn w3-btn-block w3-blue-grey w3-section" />
@@ -18,4 +19,10 @@
 	</button>
 	<br /> <br />
 	<div id="publishStatusMessage"></div>
+	<br />
+	{{statusMessage}}
+	<br />
+	{{newsHeader}}
+	<br />
+	{{newsContent}}
 </div>

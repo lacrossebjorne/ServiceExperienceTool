@@ -2,16 +2,20 @@
 
 angular.module('newspublish')
 
-.service('multipartForm', ['$http', function($http) {
-  this.post = function(uploadUrl, data) {
-    var fd = new FormData();
-    for (var key in data) {
-      fd.append(key, data[key]);
-      console.log("multipartForm[key:" + key + ", data: " + data[key] + "]");
+.factory('NewsPublishService', ['$resource', 'app.paths', function($resource, paths) {
+  return $resource(paths.api + "newsServlet", { action: 'publishNews' }, {
+    save: { method: 'POST',
+            transformRequest: formDataObject,
+            headers: {'Content-Type': undefined, enctype:'multipart/form-data' },
+            timeout: 2000
     }
+  });
 
-    $http.post(uploadUrl, fd, { transformRequest: angular.identity,
-      headers: {'Content-type': undefined }
-    })
-  }
+  function formDataObject (data) {
+    var fd = new FormData();
+    angular.forEach(data, function(value, key) {
+        fd.append(key, value);
+    });
+    return fd;
+}
 }]);

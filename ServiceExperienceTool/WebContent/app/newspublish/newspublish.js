@@ -9,8 +9,7 @@ angular.module('newspublish', [
   $routeProvider.when('/newspublish', {
 	  	templateUrl: 'app/newspublish/newspublish.html',
 	  	controller: 'NewspublishController',
-	    service: 'multipartForm',
-	    directive: 'fileModel'	
+	    service: 'NewsPublishService',
+	    directive: 'fileModel'
   });
 }]);
-
