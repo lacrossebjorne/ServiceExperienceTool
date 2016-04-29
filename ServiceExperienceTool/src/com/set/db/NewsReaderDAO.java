@@ -38,15 +38,13 @@ public class NewsReaderDAO extends AbstractDAO implements NewsReader {
 				String content = newsRs.getString("content");
 				Date createdAt = newsRs.getDate("created_at");
 
-				News newsEntry = new News(id, header, content, createdAt.toString(), null);
+				News newsEntry = new News(id, header, content, createdAt.toString(), new LinkedList<String>());
 				allNews.add(newsEntry);
 
 				imgPs.setInt(1, id);
 				ResultSet imgRs = imgPs.executeQuery();
 
 				while (imgRs.next()) {
-					if (newsEntry.getImgUriList() == null)
-						newsEntry.setImgUriList(new LinkedList<String>());
 					String uri = imgRs.getString("image_uri");
 					newsEntry.getImgUriList().add(uri);
 				}
