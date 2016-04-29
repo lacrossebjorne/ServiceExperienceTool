@@ -4,16 +4,15 @@ angular.module('newsfeed')
 
 .controller('NewsfeedController', ['$scope', 'NewsfetchService', function($scope, Newsfetch) {
   var minArticleTextLimit = 50;
-  $scope.TEST = "JS updated";
+  $scope.TEST = "Newsfetch.get";
   $scope.limit = 5;
   $scope.articleTextLimit = minArticleTextLimit;
 
   Newsfetch.get({
-    // parameter: 'value',
-    // parameter: 'value'
+    action:'getNews', type: 'json'
   }, function(newsobject) {
-    // Callback
     $scope.newsobject = newsobject;
+    console.log(newsobject);
   });
 
   // Expands article
