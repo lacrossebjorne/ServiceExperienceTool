@@ -6,5 +6,5 @@ import com.set.data_containers.News;
 
 public interface NewsReader {
 	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset);
-	public void setRequestPath(String fullPath);
+	public void setImagePath(String fullPath);
 }

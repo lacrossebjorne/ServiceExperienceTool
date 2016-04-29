@@ -4,7 +4,7 @@ angular.module('newsfeed')
 
 .factory('NewsfetchService', ['$resource', 'app.paths',
   function($resource, paths) {
-    return $resource(paths.nytimes, {}, {
+    return $resource(paths.api + 'newsServlet', {}, {
       query: {
         method: 'GET',
         params: {},

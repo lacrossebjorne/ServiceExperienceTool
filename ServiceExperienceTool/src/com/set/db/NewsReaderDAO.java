@@ -15,10 +15,10 @@ public class NewsReaderDAO extends AbstractDAO implements NewsReader {
 
 	private final String SQL_NEWS_SELECT = "SELECT news_id, header, content, created_at FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
 	private final String SQL_IMAGE_SELECT = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
-	private String requestPath = "";
+	private String imagePath = "";
 	@Override
 	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset) {
-
+		
 		List<News> allNews = null;
 
 		try {
@@ -46,7 +46,7 @@ public class NewsReaderDAO extends AbstractDAO implements NewsReader {
 
 				while (imgRs.next()) {
 					String uri = imgRs.getString("image_uri");
-					newsEntry.getImgUriList().add(requestPath + uri);
+					newsEntry.getImgUriList().add(imagePath + uri);
 				}
 			}
 
@@ -64,7 +64,7 @@ public class NewsReaderDAO extends AbstractDAO implements NewsReader {
 	}
 
 	@Override
-	public void setRequestPath(String fullPath) {
-		requestPath = fullPath;
+	public void setImagePath(String path) {
+		imagePath = path;
 	}
 }

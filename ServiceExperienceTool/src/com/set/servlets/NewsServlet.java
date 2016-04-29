@@ -57,16 +57,17 @@ public class NewsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
-		String fullPath = request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-		System.out.println(request.getProtocol());
-		System.out.println(fullPath);
+		
 		String action = (String) request.getParameter("action");
-		System.out.println("Incoming request: " + request.getMethod() + ", parameter-name action=" + action);
-
-		String subject = request.getParameter("newsHeader");
-		String content = request.getParameter("newsContent");
-		System.out.println("subject: " + subject + ", content: " + content + "//For publishNews only");
-
+		
+		//////////////////////////// Printing some Console-info ////////////////////////////
+		System.out.println("###################");
+		System.out.format("Incoming request: %s, action-parameter: %s\n", request.getMethod(), action);
+		System.out.format("Server Path: %s\n", getServerRequestPath(request));
+		System.out.format("Protocol: %s\n", request.getProtocol());
+		System.out.format("Type: %s\n", request.getParameter("type"));
+		////////////////////////////////////////////////////////////////////////////////////
+		
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
 			return;
@@ -171,6 +172,11 @@ public class NewsServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.format("subject: %s, content: %s //For publishNews only\n", 
+				request.getParameter("newsHeader"), request.getParameter("newsContent"));
+		System.out.println("selectedPage " + selectedPage);
+		System.out.println("resultsPerPage " + resultsPerPage);
 
 		// LIMIT = entriesPerPage
 		// OFFSET = (selectedPage - 1) * entriesPerPage = (3-1)*5 = 2 *
@@ -184,13 +190,12 @@ public class NewsServlet extends HttpServlet {
 		try {
 			out = response.getWriter();
 			
-			
-			String serverPath = getRequestServerPath(request);
+			String serverPath = getServerRequestPath(request);
 			//e.g: http://78.68.50.137:8080/ServiceExperienceTool/images/news/
 			String fullPath = serverPath + "/images/news/";
 			
 			NewsReader newsFetcher = DAOFactory.getNewsFetcher();
-			newsFetcher.setRequestPath(fullPath);
+			newsFetcher.setImagePath(fullPath);
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {
@@ -221,7 +226,7 @@ public class NewsServlet extends HttpServlet {
 		}
 	}
 	
-	private String getRequestServerPath(HttpServletRequest request) {
+	private String getServerRequestPath(HttpServletRequest request) {
 		String protocol = "";
 		//todo add support for more protocols
 		if (request.getProtocol().equals("HTTP/1.1")) {
