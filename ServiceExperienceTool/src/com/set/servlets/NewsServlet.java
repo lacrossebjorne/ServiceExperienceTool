@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
+import com.mysql.jdbc.log.Log;
 import com.set.dao.DAOFactory;
 import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
@@ -32,6 +33,7 @@ import com.set.entities.News;
 //import com.set.db.NewsReader;
 import com.set.uploaders.FileUploader;
 import com.set.uploaders.FileUploaderFactory;
+import com.sun.istack.internal.logging.Logger;
 
 /**
  * Servlet implementation class NewsServlet
@@ -214,9 +216,10 @@ public class NewsServlet extends HttpServlet {
 			
 			//temporary fix - temporaryImagesNewsPath is a constant used only during development face
 			try {
-				newsFetcher.setImagePath(InitialContext.doLookup("java.comp/env/temporaryImagesNewsPath"));
+				newsFetcher.setImagePath(InitialContext.doLookup("java:comp/env/temporaryImagesNewsPath"));
 			} catch (NamingException e) {
-				newsFetcher.setImagePath(getServerRequestPath(request));
+				System.out.println("Namingexpeption occured in NewsServlet::getNews(): Now trying to build path from request.");
+				newsFetcher.setImagePath(getServerRequestPath(request) +"/images/news/");
 			}
 			
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
@@ -260,7 +263,7 @@ public class NewsServlet extends HttpServlet {
 		String contextPath = request.getContextPath();
 		
 		String fullPath = protocol + server + ":" + port + contextPath;
-		
+		System.out.println(fullPath);
 		return fullPath;
 	}
 }
