@@ -1,4 +1,8 @@
-app.controller('AdminController', [$scope, 'AdminFactory', function($scope, AdminFactory) {
+'user strict'
+
+angular.module('useradmin')
+
+.controller('AdminController', [$scope, 'AdminFactory', function($scope, AdminFactory) {
     var self = this;
     self.users = [];
     self.resetPassword = {};
