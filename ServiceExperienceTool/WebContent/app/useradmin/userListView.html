@@ -1,0 +1,37 @@
+<div id="addUserView" class="w3-modal">
+			<div class="w3-modal-content w3-card-8 w3-animate-zoom"
+				style="max-width: 600px">
+				<div class="w3-blue-grey w3-padding-ver-16">
+					<h3>SET users</h3>
+				</div>
+				<div class="w3-container">
+					<div class="w3-section">
+					<table id="userTable">
+						<thead>
+								<th>First name</th>
+								<th>Last name</th>
+								<th>Username</th>
+								<th>Email address</th>
+								<th>Phone number</th>
+								<th>Role</th>
+								<th>Enabled</th>
+						</thead>
+						<tbody>
+							<tr ng-repeat="user in adminCtrl.users">
+								<td>{{ user.id }}</td>
+								<td>{{ user.first_name }}</td>
+								<td>{{ user.last_name }}</td>
+								<td>{{ user.user_name }}</td>
+								<td>{{ user.email }}</td>
+								<td>{{ user.phoneNumber }}</td>
+								<td>{{ user.roles }}</td>
+								<td>{{ user.resetPassword }}</td>
+								<td>{{ userlist.enabled }}</td>
+							</tr>
+
+						</tbody>
+					</table>
+					<ul class="w3-pagination w3-border">
+				</div>
+			</div>
+		</div>

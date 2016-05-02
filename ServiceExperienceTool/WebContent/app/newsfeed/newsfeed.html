@@ -1,7 +1,6 @@
-<div ng-if="!newsobject" class="w3-container w3-center">
+<div  class="w3-container w3-center"> 
   <span>Loading results...</span>
 </div>
-<!-- animate-repeat -->
 
 <div ng-if="newsobject" class="dn-fade-down-big" ng-repeat="x in newsobject.news | limitTo:limit">
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-right w3-margin-bottom w3-margin-left">
@@ -19,10 +18,3 @@
 <div class="w3-container w3-center">
   <button type="button" ng-show="limit < newsobject.results.length" ng-click='expandList()' class="w3-btn w3-margin">Load more</button>
 </div>
-
-<pre>{{TEST}}</pre>
-<!-- RAW JSON
-  <pre>
-  {{newsobject | json : spacing}}
-</pre>
--->

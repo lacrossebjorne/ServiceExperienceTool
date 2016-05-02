@@ -20,16 +20,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
-import com.set.data_containers.News;
-import com.set.db.DAOFactory;
-import com.set.db.NewsPublisher;
-import com.set.db.NewsReader;
+import com.set.dao.DAOFactory;
+import com.set.dao.NewsPublisherDAO;
+import com.set.dao.NewsReaderDAO;
+import com.set.entities.News;
+//import com.set.data_containers.News;
+//import com.set.db.DAOFactory;
+//import com.set.db.NewsPublisher;
+//import com.set.db.NewsReader;
 import com.set.uploaders.FileUploader;
 import com.set.uploaders.FileUploaderFactory;
 
 /**
  * Servlet implementation class NewsServlet
  */
+
 @MultipartConfig
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -59,8 +64,8 @@ public class NewsServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
-		
-		String action = (String) request.getParameter("action");
+
+String action = (String) request.getParameter("action");
 		
 		//////////////////////////// Printing some Console-info ////////////////////////////
 		Date currentTime = new Date(System.currentTimeMillis());
@@ -71,7 +76,7 @@ public class NewsServlet extends HttpServlet {
 		System.out.format("Protocol: %s\n", request.getProtocol());
 		System.out.format("Type: %s\n", request.getParameter("type"));
 		////////////////////////////////////////////////////////////////////////////////////
-		
+
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
 			return;
@@ -114,22 +119,18 @@ public class NewsServlet extends HttpServlet {
 		if (allParts != null) {
 			Set<InputStream> streams = new HashSet<InputStream>();
 			for (Part part : allParts) {
-
 				if (part.getName().equals("file")) {
 					InputStream inputStream = part.getInputStream();
 					String fileName = part.getSubmittedFileName();
-
 					if (fileName == null) {
 						System.out.println("Sending Response 400: Bad request");
 						response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 						return;
 					}
-
 					streams.add(part.getInputStream());
 					inputstreamFilenames.put(inputStream, fileName);
 				}
 			}
-
 			if (inputstreamFilenames.size() > 0) {
 
 				FileUploader imageUploader = FileUploaderFactory.getNewsImageUploader();
@@ -141,17 +142,30 @@ public class NewsServlet extends HttpServlet {
 					response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
 				}
 			}
-
 		}
 
-		NewsPublisher newsPublisher = DAOFactory.getNewsPublisher();
+		/*
+		 * NewsPublisher newsPublisher = DAOFactory.getNewsPublisher();
+		 * 
+		 * String subject = request.getParameter("newsHeader"); String content =
+		 * request.getParameter("newsContent");
+		 * 
+		 * int primaryKey = newsPublisher.publishNews(subject, content,
+		 * imageUris);
+		 */
 
 		String subject = request.getParameter("newsHeader");
 		String content = request.getParameter("newsContent");
-
-		int primaryKey = newsPublisher.publishNews(subject, content, imageUris);
-
-		if (primaryKey > -1) {
+		boolean enabled = false;
+		if (request.getParameter("status") != null)
+			enabled = true;
+		News news = new News(subject, content, enabled);
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+		NewsPublisherDAO newsPublisher = daoFactory.getNewsPublisherDAO();
+		boolean isPublished = newsPublisher.publishNews(news, imageUris);
+		System.out.println(isPublished);
+		// if (primaryKey > -1) {
+		if (isPublished) {
 			try {
 				response.getWriter().println("News are published!");
 			} catch (IOException e) {
@@ -181,7 +195,6 @@ public class NewsServlet extends HttpServlet {
 				request.getParameter("newsHeader"), request.getParameter("newsContent"));
 		System.out.println("selectedPage " + selectedPage);
 		System.out.println("resultsPerPage " + resultsPerPage);
-
 		// LIMIT = entriesPerPage
 		// OFFSET = (selectedPage - 1) * entriesPerPage = (3-1)*5 = 2 *
 		// an OFFSET of 10 means start from row 11 of ResultSet)
@@ -193,13 +206,9 @@ public class NewsServlet extends HttpServlet {
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
-			
-			String serverPath = getServerRequestPath(request);
-			//e.g: http://78.68.50.137:8080/ServiceExperienceTool/images/news/
-			String fullPath = serverPath + "/images/news/";
-			
-			NewsReader newsFetcher = DAOFactory.getNewsFetcher();
-			newsFetcher.setImagePath(fullPath);
+			// NewsReader newsFetcher = DAOFactory.getNewsFetcher();
+			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {

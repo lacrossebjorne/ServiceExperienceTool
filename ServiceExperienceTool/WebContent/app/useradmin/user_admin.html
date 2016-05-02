@@ -1,0 +1,59 @@
+
+
+	<div class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2"
+		style="z-index: 3; width: 250px; posistion: relative; clear: both">
+		<a href="#" class="w3-border-bottom w3-large"><img
+			src="http://www.w3schools.com/images/w3schools.png"
+			style="width: 80%;"></a> <a href="javascript:void(0)"
+			onclick="w3_close()"
+			class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i
+			class="fa fa-remove"></i></a> <a href="#" class="w3-light-grey w3-medium">Home</a>
+		<a href="#/userview" onclick="showHide('addUserView')">Add user</a> <a href="#/userlist">List
+			users</a> <a href="#">Manage groups</a>
+	</div>
+
+	<div id="myTop" class="w3-container w3-theme w3-large">
+		<i
+			class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right w3-margin-top"
+			onclick="w3_open()"></i>
+	</div>
+
+	<div class="w3-overlay w3-hide-large w3-animate-opacity"
+		onclick="w3_close()" style="cursor: pointer"></div>
+
+	<div id="useradmin_home" class="w3-main" style="margin-left: 250px;">
+		<div class="w3-container w3-padding-hor-32 w3-padding-ver-64 w3-margin-top">
+			<h1 class="w3-text-blue-grey">SET user administration</h1>
+			<h5>Use the navigation menu to administer users and groups.</h5>
+			<ul class="w3-leftbar w3-theme-border" style="list-style-type: none">
+				<li>Add user: add a new user to the Service Experience Tool.</li>
+				<li>List users: get a complete list of all users in the system.</li>
+				<li>Manage groups: to add new groups and add users to the
+					groups.</li>
+			</ul>
+			<br>
+
+			<h2 class="w3-section w3-text-blue-grey">Demo</h2>
+			<div class="w3-example w3-section">
+				<h3>User view</h3>
+				<div class="w3-code notranslate htmlHigh">
+					<p>Some pic illustrating the user view goes here...</p>
+					<br> <br> <br> <br> <br>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
+	<div class="w3-modal"></div>
+	<div ng-view></div>
+	<script>
+		// Open and close the sidenav on medium and small screens
+		function w3_open() {
+			document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
+			document.getElementsByClassName("w3-overlay")[0].style.display = "block";
+		}
+		function w3_close() {
+			document.getElementsByClassName("w3-sidenav")[0].style.display = "none";
+			document.getElementsByClassName("w3-overlay")[0].style.display = "none";
+		}
+	</script>
