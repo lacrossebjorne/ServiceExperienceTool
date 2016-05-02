@@ -9,7 +9,7 @@
 	driverClassName="com.mysql.jdbc.Driver"
 	url="jdbc:mysql://78.68.50.137:3306/setdb?useUnicode=true&amp;characterEncoding=UTF-8"
 	connectionProperties="useUnicode=yes;characterEncoding=utf8;"
-	maxActive="15"
+	maxTotal="15"
 	maxIdle="3" />
 	<Environment name="homePath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool" type="java.lang.String"/>
 		<Environment name="generalUploadPath" 

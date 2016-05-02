@@ -53,7 +53,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 						newsEntry.setImgUriList(new LinkedList<>());
 					}
 					String uri = imgResult.getString("image_uri");
-					System.out.println(uri);
+					System.out.println(imagePath + uri);
 					newsEntry.getImgUriList().add(imagePath + uri);
 				}
 				newsAndImages.add(newsEntry);
