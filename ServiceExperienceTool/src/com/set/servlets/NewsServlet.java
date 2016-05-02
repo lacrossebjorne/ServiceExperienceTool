@@ -3,7 +3,9 @@ package com.set.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -61,7 +63,9 @@ public class NewsServlet extends HttpServlet {
 		String action = (String) request.getParameter("action");
 		
 		//////////////////////////// Printing some Console-info ////////////////////////////
-		System.out.println("###################");
+		Date currentTime = new Date(System.currentTimeMillis());
+		SimpleDateFormat df = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a");
+		System.out.format("################### Time: %s\n", df.format(currentTime)); 
 		System.out.format("Incoming request: %s, action-parameter: %s\n", request.getMethod(), action);
 		System.out.format("Server Path: %s\n", getServerRequestPath(request));
 		System.out.format("Protocol: %s\n", request.getProtocol());

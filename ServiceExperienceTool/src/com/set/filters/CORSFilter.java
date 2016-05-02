@@ -20,7 +20,7 @@ public class CORSFilter implements Filter {
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, HEAD, OPTIONS");
 		response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, x-auth-token, "
-				+ "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+				+ "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-Requested-With, Key, enctype");
 		filterChain.doFilter(servletRequest, servletResponse);
 	}
 
