@@ -65,7 +65,7 @@ public class NewsServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html");
 
-String action = (String) request.getParameter("action");
+		String action = (String) request.getParameter("action");
 		
 		//////////////////////////// Printing some Console-info ////////////////////////////
 		Date currentTime = new Date(System.currentTimeMillis());
