@@ -116,6 +116,9 @@ public class NewsServlet extends HttpServlet {
 
 	private void publishNews(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		
+		System.out.format("subject: %s, content: %s\n", 
+				request.getParameter("newsHeader"), request.getParameter("newsContent"));
 
 		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
 		String[] imageUris = null;
@@ -195,8 +198,6 @@ public class NewsServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		System.out.format("subject: %s, content: %s //For publishNews only\n", 
-				request.getParameter("newsHeader"), request.getParameter("newsContent"));
 		System.out.println("selectedPage " + selectedPage);
 		System.out.println("resultsPerPage " + resultsPerPage);
 		// LIMIT = entriesPerPage

@@ -5,15 +5,25 @@ angular.module('newsfeed')
 .controller('NewsfeedController', ['$scope', 'NewsfetchService', function($scope, Newsfetch) {
   var minArticleTextLimit = 50;
   $scope.TEST = "Newsfetch.get";
-  $scope.limit = 5;
+  $scope.limit = 0;
+  $scope.maxLimit = 100;
   $scope.articleTextLimit = minArticleTextLimit;
+  $scope.news = [];
+  $scope.selectedPage = 0;
 
-  Newsfetch.get({
-    action:'getNews', type: 'json'
-  }, function(newsobject) {
-    $scope.newsobject = newsobject;
-    console.log(newsobject);
-  });
+  expand();
+
+  function expand() {
+    $scope.limit += 5;
+    $scope.selectedPage++;
+    Newsfetch.get({
+      action:'getNews', type: 'json', selectedPage: $scope.selectedPage, resultsPerPage: '5'
+    }, function(newsobject) {
+      for (var i = 0; i < newsobject.news.length; i++) {
+        $scope.news.push(newsobject.news[i]);
+      }
+    });
+  }
 
   // Expands article
   $scope.expandArticle = function(textLimit) {
@@ -22,7 +32,7 @@ angular.module('newsfeed')
 
   // Expands newsfeed
   $scope.expandList = function() {
-    $scope.limit += 5;
+    expand();
   };
 
   $scope.iconChange = function() {
