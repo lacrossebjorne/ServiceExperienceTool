@@ -18,6 +18,6 @@
   </div>
 </div>
 
-<div class="w3-container w3-center">
+<div ng-if="news" class="w3-container w3-center">
   <button type="button" ng-show="limit < maxLimit" ng-click='expandList()' class="w3-btn w3-margin">Load more</button>
 </div>
