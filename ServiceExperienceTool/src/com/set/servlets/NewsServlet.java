@@ -12,6 +12,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -209,6 +211,14 @@ public class NewsServlet extends HttpServlet {
 			// NewsReader newsFetcher = DAOFactory.getNewsFetcher();
 			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
+			
+			//temporary fix - temporaryImagesNewsPath is a constant used only during development face
+			try {
+				newsFetcher.setImagePath(InitialContext.doLookup("java.comp/env/temporaryImagesNewsPath"));
+			} catch (NamingException e) {
+				newsFetcher.setImagePath(getServerRequestPath(request));
+			}
+			
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {
