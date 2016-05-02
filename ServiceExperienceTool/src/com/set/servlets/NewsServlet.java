@@ -33,6 +33,7 @@ import com.set.uploaders.FileUploaderFactory;
  * Servlet implementation class NewsServlet
  */
 
+
 @MultipartConfig
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -202,9 +203,11 @@ String action = (String) request.getParameter("action");
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
+			String fullPath = getServerRequestPath(request);
 			// NewsReader newsFetcher = DAOFactory.getNewsFetcher();
 			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
+			newsFetcher.setImagePath(fullPath);
 			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
 
 			if (allNews != null) {
