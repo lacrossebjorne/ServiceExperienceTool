@@ -11,7 +11,8 @@ import com.set.entities.News;
 
 public class NewsReaderDAOJDBC implements NewsReaderDAO {
 	
-	private final String SQL_NEWS_SELECT = "SELECT news_id, header, content, created_at FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
+	private final String SQL_NEWS_SELECT_ALL = "SELECT news_id, header, content, created_at FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
+	private final String SQL_NEWS_SELECT_ENABLED = "SELECT news_id, header, content, created_at FROM news WHERE enabled=true ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
 	private final String SQL_IMAGE_SELECT = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
 	private DAOFactory daoFactory;
 	private String imagePath = "";
@@ -22,7 +23,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 	
 	@SuppressWarnings("resource")
 	@Override
-	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset) {
+	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset, boolean isDisabledEntriesIncluded) {
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet newsResult = null;
@@ -30,7 +31,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 		List<News> newsAndImages = null;
 		try {
 			connection = daoFactory.getConnection();
-			statement = connection.prepareStatement(SQL_NEWS_SELECT);
+			statement = connection.prepareStatement(isDisabledEntriesIncluded ? SQL_NEWS_SELECT_ALL : SQL_NEWS_SELECT_ENABLED);
 			statement.setInt(1,  resultsPerPage);
 			statement.setInt(2,offset);
 			newsResult = statement.executeQuery();	

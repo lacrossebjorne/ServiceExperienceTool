@@ -68,4 +68,8 @@ public abstract class DAOFactory {
 	public NewsReaderDAO getNewsReaderDAO() {
 		return new NewsReaderDAOJDBC(this);
 	}
+
+	public NewsEditorDAO getNewsEditorDAO() {
+		return new NewsEditorDAOJDBC(this);
+	}
 }

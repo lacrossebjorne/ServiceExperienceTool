@@ -3,8 +3,8 @@
 angular.module('newspublish')
 
 .controller('NewspublishController', ['$scope', 'NewsPublishService', function($scope, Publisher) {
-  $scope.newsHeader = "subject";
-  $scope.newsContent = "content";
+  $scope.newsHeader = "";
+  $scope.newsContent = "";
   $scope.customer = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent };
   $scope.statusMessage = "Please write news."
   $scope.publishNews = function() {

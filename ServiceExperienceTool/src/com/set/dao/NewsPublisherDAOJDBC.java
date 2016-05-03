@@ -38,8 +38,9 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 			
 			//Insert news article in news-table and retreive news PK
 			publishPS = prepareStatement(connection, SQL_INSERT_INTO_NEWS, true, newsObj);
-			if (publishPS.executeUpdate() == 0)
+			if (publishPS.executeUpdate() == 0) {
 				throw new SQLException("Couldn't insert rows into table news");
+			}
 			rsNewsKeys = publishPS.getGeneratedKeys();
 			if (rsNewsKeys.next())
 				newsID = rsNewsKeys.getLong(1);

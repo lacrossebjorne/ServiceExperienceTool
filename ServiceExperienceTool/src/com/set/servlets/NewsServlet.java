@@ -1,6 +1,5 @@
 package com.set.servlets;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -11,10 +10,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -23,8 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
-import com.mysql.jdbc.log.Log;
 import com.set.dao.DAOFactory;
+import com.set.dao.NewsEditorDAO;
 import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
 import com.set.entities.News;
@@ -34,7 +35,6 @@ import com.set.entities.News;
 //import com.set.db.NewsReader;
 import com.set.uploaders.FileUploader;
 import com.set.uploaders.FileUploaderFactory;
-import com.sun.istack.internal.logging.Logger;
 
 /**
  * Servlet implementation class NewsServlet
@@ -43,9 +43,13 @@ import com.sun.istack.internal.logging.Logger;
 @MultipartConfig
 public class NewsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	Map<Integer, String> errorMap = new HashMap<Integer, String>();
 
 	@Override
 	public void init() throws ServletException {
+		errorMap.put(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
+		errorMap.put(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported Media Type");
+		errorMap.put(HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
 		super.init();
 	}
 
@@ -71,15 +75,15 @@ public class NewsServlet extends HttpServlet {
 		response.setContentType("text/html");
 
 		String action = (String) request.getParameter("action");
-		
-		//////////////////////////// Printing some Console-info ////////////////////////////
+
+		//////////////////////////// Printing some Console-info
+		//////////////////////////// ////////////////////////////
 		Date currentTime = new Date(System.currentTimeMillis());
 		SimpleDateFormat df = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a");
-		System.out.format("################### Time: %s\n", df.format(currentTime)); 
+		System.out.format("################### Time: %s\n", df.format(currentTime));
 		System.out.format("Incoming request: %s, action-parameter: %s\n", request.getMethod(), action);
 		System.out.format("Server Path: %s\n", getServerRequestPath(request));
 		System.out.format("Protocol: %s\n", request.getProtocol());
-		System.out.format("Type: %s\n", request.getParameter("type"));
 		////////////////////////////////////////////////////////////////////////////////////
 
 		if (action == null) {
@@ -96,6 +100,12 @@ public class NewsServlet extends HttpServlet {
 			case "fileUpload":
 				uploadFile(request, response);
 				break;
+			case "updateNews":
+				updateNews(request, response);
+				break;
+			case "disableNews":
+				disableNews(request, response);
+				break;
 			default:
 				response.getWriter().println("An invalid value was set to the action-parameter!");
 				break;
@@ -111,15 +121,15 @@ public class NewsServlet extends HttpServlet {
 
 	private void uploadFile(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		UploadServlet us = new UploadServlet();
-		us.doPost(request, response);
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/uploadServlet");
+		dispatcher.forward(request, response);
 	}
 
 	private void publishNews(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		
-		System.out.format("subject: %s, content: %s\n", 
-				request.getParameter("newsHeader"), request.getParameter("newsContent"));
+
+		System.out.format("subject: %s, content: %s\n", request.getParameter("newsHeader"),
+				request.getParameter("newsContent"));
 
 		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
 		String[] imageUris = null;
@@ -131,8 +141,7 @@ public class NewsServlet extends HttpServlet {
 					InputStream inputStream = part.getInputStream();
 					String fileName = part.getSubmittedFileName();
 					if (fileName == null) {
-						System.out.println("Sending Response 400: Bad request");
-						response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+						sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 						return;
 					}
 					streams.add(part.getInputStream());
@@ -146,8 +155,8 @@ public class NewsServlet extends HttpServlet {
 				if (filesAreUploaded) {
 					imageUris = imageUploader.getRecentlyUploadedFileNames();
 				} else {
-					System.out.println("Sending Response 415: Unsupported media type");
-					response.sendError(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+					sendError(response, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+					return;
 				}
 			}
 		}
@@ -179,6 +188,9 @@ public class NewsServlet extends HttpServlet {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else {
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
 		}
 	}
 
@@ -186,8 +198,11 @@ public class NewsServlet extends HttpServlet {
 
 		Integer selectedPage = 1;
 		Integer resultsPerPage = 5;
+		Boolean isDisabledEntriesIncluded = false;
 
 		String type = request.getParameter("type");
+		System.out.format("Type: %s\n", type);
+
 		try {
 			String selectedPageParameter = request.getParameter("selectedPage");
 			String resultsPerPageParameter = request.getParameter("resultsPerPage");
@@ -198,7 +213,13 @@ public class NewsServlet extends HttpServlet {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		}
-		
+
+		String showDisabled = request.getParameter("showDisabled");
+		System.out.println("showDisabled: " + showDisabled);
+		if (showDisabled != null && showDisabled.equals("true")) {
+			isDisabledEntriesIncluded = true;
+		}
+
 		System.out.println("selectedPage " + selectedPage);
 		System.out.println("resultsPerPage " + resultsPerPage);
 		// LIMIT = entriesPerPage
@@ -215,16 +236,18 @@ public class NewsServlet extends HttpServlet {
 			// NewsReader newsFetcher = DAOFactory.getNewsFetcher();
 			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
-			
-			//temporary fix - temporaryImagesNewsPath is a constant used only during development face
+
+			// temporary fix - temporaryImagesNewsPath is a constant used only
+			// during development face
 			try {
 				newsFetcher.setImagePath(InitialContext.doLookup("java:comp/env/temporaryImagesNewsPath"));
 			} catch (NamingException e) {
-				System.out.println("Namingexpeption occured in NewsServlet::getNews(): Now trying to build path from request.");
-				newsFetcher.setImagePath(getServerRequestPath(request) +"/images/news/");
+				System.out.println(
+						"Namingexpeption occured in NewsServlet::getNews(): Now trying to build path from request.");
+				newsFetcher.setImagePath(getServerRequestPath(request) + "/images/news/");
 			}
-			
-			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset);
+
+			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset, isDisabledEntriesIncluded);
 
 			if (allNews != null) {
 
@@ -253,19 +276,116 @@ public class NewsServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	
+
+	private void disableNews(HttpServletRequest request, HttpServletResponse response) {
+		
+		Long id = null;
+		try {
+			String idParameter = request.getParameter("id");
+
+			if (idParameter != null) {
+				id = Long.parseLong(idParameter);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		if (id == null) {
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		System.out.println("id: " + id);
+
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+		NewsEditorDAO newsEditorDAO = daoFactory.getNewsEditorDAO();
+		boolean isDisabled = newsEditorDAO.disableNewsEntry(id);
+
+		if (isDisabled) {
+			try {
+				response.getWriter().println("News entry are disabled!");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+
+	}
+
+	private void updateNews(HttpServletRequest request, HttpServletResponse response) {
+
+		Long id = null;
+		String header = request.getParameter("header");
+		String content = request.getParameter("content");
+
+		try {
+			String idParameter = request.getParameter("id");
+
+			if (idParameter != null) {
+				id = Long.parseLong(idParameter);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		if (id == null || header == null || content == null) {
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		System.out.println("id: " + id);
+		System.out.println("header: " + header);
+		System.out.println("content: " + content);
+
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+		NewsEditorDAO newsEditorDAO = daoFactory.getNewsEditorDAO();
+
+		News newsEntry = new News(header, content, null, null, true, null);
+		newsEntry.setNewsId(id);
+
+		boolean isPublished = newsEditorDAO.updateNews(newsEntry);
+
+		if (isPublished) {
+			try {
+				response.getWriter().println("News are published!");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+
+	}
+
 	private String getServerRequestPath(HttpServletRequest request) {
 		String protocol = "";
-		//todo add support for more protocols
+		// todo add support for more protocols
 		if (request.getProtocol().equals("HTTP/1.1")) {
 			protocol = "http://";
 		}
 		String server = request.getServerName();
 		String port = Integer.toString(request.getServerPort());
 		String contextPath = request.getContextPath();
-		
+
 		String fullPath = protocol + server + ":" + port + contextPath;
 		System.out.println(fullPath);
 		return fullPath;
+	}
+
+	public void sendError(HttpServletResponse response, Integer errorCode) {
+		Map<Integer, String> errorMap = new HashMap<Integer, String>();
+		errorMap.put(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
+		errorMap.put(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported Media Type");
+		errorMap.put(HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
+		String errorName = errorMap.get(errorCode);
+		try {
+			System.out.format("Sending Response %d: %s", errorCode, errorName);
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
