@@ -1,43 +1,58 @@
 <!doctype html>
 <html lang="en" ng-app="app">
 
-  <head>
-    <meta charset="utf-8">
-    <title>Sevice Experience Tool</title>
-    <link rel="stylesheet" href="css/w3.css">
-    <link rel="stylesheet" href="css/animation.css">
-    <link rel="stylesheet" href="css/w3-theme-blue-grey.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-  </head>
+<head>
+<meta charset="utf-8">
+<title>Sevice Experience Tool</title>
+<link rel="stylesheet" href="css/w3.css">
+<link rel="stylesheet" href="css/animation.css">
+<link rel="stylesheet" href="css/w3-theme-blue-grey.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
 
-  <body class="w3-theme-l5">
-    <div ng-include src="'static/navbar.html'"></div>
-    <div class="w3-container w3-content" style="max-width:1024px;margin-top:80px">
-      <div ng-include src="'app/main-view/main-view.html'"></div>
-    </div>
-    <div ng-include src="'static/footer.html'"></div>
+<body class="w3-theme-l5">
+	<div ng-include src="'static/navbar.html'"></div>
+	<div class="w3-container w3-content"
+		style="max-width: 1024px; margin-top: 64px">
+		<div ng-include src="'app/main-view/main-view.html'"></div>
+	</div>
+	<div ng-include src="'static/footer.html'"></div>
 
-    <!-- Angular Scripts -->
-    <script src="angular/angular.js"></script>
-    <script src="angular/angular-animate.js"></script>
-    <script src="angular/angular-route.js"></script>
-    <script src="angular/angular-resource.js"></script>
-    <script src="angular/animate.js"></script>
+	<!-- Angular Scripts -->
+	<script src="angular/angular.js"></script>
+	<script src="angular/angular-animate.js"></script>
+	<script src="angular/angular-route.js"></script>
+	<script src="angular/angular-resource.js"></script>
+	<script src="angular/animate.js"></script>
 
-    <!-- App Scripts -->
-    <script src="app/app.js"></script>
+	<!-- App Scripts -->
+	<script src="app/app.js"></script>
 
-    <script src="app/main-view/main-view.js"></script>
+	<script src="app/main-view/main-view.js"></script>
 
-    <script src="app/newsfeed/newsfeed.js"></script>
-    <script src="app/newsfeed/controller.js"></script>
-    <script src="app/newsfeed/service.js"></script>
+	<script src="app/newsfeed/newsfeed.js"></script>
+	<script src="app/newsfeed/controller.js"></script>
+	<script src="app/newsfeed/service.js"></script>
 
 	<script src="app/newspublish/newspublish.js"></script>
-    <script src="app/newspublish/controller.js"></script>
-    <script src="app/newspublish/service.js"></script>
-    <script src="app/newspublish/directive.js"></script>
+	<script src="app/newspublish/controller.js"></script>
+	<script src="app/newspublish/service.js"></script>
+	<script src="app/newspublish/directive.js"></script>
 
-  </body>
+	<script>
+		function showDiv(divIdName) {
+			
+			var x = document.getElementById(divIdName);
+			console.log("showDiv " + x.className);
+			if (x.className.indexOf("w3-show") == -1) {
+				x.className += " w3-show";
+			} else {
+				x.className = x.className.replace(" w3-show", "");
+			}
+		}
+	</script>
+
+</body>
 
 </html>
