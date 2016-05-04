@@ -12,7 +12,7 @@
 	maxTotal="15"
 	maxIdle="3" />
 	<Environment name="homePath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool" type="java.lang.String"/>
-		<Environment name="generalUploadPath" 
+	<Environment name="generalUploadPath" 
 		value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\generalUpload" type="java.lang.String"/>
 	<Environment name="imagesUploadPath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\images" type="java.lang.String"/>
 	<Environment name="temporaryImagesNewsPath" value="http://78.68.50.137:8080/ServiceExperienceTool/images/news/" type="java.lang.String"/>
