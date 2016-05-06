@@ -11,14 +11,11 @@ angular.module('newspublish')
   $scope.urlPath = "";
   $scope.urlList = [];
 
-  $scope.publishNews = function() {
-	  console.log('Publishing: ' + $scope.newsSubject + ", " + $scope.newsContent);
-  };
-
   $scope.addUrl = function() {
-    if (!$scope.publishForm.urlField.$valid && $scope.urlPath.length > 0) {
+	if ($scope.urlPath == null || !$scope.publishForm.urlField.$valid || $scope.urlPath.length == 0) {
       return;
-    }
+    } 
+	
     var urlName = $scope.urlName.length > 0 ? $scope.urlName : "no title";
     $scope.urlList.push({name: $scope.urlName.length > 0 ? $scope.urlName : "no title", url: $scope.urlPath});
   }
