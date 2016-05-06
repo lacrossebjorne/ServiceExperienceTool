@@ -13,8 +13,7 @@
 
 <body class="w3-theme-l5">
 	<div ng-include src="'static/navbar.html'"></div>
-	<div class="w3-container w3-content"
-		style="max-width: 1024px; margin-top: 64px">
+	<div class="w3-container w3-content" style="max-width: 1200px; margin-top: 64px; padding:0;">
 		<div ng-include src="'app/main-view/main-view.html'"></div>
 	</div>
 	<div ng-include src="'static/footer.html'"></div>
@@ -42,7 +41,7 @@
 
 	<script>
 		function showDiv(divIdName) {
-			
+
 			var x = document.getElementById(divIdName);
 			console.log("showDiv " + x.className);
 			if (x.className.indexOf("w3-show") == -1) {

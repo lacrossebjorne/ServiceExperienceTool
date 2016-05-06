@@ -1,23 +1,61 @@
 <div class="w3-container w3-card-2 w3-white w3-round w3-margin-right w3-margin-bottom w3-margin-left">
-	<div class="w3-blue-grey w3-padding-ver-16">
-		<h1>upload news</h1>
-	</div>
-	<label>Subject: </label>
-	<input ng-model="newsHeader" type="text" pattern=".{3,}"
-		placeholder="write a subject(minimum 3 characters)" required autofocus
-		class="w3-input w3-border w3-hover-border-black" /> <br /> <label
-		for="newsContentField">Content:</label> <br />
-	<textarea pattern=".{12,}" ng-model="newsContent" rows="4" cols="50"
-		placeholder="write the news(minimum 12 characters)" required
-		class="w3-input w3-border w3-hover-border-black" ></textarea>
-	<br /> <br /> <label>Choose one or more images to upload</label> <br />
-	<input type="file" name="file" file-model="customer.file" accept=".jpg,.jpeg,.png,.gif" multiple />
-	<br />
-	<button ng-click="submit()"
-		class="w3-btn w3-btn-block w3-blue-grey w3-section" />
-	Publish
-	</button>
-	<p>
-		{{statusMessage}}
-	</p>
+	<form name="publishForm">
+
+		<div class="w3-blue-grey w3-padding-ver-16 w3-section">
+			<h1>upload news</h1>
+		</div>
+
+		<div class="w3-section">
+			<label>Subject: </label>
+			<input ng-model="newsHeader" type="text" pattern=".{3,}"
+			placeholder="write a subject(minimum 3 characters)" required autofocus
+			class="w3-input w3-border w3-hover-border-black" />
+			<br />
+			<label>Content:</label>
+			<br />
+			<textarea pattern=".{12,}" ng-model="newsContent" rows="4" cols="50"
+			placeholder="write the news(minimum 12 characters)" required
+			class="w3-input w3-border w3-hover-border-black" ></textarea>
+		</div>
+
+		<div class="w3-section">
+			<label>Choose one or more images to upload</label>
+			<input type="file" name="file" file-model="customer.file" accept=".jpg,.jpeg,.png,.gif" />
+		</div>
+
+		<div ng-if="urlList.length > 0" class="w3-rest w3-section">URLs to add:
+			<div class="w3-row" ng-repeat="urlItem in urlList">
+				<div class="w3-quarter">{{urlItem.name}}</div>
+				<div class="w3-half">{{urlItem.url}}</div>
+				<div ng-click="removeUrl()" class="w3-quarter">
+					<button class="w3-btn w3-red w3-btn-block">
+						<i class="fa fa-remove"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="w3-section w3-row">
+			<div class="w3-third">
+				<label>Name:</label>
+				<input type="text" ng-model="urlName" placeHolder="name of url" class="w3-input w3-border w3-hover-border-black"/>
+			</div>
+			<div class="w3-twothird">
+				<label>URL:</label>
+				<input name="urlField" type="url" ng-model="urlPath" placeHolder="http://www.link.com" class="w3-input w3-border w3-hover-border-black"/>
+			</div>
+			<div class="w3-third">
+				<button type="button" ng-click="addUrl()" class="w3-btn w3-btn-block w3-green">add url</button>
+			</div>
+		</div>
+
+		<div class="w3-section">
+			<button type="submit" ng-click="submit()"
+			class="w3-btn w3-btn-block w3-blue-grey" />
+			Publish
+			</button>
+			{{statusMessage}}
+		</div>
+
+	</form>
 </div>

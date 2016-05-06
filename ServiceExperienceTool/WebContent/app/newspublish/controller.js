@@ -6,11 +6,27 @@ angular.module('newspublish')
   $scope.newsHeader = "";
   $scope.newsContent = "";
   $scope.customer = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent };
-  $scope.statusMessage = "Please write news."
+  $scope.statusMessage = "Please write news.";
+  $scope.urlName = "";
+  $scope.urlPath = "";
+  $scope.urlList = [];
+
   $scope.publishNews = function() {
 	  console.log('Publishing: ' + $scope.newsSubject + ", " + $scope.newsContent);
-	  //alert('Publishing: ' + $scope.newsSubject + ", " + $scope.newsContent);
   };
+
+  $scope.addUrl = function() {
+    if (!$scope.publishForm.urlField.$valid && $scope.urlPath.length > 0) {
+      return;
+    }
+    var urlName = $scope.urlName.length > 0 ? $scope.urlName : "no title";
+    $scope.urlList.push({name: $scope.urlName.length > 0 ? $scope.urlName : "no title", url: $scope.urlPath});
+  }
+
+  $scope.removeUrl = function() {
+    var index = $scope.urlList.indexOf(this.urlItem);
+    $scope.urlList.splice(index, 1);
+  }
 
   $scope.submit = function() {
     if (!validateFormInput()) {
@@ -19,7 +35,7 @@ angular.module('newspublish')
 
     $scope.customer.newsHeader = $scope.newsHeader;
     $scope.customer.newsContent = $scope.newsContent;
-    //$scope.customer.file = null;
+
     console.log($scope.customer);
     Publisher.save($scope.customer).$promise.then(function(result) {
       console.log("Success? " + result);
