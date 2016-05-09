@@ -5,8 +5,7 @@
 angular.module('mainView', [
   'ngRoute',
   'newsfeed',
-  'newspublish',
-  'app.newsfeedservice'
+  'newspublish'
 ])
 
 /* 
@@ -24,4 +23,17 @@ angular.module('mainView', [
         redirectTo: '/newsfeed'
       });
   }
-]);
+])
+
+.controller('MainViewController', MainViewController);
+
+MainViewController.$inject = ['$scope', 'newsfeedservice'];
+
+function MainViewController($scope, newsfeedservice) {
+	console.log('MainViewController init');
+  var vm = this;
+  vm.test = newsfeedservice.test('World');
+  vm.update = function(){
+	  vm.test = newsfeedservice.test('Update');
+  }
+};

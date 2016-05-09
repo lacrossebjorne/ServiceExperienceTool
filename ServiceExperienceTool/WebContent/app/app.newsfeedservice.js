@@ -5,7 +5,8 @@ newsfeedservice.$inject = ['$resource', 'app.paths'];
 
 function newsfeedservice($resource, paths) {
   var service = {
-    saveNews: saveNews
+    saveNews: saveNews,
+    test: test
   };
 
   return service;
@@ -31,5 +32,9 @@ function newsfeedservice($resource, paths) {
         console.log("Error: " + errorMsg);
         return "Couldn't post news!";
       });
+  }
+  
+  function test(){
+	  return 'Hello from test';
   }
 }
