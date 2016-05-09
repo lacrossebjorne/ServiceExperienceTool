@@ -5,7 +5,8 @@
 angular.module('mainView', [
   'ngRoute',
   'newsfeed',
-  'newspublish'
+  'newspublish',
+  'app.newsfeedservice'
 ])
 
 /* 

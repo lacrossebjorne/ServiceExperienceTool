@@ -1,50 +1,35 @@
 angular.module('app')
   .factory('newsfeedservice', newsfeedservice);
 
-newsfeedservice.$inject = ['$resource','app.paths'];
+newsfeedservice.$inject = ['$resource', 'app.paths'];
 
 function newsfeedservice($resource, paths) {
   var service = {
-    getNews: getNews,
     saveNews: saveNews
   };
 
   return service;
 
-
-  function getNews() {
-    var newsobject = $resource(paths.api + "newsServlet", {}, {
-      get: {
-        method: 'GET',
+  function saveNews(header, content) {
+    var saveResource = $resource(paths.api + "newsServlet", {}, {
+      save: {
+        method: 'POST',
         params: {
-          action: 'getNews',
-          type: 'json',
-          selectedPage: '1',
-          resultsPerPage: '5',
-          showDisabled: false
+          action: 'publishNews',
+          header: header,
+          content: content
         },
         isArray: false
       }
     });
 
-    return newsobject.get();
+    return saveResource.save().$promise.then(function(result) {
+        console.log("Success? " + result);
+        return "Succesfully posted news!";
+      })
+      .catch(function(errorMsg) {
+        console.log("Error: " + errorMsg);
+        return "Couldn't post news!";
+      });
   }
-  
-  function saveNews() {
-	    var newsobject = $resource(paths.api + "newsServlet", {}, {
-	      get: {
-	        method: 'GET',
-	        params: {
-	          action: 'getNews',
-	          type: 'json',
-	          selectedPage: '1',
-	          resultsPerPage: '5',
-	          showDisabled: false
-	        },
-	        isArray: false
-	      }
-	    });
-
-	    return newsobject.get();
-	  }
 }
