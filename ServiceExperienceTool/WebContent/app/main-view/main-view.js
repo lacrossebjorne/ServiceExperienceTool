@@ -5,7 +5,8 @@
 angular.module('mainView', [
   'ngRoute',
   'newsfeed',
-  'newspublish'
+  'newspublish',
+  'menu'
 ])
 
 /* 
@@ -15,11 +16,7 @@ angular.module('mainView', [
 
 .config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.when('/menu', {
-        templateUrl: 'app/menu/menu.html'
-          //, controller: 'MenuController'
-      })
-      .otherwise({
+    $routeProvider.otherwise({
         redirectTo: '/newsfeed'
       });
   }
