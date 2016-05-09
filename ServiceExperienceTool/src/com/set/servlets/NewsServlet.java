@@ -238,7 +238,7 @@ public class NewsServlet extends HttpServlet {
 			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
 
 			// temporary fix - temporaryImagesNewsPath is a constant used only
-			// during development face
+			// during development phase
 			try {
 				newsFetcher.setImagePath(InitialContext.doLookup("java:comp/env/temporaryImagesNewsPath"));
 			} catch (NamingException e) {
@@ -303,7 +303,7 @@ public class NewsServlet extends HttpServlet {
 
 		if (isDisabled) {
 			try {
-				response.getWriter().println("News entry are disabled!");
+				response.getWriter().println("News entry is disabled!");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -376,14 +376,10 @@ public class NewsServlet extends HttpServlet {
 	}
 
 	public void sendError(HttpServletResponse response, Integer errorCode) {
-		Map<Integer, String> errorMap = new HashMap<Integer, String>();
-		errorMap.put(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Internal Server Error");
-		errorMap.put(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE, "Unsupported Media Type");
-		errorMap.put(HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
-		String errorName = errorMap.get(errorCode);
+		String errorName = this.errorMap.get(errorCode);
 		try {
 			System.out.format("Sending Response %d: %s", errorCode, errorName);
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			response.sendError(errorCode);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
