@@ -1,3 +1,38 @@
-<div class="w3-container w3-card-2 w3-white w3-round w3-margin">
-  <h1>Inside menu.html</h1>
+
+<div ng-if="!menus" class="w3-container w3-center">
+  <span>Loading results...</span>
+</div>
+
+<div ng-if="!selectedMenu" class="w3-container w3-card-2">
+	<ul>
+		<li ng-repeat="menu in menus" ng-click="showMenu(menu.id)">{{menu.name}}</li>
+	</ul>
+</div>
+
+<div ng-if="selectedMenu">
+<!-- Category navbar-->
+<div>
+<ul ng-if="categories" class="w3-navbar w3-border w3-theme-d2">
+  <li ng-repeat="cat in categories" class="w3-border w3-theme-d2">
+  	<a href ng-click="showCategory(cat.id)" class="w3-hover-white">{{ cat.name }}</a>
+  </li>
+  <!-- Debug output -->
+    <li>{{ selectedCat }}</li>
+</ul>
+</div>
+
+<div ng-repeat="cat in categories | filter:selectedCat:true">
+	<div id="{{ 'category-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-right w3-margin-bottom w3-margin-left">
+		<h4>{{ cat.name }}</h4>
+		<ul class="w3-ul">
+			<li ng-repeat="item in menuItems | filter:{category: cat.id}:true">
+				<div id="{{ 'menu-item-' + $index }}">
+					<h4>{{ item.name }}</h4>
+					<p>{{ item.description }}</p>
+					<p>{{ item.details }}</p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
 </div>
