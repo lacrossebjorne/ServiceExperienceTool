@@ -72,4 +72,16 @@ public abstract class DAOFactory {
 	public NewsEditorDAO getNewsEditorDAO() {
 		return new NewsEditorDAOJDBC(this);
 	}
+	
+	public MenuItemDAO getMenuItemDAO() {
+		return new MenuItemDAOSqlImpl(this);
+	}
+	
+	public MenuCategoryDAO getMenuCategoryDAO() {
+		return new MenuCategoryDAOSqlImpl(this);
+	}
+	
+	public MenuDAO getMenuDAO(){
+		return new MenuDAOSqlImpl(this);
+	}
 }
