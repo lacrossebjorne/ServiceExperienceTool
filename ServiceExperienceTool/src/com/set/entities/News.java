@@ -16,6 +16,7 @@ public class News {
 	private boolean enabled;
 	private Set<NewsImage> newsImages = new HashSet<NewsImage>(0);
 	private List<String> imgUri = new LinkedList<>();
+	private List<NewsUrl> newsUrls = new LinkedList<>();
 
 	public News() {
 	}
@@ -29,13 +30,14 @@ public class News {
 	
 	
 	public News(String header, String content, Date createdAt, Date updatedAt, boolean enabled,
-			Set<NewsImage> newsImages) {
+			Set<NewsImage> newsImages, List<NewsUrl> newsUrls) {
 		this.header = header;
 		this.content = content;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.enabled = enabled;
 		this.newsImages = newsImages;
+		this.newsUrls = newsUrls;
 	}
 	
 	public Long getNewsId() {
@@ -99,5 +101,13 @@ public class News {
 	}
 	public void setImgUriList(List<String> imgUri) {
 		this.imgUri = imgUri;
+	}
+	
+	public List<NewsUrl> getNewsUrls() {
+		return this.newsUrls;
+	}
+	
+	public void setNewsUrls(List<NewsUrl> newsUrls) {
+		this.newsUrls = newsUrls;
 	}
 }

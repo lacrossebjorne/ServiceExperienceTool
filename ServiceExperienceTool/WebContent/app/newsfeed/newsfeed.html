@@ -9,12 +9,19 @@
     <h4>{{ x.header }}</h4>
     <span>Date: {{ x.createdAt }}</span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
+    <div ng-if="x.newsUrls.length > 0" class="w3-margin-bottom">
+      <strong>Added url:s:</strong>
+      <div ng-repeat="url in x.newsUrls">
+          <a href="{{url.path}}">{{url.title}}</a>
+      </div>
+    </div>
     <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
       <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
     </button>
     <button type="button" ng-click="toggleEdit(x)" class="w3-btn w3-theme-d1 w3-margin-bottom">
       <i class="fa fa-pencil" ></i> Edit
     </button>
+
     <div ng-if="x.isEditing">
       <input id="{{ 'edit-header-' + $index }}" type="text" ng-value="x.header" pattern=".{3,}"
         placeholder="write a subject(minimum 3 characters)" required
