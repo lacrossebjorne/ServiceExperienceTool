@@ -8,7 +8,7 @@ angular.module('mainView', [
   'newspublish'
 ])
 
-/* 
+/*
  * This routing should only redirect on '.otherwise'.
  * Separate routing in corresponding module.
  *  */

@@ -1,3 +1,4 @@
+/*
 'use strict';
 
 angular.module('newspublish')
@@ -19,3 +20,4 @@ angular.module('newspublish')
     return fd;
 }
 }]);
+*/
