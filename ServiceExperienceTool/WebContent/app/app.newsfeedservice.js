@@ -12,6 +12,10 @@ function newsfeedservice($http, $log, $resource, paths) {
 
 	return service;
 
+	/*
+	 * Service functions
+	 */
+	
 	function saveNews(header, content) {
 		$log.info('saveNews called');
 		var saveResource = $resource(paths.local + "newsServlet", {}, {
@@ -32,7 +36,7 @@ function newsfeedservice($http, $log, $resource, paths) {
 
 	function getMovie(t, y, plot) {
 		$log.info('getMovie called');
-		var saveResource = $resource("http://www.omdbapi.com/", {}, {
+		var saveResource = $resource("http://www.omdbapicom/", {}, {
 			get : {
 				method : 'POST',
 				params : {
@@ -55,13 +59,12 @@ function newsfeedservice($http, $log, $resource, paths) {
 		});
 
 		return saveResource.get().$promise.then(function(result) {
-		      $log.info("Succesfully got movie!");
-		    })
-		    .catch(function(errorMsg) {
-		      $log.info("Couldn't get movie!");
-		      $log.log("Error: ");
-		      $log.error(errorMsg);
-		    });
+			$log.info("Succesfully got movie!");
+		}, function(error) {
+			$log.info("Couldn't get movie!");
+			$log.log("Error: ");
+			$log.error(error);
+		});
 
 	}
     
