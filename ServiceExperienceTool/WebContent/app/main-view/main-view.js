@@ -30,10 +30,9 @@ angular.module('mainView', [
 MainViewController.$inject = ['$scope', 'newsfeedservice'];
 
 function MainViewController($scope, newsfeedservice) {
-	console.log('MainViewController init');
-  var vm = this;
-  vm.test = newsfeedservice.test('World');
-  vm.update = function(){
-	  vm.test = newsfeedservice.test('Update');
-  }
+//	console.log('MainViewController initialized');
+	var vm = this;
+	vm.test = newsfeedservice.test();
+	vm.testRes = newsfeedservice.getMovie('Titanic', '1997', 'short');
+	
 };
