@@ -26,9 +26,10 @@ public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		if (request.getParameter("getUserList") != null) {
 			UserDAO userDAO = getDAOFactory().getUserDAO();
-			List<User> userList = userDAO.listUsers();
+			List<User> userList = userDAO.listUsers();			
 			Map<String, Object> map = new HashMap<>();
 			boolean isValid = false;
 			if (!userList.isEmpty()) {
@@ -36,7 +37,12 @@ public class UserAdminServlet extends HttpServlet {
 				map.put("userList", userList);
 			}
 			map.put("isValid", isValid);
-			writeJson(response, map);
+			
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+			}
+			
+			//writeJson(response, map);
 		}
 		
 		if (request.getParameter("getRolesList") != null) {
@@ -54,8 +60,7 @@ public class UserAdminServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.setContentType("application/json");
-		request.setCharacterEncoding("UTF-8");
+		
 		final GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(User.class, new UserDeserializer());
 		final Gson gson = builder.create();

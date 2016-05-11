@@ -1,5 +1,4 @@
 package com.set.entities;
-// Generated 2016-apr-24 20:41:36 by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
 
@@ -10,7 +9,7 @@ public class ResetPassword implements java.io.Serializable {
 	private Long resetPasswordId;
 	private User user;
 	private String securitycode;
-	private Date experationTime;
+	private Date expirationTime;
 
 	public ResetPassword() {
 	}
@@ -18,7 +17,7 @@ public class ResetPassword implements java.io.Serializable {
 	public ResetPassword(User user, String securitycode, Date experationTime) {
 		this.user = user;
 		this.securitycode = securitycode;
-		this.experationTime = experationTime;
+		this.expirationTime = experationTime;
 	}
 
 	public Long getResetPasswordId() {
@@ -45,12 +44,16 @@ public class ResetPassword implements java.io.Serializable {
 		this.securitycode = securitycode;
 	}
 
-	public Date getExperationTime() {
-		return this.experationTime;
+	public Date getExpirationTime() {
+		return this.expirationTime;
 	}
 
-	public void setExperationTime(Date experationTime) {
-		this.experationTime = experationTime;
+	public void setExpirationTime(Date experationTime) {
+		this.expirationTime = experationTime;
 	}
-
+	
+	public String toString() {
+		return "ResetID: " + resetPasswordId + " Securitycode: " + securitycode + " Expiration time: " + expirationTime;
+		
+	}
 }

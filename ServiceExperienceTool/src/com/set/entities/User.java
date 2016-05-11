@@ -20,7 +20,6 @@ public class User implements java.io.Serializable {
 	private Date createdAt;
 	private Date updatedAt;
 	private boolean enabled;
-	private ResetPassword securitycode;
 	private List<Role> roles = new ArrayList<>();
 	private Set<ResetPassword> resetPasswords = new HashSet<ResetPassword>(0);
 	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
@@ -153,14 +152,6 @@ public class User implements java.io.Serializable {
 		this.roles = roles;
 	}
 
-	public ResetPassword getSecurityToken() {
-		return securitycode;
-	}
-
-	public void setSecurityToken(ResetPassword securitycode) {
-		this.securitycode = securitycode;
-	}
-
 	public Set<ResetPassword> getResetPasswords() {
 		return this.resetPasswords;
 	}
@@ -179,7 +170,8 @@ public class User implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return ("ID:" + userId + " First name: " +firstName + " Last name: " + lastName + " Username: " + username + " Email: " + email + " Roles: " + roles + " Created date: " + createdAt + " Enabled: " + enabled);
+		return ("ID:" + userId + " First name: " +firstName + " Last name: " + lastName + " Username: " + username + " Email: "
+				+ email + " Roles: " + roles + " Created date: " + createdAt + " Enabled: " + enabled + " Resetpass requests: " + resetPasswords);
 		
 	}
 }

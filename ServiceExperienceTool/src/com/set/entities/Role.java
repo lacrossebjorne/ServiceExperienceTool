@@ -80,6 +80,6 @@ public class Role implements java.io.Serializable {
 	}
 	
 	public String toString() {
-		return "ID: " + roleId + " Name: " + name + " Description: " + description + " Enabled: " + enabled;
+		return "ID: " + roleId + " Rolename: " + name + " Description: " + description + " Enabled: " + enabled;
 	}
 }

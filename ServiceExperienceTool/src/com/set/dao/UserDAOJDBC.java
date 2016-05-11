@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -80,7 +81,6 @@ public class UserDAOJDBC implements UserDAO {
 		return user;
 	}
 
-	@SuppressWarnings("null")
 	@Override
 	public List<User> listUsers() {
 		List<User> users = new ArrayList<>();
@@ -97,13 +97,15 @@ public class UserDAOJDBC implements UserDAO {
 			Long roleID = null;
 			List<Role> roles = null;
 			Long resetpassID = null;
-			Set<ResetPassword> resetSet = null;
+			Set<ResetPassword> resetPasswordsSet = null;
 			while (resultSet.next()) {
-				if(user == null || !userID.equals(resultSet.getLong("user_id"))) {
-					if (!user.equals(null)) {
+				if(userID == null || userID != resultSet.getLong("user_id")) {
+					if (user != null) {
 						user.setRoles(roles);
-						user.setResetPasswords(resetSet);
+						user.setResetPasswords(resetPasswordsSet);
 						users.add(user);
+						roleID = null;
+						resetpassID = null;
 					}
 					user = new User();
 					user.setUserId(resultSet.getLong("user_id"));
@@ -116,34 +118,39 @@ public class UserDAOJDBC implements UserDAO {
 					user.setCreatedAt(resultSet.getDate("created_at"));
 					user.setUpdatedAt(resultSet.getDate("updated_at"));
 					roles = new ArrayList<>();
-					if ((roleID = resultSet.getLong("role_id")) != null) {
+					if ((roleID = resultSet.getLong("role_id")) != 0) {
 						role = new Role();
 						role.setRoleId(roleID);
 						role.setName(resultSet.getString("rolename"));
-						role.setDescription("role_description");
+						role.setDescription(resultSet.getString("role_description"));
+						role.setEnabled(resultSet.getBoolean("role_enabled"));
 						roles.add(role);
 					}
-					if ((resetpassID = resultSet.getLong("reset_password_id")) != null) {
+					resetPasswordsSet = new HashSet<>();
+					if ((resetpassID = resultSet.getLong("reset_password_id")) != 0) {
 						ResetPassword reset = new ResetPassword();
 						reset.setResetPasswordId(resetpassID);
 						reset.setSecuritycode(resultSet.getString("securitycode"));
-						reset.setExperationTime(resultSet.getDate("experation_time"));
-						user.setSecurityToken(reset);
+						reset.setExpirationTime(resultSet.getDate("expiration_time"));
+						reset.setUser(user);
+						resetPasswordsSet.add(reset);
 					}
 				} else {
-					if ((roleID = resultSet.getLong("role_id")) != null) {
+					if ((roleID = resultSet.getLong("role_id")) != 0) {
 						role = new Role();
 						role.setRoleId(roleID);
 						role.setName(resultSet.getString("rolename"));
 						role.setDescription("role_description");
+						role.setEnabled(resultSet.getBoolean("role_enabled"));
 						roles.add(role);
 					}
-					if ((resetpassID = resultSet.getLong("reset_password_id")) != null) {
+					if ((resetpassID = resultSet.getLong("reset_password_id")) != 0) {
 						ResetPassword reset = new ResetPassword();
 						reset.setResetPasswordId(resetpassID);
 						reset.setSecuritycode(resultSet.getString("securitycode"));
-						reset.setExperationTime(resultSet.getDate("experation_time"));
-						resetSet.add(reset);
+						reset.setExpirationTime(resultSet.getDate("expiration_time"));
+						reset.setUser(user);
+						resetPasswordsSet.add(reset);
 					}
 				}
 			}
