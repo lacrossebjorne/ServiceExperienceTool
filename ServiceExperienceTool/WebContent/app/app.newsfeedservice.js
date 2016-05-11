@@ -31,7 +31,7 @@ function newsfeedservice($http, $log, $resource, paths) {
 					method: 'POST',
 					params: { action: 'updateNews' },
 					transformRequest: formDataObject,
-					headers: {'Content-Type': undefined, enctype:'multipart/form-data' },
+					headers: {'Content-Type': undefined, 'Content-Transfer-Encoding': 'binary', enctype:'multipart/form-data' },
 					timeout: 2000
 				},
 				disable: {
@@ -45,8 +45,13 @@ function newsfeedservice($http, $log, $resource, paths) {
 			var fd = new FormData();
 			angular.forEach(data, function(value, key) {
 				console.log("key: " + key);
-				console.log("value: " + value);
-				fd.append(key, value);
+				var val = value;
+				/*
+				if (key != "file") {
+					val = encodeURIComponent(value);
+				}*/
+				console.log("value: " + val);
+				fd.append(key, val);
 			});
 			return fd;
 		}
