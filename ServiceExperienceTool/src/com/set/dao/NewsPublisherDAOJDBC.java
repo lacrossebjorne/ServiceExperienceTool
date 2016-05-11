@@ -9,6 +9,7 @@ import java.util.Set;
 
 import com.set.entities.Image;
 import com.set.entities.News;
+import com.set.entities.NewsUrl;
 
 import static com.set.dao.DAOUtil.*;
 
@@ -16,6 +17,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 	private final String SQL_INSERT_INTO_NEWS = "INSERT INTO news(header, content, created_at) VALUES(?, ?, NOW())";
 	private final String SQL_INSERT_INTO_IMAGE = "INSERT INTO image (image_uri) VALUE (?)";
 	private final String SQL_INSERT_INTO_NEWS_IMAGE = "INSERT INTO news_image(news_id, image_id) VALUES(?, ?)";
+	private final String SQL_INSERT_INTO_NEWS_URL = "INSERT INTO news_url(news_id, title, path) VALUES (?, ?, ?)";
 	private DAOFactory daoFactory;
 
 	public NewsPublisherDAOJDBC(DAOFactory daoFactory) {
@@ -24,7 +26,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 
 	@SuppressWarnings("resource")
 	@Override
-	public boolean publishNews(News news, String... imgUris) {
+	public boolean publishNews(News news, String[] imgUris, NewsUrl[] newsUrls) {
 		boolean published = false;
 		Object[] newsObj = { news.getHeader(), news.getContent() };
 		Connection connection = null;
@@ -32,6 +34,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		ResultSet rsNewsKeys = null;
 		ResultSet rsImageKeys = null;
 		Long newsID = null;
+		int[] batchResult = null;
 		try {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
@@ -73,9 +76,27 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 					publishPS.setLong(2, imagePrimaryKey);
 					publishPS.addBatch();
 				}
-				if (publishPS.executeUpdate() == 0)
+				batchResult = publishPS.executeBatch();
+				if (!isBatchSuccessful(batchResult)) {
 					throw new SQLException("Couldn't insert image into table news_image");
+				}
 			}
+			
+			//Insert urls into newsUrl-table
+			if (newsUrls != null && newsUrls.length > 0) {
+				publishPS = connection.prepareStatement(SQL_INSERT_INTO_NEWS_URL);
+				for (NewsUrl newsUrl : newsUrls) {
+					publishPS.setLong(1, newsID);
+					publishPS.setString(2, newsUrl.getTitle());
+					publishPS.setString(3, newsUrl.getPath());
+					publishPS.addBatch();
+				}
+				batchResult = publishPS.executeBatch();
+				if (!isBatchSuccessful(batchResult)) {
+					throw new SQLException("Couldn't insert into table newsUrl");
+				}
+			}
+			
 			connection.commit();
 			published = true;
 		} catch (SQLException e) {
@@ -97,5 +118,14 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 			}
 		}
 		return published;
+	}
+	
+	public boolean isBatchSuccessful(int[] updateCounts){
+		for (int i = 0; i < updateCounts.length; i++) {
+			if (updateCounts[i] <= 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

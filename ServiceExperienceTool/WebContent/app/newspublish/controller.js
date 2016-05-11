@@ -38,10 +38,8 @@ angular.module('newspublish')
     $scope.customer.newsHeader = $scope.newsHeader;
     $scope.customer.newsContent = $scope.newsContent;
 
-    console.log($scope.customer);
-
-    var publisher = newsfeedservice.getPublisher();
-    publisher.save($scope.customer).$promise.then(function(result) {
+    console.log($scope.bundle);
+    Publisher.save($scope.bundle).$promise.then(function(result) {
       console.log("Success? " + result);
       $scope.statusMessage = "Succesfully posted news!"
     })

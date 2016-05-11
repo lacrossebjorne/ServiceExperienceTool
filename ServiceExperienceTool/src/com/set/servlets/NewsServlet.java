@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,11 +26,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.set.dao.DAOFactory;
 import com.set.dao.NewsEditorDAO;
 import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
 import com.set.entities.News;
+import com.set.entities.NewsUrl;
 //import com.set.data_containers.News;
 //import com.set.db.DAOFactory;
 //import com.set.db.NewsPublisher;
@@ -130,6 +137,14 @@ public class NewsServlet extends HttpServlet {
 
 		System.out.format("subject: %s, content: %s\n", request.getParameter("newsHeader"),
 				request.getParameter("newsContent"));
+		String jsonUrlList = request.getParameter("urlList");
+
+		Gson gson = new Gson();
+		NewsUrl[] urlList = gson.fromJson(jsonUrlList, NewsUrl[].class);
+		System.out.println("urlList-length: " + urlList.length);
+		for (int i = 0; i < urlList.length; i++) {
+			System.out.format("newsUrl.getTitle(): %s, newsUrl.getPath(): %s\n", urlList[i].getTitle(), urlList[i].getPath());
+		}
 
 		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
 		String[] imageUris = null;
@@ -179,8 +194,8 @@ public class NewsServlet extends HttpServlet {
 		News news = new News(subject, content, enabled);
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		NewsPublisherDAO newsPublisher = daoFactory.getNewsPublisherDAO();
-		boolean isPublished = newsPublisher.publishNews(news, imageUris);
-		System.out.println(isPublished);
+		boolean isPublished = newsPublisher.publishNews(news, imageUris, urlList);
+		System.out.println("isPublished: " + isPublished);
 		// if (primaryKey > -1) {
 		if (isPublished) {
 			try {
@@ -342,7 +357,7 @@ public class NewsServlet extends HttpServlet {
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		NewsEditorDAO newsEditorDAO = daoFactory.getNewsEditorDAO();
 
-		News newsEntry = new News(header, content, null, null, true, null);
+		News newsEntry = new News(header, content, null, null, true, null, null);
 		newsEntry.setNewsId(id);
 
 		boolean isPublished = newsEditorDAO.updateNews(newsEntry);
