@@ -37,12 +37,7 @@ public class UserAdminServlet extends HttpServlet {
 				map.put("userList", userList);
 			}
 			map.put("isValid", isValid);
-			
-			for (Map.Entry<String, Object> entry : map.entrySet()) {
-				System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
-			}
-			
-			//writeJson(response, map);
+			writeJson(response, map);
 		}
 		
 		if (request.getParameter("getRolesList") != null) {
@@ -89,10 +84,9 @@ public class UserAdminServlet extends HttpServlet {
 			map.put("isValid", isValid);
 			writeJson(response, map);
 		}
-		
 	}
 	
-	private void writeJson(HttpServletResponse response, Map<String, Object> map) {
+	private void writeJson(HttpServletResponse response, Map<String, Object> map) throws IOException {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		try {

@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.set.entities.ResetPassword;
-import com.set.entities.User;
 
 /**
  * 
@@ -67,7 +66,7 @@ public class ResetPasswordDAOJDBC implements ResetPasswordDAO {
 		if (resetPassword.getResetPasswordId() == null)
 			throw new IllegalArgumentException("The resetpassword-object does not exists");
 
-		Object[] resetPassObj = { resetPassword.getSecuritycode(), resetPassword.getUser().getUserId() };
+		Object[] resetPassObj = { resetPassword.getSecuritycode(), resetPassword.getUserId() };
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet keys = null;
@@ -94,24 +93,12 @@ public class ResetPasswordDAOJDBC implements ResetPasswordDAO {
 	}
 
 	private ResetPassword processQuery(ResultSet resultSet) throws SQLException {
-		// Create the user who will recieve new password
-		User absentMindedUser = new User();
-		absentMindedUser.setUserId(resultSet.getLong("user_id"));
-		absentMindedUser.setUserName(resultSet.getString("user_name"));
-		absentMindedUser.setFirstName(resultSet.getString("first_name"));
-		absentMindedUser.setLastName(resultSet.getString("last_name"));
-		absentMindedUser.setEmail(resultSet.getString("email"));
-		absentMindedUser.setEnabled(resultSet.getBoolean("enabled"));
-		absentMindedUser.setPhoneNumber(resultSet.getString("phone_number"));
-		absentMindedUser.setCreatedAt(resultSet.getDate("created_at"));
-		absentMindedUser.setUpdatedAt(resultSet.getDate("updated_at"));
-
-		// Create the ForgottenPassword object and store the user within it
+		// Create the ForgottenPassword object and store the userId within it
 		ResetPassword reset = new ResetPassword();
 		reset.setResetPasswordId(resultSet.getLong("forgot_password_id"));
 		reset.setSecuritycode(resultSet.getString("securitycode"));
-		reset.setExperationTime(resultSet.getDate("created_at"));
-		reset.setUser(absentMindedUser);
+		reset.setExpirationTime(resultSet.getDate("created_at"));
+		reset.setUserId(resultSet.getLong("user_id"));
 		return reset;
 	}
 

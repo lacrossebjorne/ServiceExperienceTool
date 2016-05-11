@@ -132,7 +132,7 @@ public class UserDAOJDBC implements UserDAO {
 						reset.setResetPasswordId(resetpassID);
 						reset.setSecuritycode(resultSet.getString("securitycode"));
 						reset.setExpirationTime(resultSet.getDate("expiration_time"));
-						reset.setUser(user);
+						reset.setUserId(userID);
 						resetPasswordsSet.add(reset);
 					}
 				} else {
@@ -149,7 +149,7 @@ public class UserDAOJDBC implements UserDAO {
 						reset.setResetPasswordId(resetpassID);
 						reset.setSecuritycode(resultSet.getString("securitycode"));
 						reset.setExpirationTime(resultSet.getDate("expiration_time"));
-						reset.setUser(user);
+						reset.setUserId(userID);
 						resetPasswordsSet.add(reset);
 					}
 				}

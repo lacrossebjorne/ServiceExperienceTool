@@ -22,7 +22,6 @@ public class User implements java.io.Serializable {
 	private boolean enabled;
 	private List<Role> roles = new ArrayList<>();
 	private Set<ResetPassword> resetPasswords = new HashSet<ResetPassword>(0);
-	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
 	public User() {
 	}
@@ -39,8 +38,7 @@ public class User implements java.io.Serializable {
 	}
 
 	public User(Role role, String firstName, String lastName, String email, String username, String password,
-			String phoneNumber, Date createdAt, Date updatedAt, boolean enabled, Set<ResetPassword> resetPasswords,
-			Set<UserRole> userRoles) {
+			String phoneNumber, Date createdAt, Date updatedAt, boolean enabled, Set<ResetPassword> resetPasswords) {
 		this.role = role;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -52,7 +50,6 @@ public class User implements java.io.Serializable {
 		this.updatedAt = updatedAt;
 		this.enabled = enabled;
 		this.resetPasswords = resetPasswords;
-		this.userRoles = userRoles;
 	}
 
 
@@ -160,13 +157,6 @@ public class User implements java.io.Serializable {
 		this.resetPasswords = resetPasswords;
 	}
 
-	public Set<UserRole> getUserRoles() {
-		return this.userRoles;
-	}
-
-	public void setUserRoles(Set<UserRole> userRoles) {
-		this.userRoles = userRoles;
-	}
 	
 	@Override
 	public String toString() {

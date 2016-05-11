@@ -1,9 +1,5 @@
 package com.set.entities;
 
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class Role implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -11,8 +7,6 @@ public class Role implements java.io.Serializable {
 	private String name;
 	private String description;
 	private Boolean enabled;
-	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
-	private Set<User> users = new HashSet<User>(0);
 
 	public Role() {
 	}
@@ -21,14 +15,11 @@ public class Role implements java.io.Serializable {
 		this.roleId = roleId;
 	}
 
-	public Role(Long roleId, String name, String description, Boolean enabled, Set<UserRole> userRoles,
-			Set<User> users) {
+	public Role(Long roleId, String name, String description, Boolean enabled) {
 		this.roleId = roleId;
 		this.name = name;
 		this.description = description;
 		this.enabled = enabled;
-		this.userRoles = userRoles;
-		this.users = users;
 	}
 
 	public Long getRoleId() {
@@ -61,22 +52,6 @@ public class Role implements java.io.Serializable {
 
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	public Set<UserRole> getUserRoles() {
-		return this.userRoles;
-	}
-
-	public void setUserRoles(Set<UserRole> userRoles) {
-		this.userRoles = userRoles;
-	}
-
-	public Set<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
 	}
 	
 	public String toString() {
