@@ -5,43 +5,47 @@ angular.module('newspublish')
 .controller('NewspublishController', ['$scope', 'newsfeedservice', function($scope, newsfeedservice) {
   $scope.newsHeader = "";
   $scope.newsContent = "";
-  $scope.customer = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent };
   $scope.statusMessage = "Please write news.";
-  $scope.urlName = "";
+  $scope.urlTitle = "";
   $scope.urlPath = "";
   $scope.urlList = [];
+  $scope.bundle = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent, urlList: null };
 
   $scope.addUrl = function() {
-	  if ($scope.urlPath == null || !$scope.publishForm.urlField.$valid || $scope.urlPath.length == 0) {
-      return;
+    if (newsfeedservice.addUrl($scope.urlTitle, $scope.urlPath, function(urlItem) { $scope.urlList.push(urlItem); })) {
+      console.log("url was added");
+    } else {
+      console.log("url couldn't be added");
     }
-
-    var urlName = $scope.urlName.length > 0 ? $scope.urlName : "no title";
-    $scope.urlList.push({name: $scope.urlName.length > 0 ? $scope.urlName : "no title", url: $scope.urlPath});
   }
 
   $scope.removeUrl = function() {
-    var index = $scope.urlList.indexOf(this.urlItem);
-    $scope.urlList.splice(index, 1);
+    if(newsfeedservice.removeUrl($scope.urlList, this.urlItem)) {
+      console.log("url was removed");
+    } else {
+      console.log("url couldn't be removed");
+    }
   }
 
   $scope.submit = function() {
 
-    if (!newsfeedservice.validateFormInput({ newsHeader: $scope.newsHeader,
-        newsContent: $scope.newsContent},
-        function(rejectedStatusMessage) {
-          $scope.statusMessage = rejectedStatusMessage;
-        })) {
+    var formData = { newsHeader: $scope.newsHeader, newsContent: $scope.newsContent};
+    if (!newsfeedservice.validateFormInput(formData,
+      function(rejectedStatusMessage) {
+        $scope.statusMessage = rejectedStatusMessage;
+      })) {
       return;
     }
 
-    $scope.customer.newsHeader = $scope.newsHeader;
-    $scope.customer.newsContent = $scope.newsContent;
+    $scope.bundle.newsHeader = $scope.newsHeader;
+    $scope.bundle.newsContent = $scope.newsContent;
+    $scope.bundle.urlList = JSON.stringify($scope.urlList);
 
     console.log($scope.bundle);
-    Publisher.save($scope.bundle).$promise.then(function(result) {
+    var publisher = newsfeedservice.getPublisher();
+    publisher.save($scope.bundle).$promise.then(function(result) {
       console.log("Success? " + result);
-      $scope.statusMessage = "Succesfully posted news!"
+      $scope.statusMessage = "Successfully posted news!"
     })
     .catch(function(errorMsg) {
       $scope.statusMessage = "Couldn't post news!"

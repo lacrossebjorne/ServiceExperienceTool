@@ -2,7 +2,8 @@
 
 angular.module('newsfeed')
 
-.controller('NewsfeedController', ['$scope', 'NewsfetchService', 'NewsEditService', function($scope, Newsfetch, NewsEditor) {
+.controller('NewsfeedController', ['$scope', 'NewsfetchService', 'newsfeedservice',
+function($scope, Newsfetch, newsfeedservice) {
   var minArticleTextLimit = 50;
   var initialStatusMessage = "Enter you news.";
   $scope.TEST = "Newsfetch.get";
@@ -63,13 +64,27 @@ angular.module('newsfeed')
     var editedHeader = angular.element(document.querySelector('#edit-header-' + index)).val();
     var editedContent = angular.element(document.querySelector('#edit-content-' + index)).val();
     var self = this;
-    if (!validateFormInput(editedHeader, editedContent)) {
-      this.statusMessage = "Either you typed to little or to much!";
+
+    var formData = { newsHeader: editedHeader, newsContent: editedContent};
+    if (!newsfeedservice.validateFormInput(formData,
+      function(rejectedStatusMessage) {
+        self.statusMessage = rejectedStatusMessage;
+      })) {
+      return;
+    }
+
+
+    var formData = { newsHeader: editedHeader, newsContent: editedContent};
+    if (!newsfeedservice.validateFormInput(formData,
+      function(rejectedStatusMessage) {
+        self.statusMessage = rejectedStatusMessage;
+      })) {
       return;
     } else {
       //do backend call here
-      NewsEditor.save({
-        id: news.newsId, header: editedHeader, content: editedContent
+      var publisher = newsfeedservice.getPublisher();
+      publisher.update({
+        newsId: news.newsId, newsHeader: editedHeader, newsContent: editedContent
       }).$promise.then(function(result) {
         //if backend call is successful
         news.header = editedHeader;
@@ -85,8 +100,9 @@ angular.module('newsfeed')
 
   $scope.deleteNews = function(news, statusMessage) {
     var self = this;
-    NewsEditor.disable({
-      id: news.newsId
+    var publisher = newsfeedservice.getPublisher();
+    publisher.disable({
+      newsId: news.newsId
     }).$promise.then(function(result) {
       //if backend call is successful
       self.statusMessage = "Successfully deleted news!";

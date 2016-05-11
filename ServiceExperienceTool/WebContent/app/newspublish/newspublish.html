@@ -24,9 +24,9 @@
 		</div>
 
 		<div ng-if="urlList.length > 0" class="w3-rest w3-margin-bottom">URLs to add:
-			<div class="w3-row" ng-repeat="item in urlList">
-				<div class="w3-quarter" style="word-wrap: break-word;">{{item.title}}</div>
-				<div class="w3-half" style="word-wrap: break-word;">{{item.path}}</div>
+			<div class="w3-row" ng-repeat="urlItem in urlList">
+				<div class="w3-quarter" style="word-wrap: break-word;">{{urlItem.title}}</div>
+				<div class="w3-half" style="word-wrap: break-word;">{{urlItem.path}}</div>
 				<div ng-click="removeUrl()" class="w3-quarter">
 					<button class="w3-btn w3-red w3-btn-block">
 						<i class="fa fa-remove"></i>

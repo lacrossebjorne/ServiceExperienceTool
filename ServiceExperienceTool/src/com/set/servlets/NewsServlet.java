@@ -3,6 +3,7 @@ package com.set.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -91,6 +92,7 @@ public class NewsServlet extends HttpServlet {
 		System.out.format("Incoming request: %s, action-parameter: %s\n", request.getMethod(), action);
 		System.out.format("Server Path: %s\n", getServerRequestPath(request));
 		System.out.format("Protocol: %s\n", request.getProtocol());
+		System.out.println("Character Encoding: " + request.getCharacterEncoding());
 		////////////////////////////////////////////////////////////////////////////////////
 
 		if (action == null) {
@@ -138,12 +140,18 @@ public class NewsServlet extends HttpServlet {
 		System.out.format("subject: %s, content: %s\n", request.getParameter("newsHeader"),
 				request.getParameter("newsContent"));
 		String jsonUrlList = request.getParameter("urlList");
+		System.out.println(jsonUrlList);
 
-		Gson gson = new Gson();
-		NewsUrl[] urlList = gson.fromJson(jsonUrlList, NewsUrl[].class);
-		System.out.println("urlList-length: " + urlList.length);
-		for (int i = 0; i < urlList.length; i++) {
-			System.out.format("newsUrl.getTitle(): %s, newsUrl.getPath(): %s\n", urlList[i].getTitle(), urlList[i].getPath());
+		NewsUrl[] urlList = null;
+		
+		if (jsonUrlList != null) {
+			//validate
+			Gson gson = new Gson();
+			urlList = gson.fromJson(jsonUrlList, NewsUrl[].class);
+			System.out.println("urlList-length: " + urlList.length);
+			for (int i = 0; i < urlList.length; i++) {
+				System.out.format("newsUrl.getTitle(): %s, newsUrl.getPath(): %s\n", urlList[i].getTitle(), urlList[i].getPath());
+			}
 		}
 
 		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
@@ -296,7 +304,7 @@ public class NewsServlet extends HttpServlet {
 		
 		Long id = null;
 		try {
-			String idParameter = request.getParameter("id");
+			String idParameter = request.getParameter("newsId");
 
 			if (idParameter != null) {
 				id = Long.parseLong(idParameter);
@@ -330,13 +338,25 @@ public class NewsServlet extends HttpServlet {
 	}
 
 	private void updateNews(HttpServletRequest request, HttpServletResponse response) {
-
 		Long id = null;
-		String header = request.getParameter("header");
-		String content = request.getParameter("content");
-
+		String header = request.getParameter("newsHeader");
+		String content = request.getParameter("newsContent");
 		try {
-			String idParameter = request.getParameter("id");
+			Collection<Part> parts = request.getParts();
+			for (Part part : parts) {
+				System.out.println(part.getName());
+				System.out.println(part.getSubmittedFileName());
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ServletException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		try {
+			String idParameter = request.getParameter("newsId");
 
 			if (idParameter != null) {
 				id = Long.parseLong(idParameter);

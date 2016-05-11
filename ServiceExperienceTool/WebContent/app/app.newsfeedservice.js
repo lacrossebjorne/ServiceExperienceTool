@@ -5,11 +5,12 @@ newsfeedservice.$inject = ['$http', '$log', '$resource', 'app.paths'];
 
 function newsfeedservice($http, $log, $resource, paths) {
 	var service = {
-		saveNews : saveNews,
 		test : test,
 		getMovie : getMovie,
 		getPublisher : getPublisher,
-		validateFormInput : validateFormInput
+		validateFormInput : validateFormInput,
+		addUrl : addUrl,
+		removeUrl : removeUrl
 	};
 
 	return service;
@@ -17,23 +18,6 @@ function newsfeedservice($http, $log, $resource, paths) {
 	/*
 	* Service functions
 	*/
-
-	function saveNews(header, content) {
-		$log.info('saveNews called');
-		var saveResource = $resource(paths.local + "newsServlet", {}, {
-			save : {
-				method : 'POST',
-				params : {
-					action : 'publishNews',
-					header : header,
-					content : content
-				},
-				isArray : false
-			}
-		});
-
-		return saveResource;
-	}
 
 	function getPublisher() {
 		var saveResource = $resource(paths.api + "newsServlet", { action : '' },
@@ -52,7 +36,7 @@ function newsfeedservice($http, $log, $resource, paths) {
 				},
 				disable: {
 					method: 'POST',
-					params: { action: 'disableNews' },
+					params: { action: 'disableNews', newsId: '@newsId' },
 					timeout: 2000
 				}
 		});
@@ -70,14 +54,33 @@ function newsfeedservice($http, $log, $resource, paths) {
 	return saveResource;
 	}
 
-	/* not tested */
-	function validateUrlInput(urlPath, urlField, urlName) {
-		if (urlPath == null || urlField.$valid || urlPath.length == 0) {
+	function addUrl(urlTitle, urlPath, callback) {
+    var urlPattern = /https?:\/\/.+\..+\..+/;
+
+	  if (urlPath != null && urlPath.length > 0 && urlPattern.test(urlPath)) {
+			if (urlTitle == null || urlTitle.length == 0) {
+				urlTitle = urlPath;
+			}
+
+			var urlItem = { title: urlTitle, path: urlPath};
+			callback(urlItem);
+			return true;
+    } else {
 			return false;
 		}
-		var urlName = urlName.length > 0 ? urlName : urlPath;
-		var urlItem = { name: urlName, url: urlPath };
-		return urlItem;
+  }
+
+	function removeUrl(urlList, urlItem) {
+		var index = urlList.indexOf(urlItem);
+		if (index < 0) {
+			return false;
+		}
+		var removed = urlList.splice(index, 1);
+		if (removed.length > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	function validateFormInput(data, callbackMessage) {
