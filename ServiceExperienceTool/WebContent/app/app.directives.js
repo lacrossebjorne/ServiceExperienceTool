@@ -1,8 +1,8 @@
-/*
 'use strict';
 
-angular.module('newspublish')
+/* App Module */
 
+angular.module('app')
 .directive('fileModel', ['$parse', function($parse) {
   return {
     restrict: 'A',
@@ -18,4 +18,3 @@ angular.module('newspublish')
     }
   }
 }]);
-*/
