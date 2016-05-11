@@ -84,4 +84,8 @@ public abstract class DAOFactory {
 	public MenuDAO getMenuDAO(){
 		return new MenuDAOSqlImpl(this);
 	}
+	
+	public RoleDAO getRoleDAO() {
+		return new RoleDAOJDBC(this);
+	}
 }

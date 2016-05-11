@@ -1,10 +1,12 @@
 package com.set.entities;
-
+// Generated 2016-apr-24 20:41:36 by Hibernate Tools 5.1.0.Alpha1
 
 import java.util.Date;
 
-public class ResetPassword {
-	
+
+public class ResetPassword implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private Long resetPasswordId;
 	private User user;
 	private String securitycode;

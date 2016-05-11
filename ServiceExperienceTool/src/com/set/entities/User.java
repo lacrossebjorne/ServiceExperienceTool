@@ -1,12 +1,14 @@
 package com.set.entities;
 
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class User {
-	
+public class User implements java.io.Serializable {
+
+	static final long serialVersionUID = 1L;
 	private Long userId;
 	private Role role;
 	private String firstName;
@@ -18,6 +20,8 @@ public class User {
 	private Date createdAt;
 	private Date updatedAt;
 	private boolean enabled;
+	private ResetPassword securitycode;
+	private List<Role> roles = new ArrayList<>();
 	private Set<ResetPassword> resetPasswords = new HashSet<ResetPassword>(0);
 	private Set<UserRole> userRoles = new HashSet<UserRole>(0);
 
@@ -51,6 +55,7 @@ public class User {
 		this.resetPasswords = resetPasswords;
 		this.userRoles = userRoles;
 	}
+
 
 	public Long getUserId() {
 		return this.userId;
@@ -140,6 +145,22 @@ public class User {
 		this.enabled = enabled;
 	}
 
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public ResetPassword getSecurityToken() {
+		return securitycode;
+	}
+
+	public void setSecurityToken(ResetPassword securitycode) {
+		this.securitycode = securitycode;
+	}
+
 	public Set<ResetPassword> getResetPasswords() {
 		return this.resetPasswords;
 	}
@@ -158,7 +179,7 @@ public class User {
 	
 	@Override
 	public String toString() {
-		return (userId + " " +firstName + " " + lastName + " " + username + " " + email + " " + createdAt + " " + enabled);
+		return ("ID:" + userId + " First name: " +firstName + " Last name: " + lastName + " Username: " + username + " Email: " + email + " Roles: " + roles + " Created date: " + createdAt + " Enabled: " + enabled);
 		
 	}
 }

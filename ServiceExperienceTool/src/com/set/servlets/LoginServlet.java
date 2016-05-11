@@ -1,8 +1,6 @@
 package com.set.servlets;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,7 +17,7 @@ import com.set.entities.User;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/LoginServlet")
+@WebServlet("/loginServlet")
 public class LoginServlet extends HttpServlet {
 	
 	 private static final long serialVersionUID = 1L;
@@ -44,8 +42,7 @@ public class LoginServlet extends HttpServlet {
 			User user = userDAO.find(username, password);
 			if (user != null && user.isEnabled()) {
 				request.getSession().setAttribute("user", user);
-				System.out.println(user);
-				response.sendRedirect(request.getContextPath() + "/api-tester.html");
+				response.sendRedirect(request.getContextPath() + "/user_admin.html");
 				return;
 			} else {
 				RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
@@ -53,7 +50,6 @@ public class LoginServlet extends HttpServlet {
 				rd.include(request, response);
 			}
 		}
-		// request.setAttribute("message", message);
 		request.getRequestDispatcher("/login.html").forward(request, response);
 	}
 }

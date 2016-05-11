@@ -4,8 +4,9 @@ package com.set.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Role {
+public class Role implements java.io.Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private Long roleId;
 	private String name;
 	private String description;
@@ -37,7 +38,7 @@ public class Role {
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
-
+	
 	public String getName() {
 		return this.name;
 	}
@@ -54,7 +55,7 @@ public class Role {
 		this.description = description;
 	}
 
-	public Boolean getEnabled() {
+	public Boolean isEnabled() {
 		return this.enabled;
 	}
 
@@ -77,5 +78,8 @@ public class Role {
 	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
-
+	
+	public String toString() {
+		return "ID: " + roleId + " Name: " + name + " Description: " + description + " Enabled: " + enabled;
+	}
 }
