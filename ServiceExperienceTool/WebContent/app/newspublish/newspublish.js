@@ -8,7 +8,6 @@ angular.module('newspublish', [
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/newspublish', {
 	  	templateUrl: 'app/newspublish/newspublish.html',
-	  	controller: 'NewspublishController',
-	    service: 'NewsPublishService'
+	  	controller: 'NewspublishController'
   });
 }]);
