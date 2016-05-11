@@ -145,7 +145,6 @@ public class NewsServlet extends HttpServlet {
 		NewsUrl[] urlList = null;
 		
 		if (jsonUrlList != null) {
-			//validate
 			Gson gson = new Gson();
 			urlList = gson.fromJson(jsonUrlList, NewsUrl[].class);
 			System.out.println("urlList-length: " + urlList.length);
@@ -291,7 +290,7 @@ public class NewsServlet extends HttpServlet {
 					HashMap<String, List<News>> jsonMap = new HashMap<String, List<News>>();
 					jsonMap.put("news", allNews);
 					response.setContentType("application/json");
-					response.getWriter().write(new Gson().toJson(jsonMap));
+					response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonMap));
 				}
 			}
 
@@ -338,6 +337,7 @@ public class NewsServlet extends HttpServlet {
 	}
 
 	private void updateNews(HttpServletRequest request, HttpServletResponse response) {
+		
 		Long id = null;
 		String header = request.getParameter("newsHeader");
 		String content = request.getParameter("newsContent");

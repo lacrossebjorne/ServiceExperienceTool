@@ -31,15 +31,6 @@ function($scope, Newsfetch, newsfeedservice) {
     });
   }
 
-  var validateFormInput = function(newsHeader, newsContent) {
-    if (newsHeader != undefined && newsHeader.length >= 3 &&
-      newsContent != undefined && newsContent.length >= 12) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   // Expands article
   $scope.expandArticle = function(textLimit) {
     textLimit == minArticleTextLimit ? this.articleTextLimit = 999 : this.articleTextLimit = minArticleTextLimit;
@@ -64,15 +55,6 @@ function($scope, Newsfetch, newsfeedservice) {
     var editedHeader = angular.element(document.querySelector('#edit-header-' + index)).val();
     var editedContent = angular.element(document.querySelector('#edit-content-' + index)).val();
     var self = this;
-
-    var formData = { newsHeader: editedHeader, newsContent: editedContent};
-    if (!newsfeedservice.validateFormInput(formData,
-      function(rejectedStatusMessage) {
-        self.statusMessage = rejectedStatusMessage;
-      })) {
-      return;
-    }
-
 
     var formData = { newsHeader: editedHeader, newsContent: editedContent};
     if (!newsfeedservice.validateFormInput(formData,

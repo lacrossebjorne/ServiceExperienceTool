@@ -9,19 +9,18 @@
     <h4>{{ x.header }}</h4>
     <span>Date: {{ x.createdAt }}</span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
+    <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
+      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
+    </button>
     <div ng-if="x.newsUrls.length > 0" class="w3-margin-bottom">
       <strong>Added url:s:</strong>
       <div ng-repeat="url in x.newsUrls">
           <a href="{{url.path}}">{{url.title}}</a>
       </div>
     </div>
-    <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
-      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
-    </button>
-    <button type="button" ng-click="toggleEdit(x)" class="w3-btn w3-theme-d1 w3-margin-bottom">
+    <button type="button" ng-click="toggleEdit(x)" class="w3-btn w3-theme-d1 w3-margin-bottom w3-rest">
       <i class="fa fa-pencil" ></i> Edit
     </button>
-
     <div ng-if="x.isEditing">
       <input id="{{ 'edit-header-' + $index }}" type="text" ng-value="x.header" pattern=".{3,}"
         placeholder="write a subject(minimum 3 characters)" required
@@ -31,6 +30,42 @@
         placeholder="write the news(minimum 12 characters)" required
         class="w3-input w3-border w3-hover-border-black" >{{news[$index].content}}</textarea>
       <br />
+
+      <!-- duplicate from newspublish, maybe it's better to use ng-include -->
+      <!-- not working ATM  -->
+      <div class="w3-margin-bottom">
+  			<label>Choose an image to upload</label>
+  			<input type="file" name="file" file-model="bundle.file" accept=".jpg,.jpeg,.png,.gif" />
+  		</div>
+
+  		<div ng-if="urlList.length > 0" class="w3-rest w3-margin-bottom">URLs to add:
+  			<div class="w3-row" ng-repeat="urlItem in urlList">
+  				<div class="w3-quarter" style="word-wrap: break-word;">{{urlItem.title}}</div>
+  				<div class="w3-half" style="word-wrap: break-word;">{{urlItem.path}}</div>
+  				<div ng-click="removeUrl()" class="w3-quarter">
+  					<button class="w3-btn w3-red w3-btn-block">
+  						<i class="fa fa-remove"></i>
+  					</button>
+  				</div>
+  			</div>
+  		</div>
+
+  		<div class="w3-margin-bottom w3-row">
+  			<div class="w3-third">
+  				<label class="w3-hide-small">Title:</label>
+  				<input type="text" ng-model="urlTitle" placeHolder="title of url" class="w3-input w3-border w3-hover-border-black"/>
+  			</div>
+  			<div class="w3-twothird">
+  				<label class="w3-hide-small">URL:</label>
+  				<input name="urlPath" type="text" ng-pattern='/^https?://.+\..+\..+$/' ng-model="urlPath"
+  				placeHolder="http://www.link.com" class="w3-input w3-border w3-hover-border-black"/>
+  			</div>
+  			<div class="w3-third">
+  				<button type="button" ng-click="addUrl()" class="w3-btn w3-btn-block w3-green">add url</button>
+  			</div>
+  		</div>
+      <!-- end of duplicate -->
+
       <button type="button" ng-click="saveNews(x, $index, statusMessage)" class="w3-btn w3-theme-d1 w3-margin-bottom">Save</button>
       <button type="button" ng-click="toggleEdit(x)" class="w3-btn w3-theme-d1 w3-margin-bottom">Cancel</button>
       <button type="button" ng-click="deleteNews(x, statusMessage)" class="w3-btn w3-theme-d1 w3-margin-bottom">Delete</button>
