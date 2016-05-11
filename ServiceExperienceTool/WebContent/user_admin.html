@@ -305,7 +305,7 @@ tbody {
 				} else
 					$("#checkDiv :checkbox").not(this).prop("disabled", false);
 			});
-			$("#checkDiv").on("change", "input[type='checkbox']", function() {
+			$("#userform").on("change", "input[type='checkbox']", function() {
 				if($(this).is(':checked'))
 					$(this).val(true);
 				else
@@ -333,7 +333,7 @@ tbody {
 											+ '<td>' + user.username + '</td>'
 											+ '<td>' + user.email + '</td>'
 											+ '<td>' + user.phoneNumber + '</td>'
-											+ '<td>' + user.userRoles + '</td>'
+											+ '<td>' + user.roles + '</td>'
 											+ '<td>' + user.enabled + '</td>'
 											+ '<td>' + user.resetPasswords + '</td>'
 											+ '<td><i class="fa fa-pencil fa-1" aria-hidden="true"></i></td>'
