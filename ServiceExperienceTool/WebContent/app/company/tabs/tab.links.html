@@ -1,0 +1,29 @@
+<div id="viewTwo">
+  <br>
+  <span class="w3-large">Useful Links</span>
+  <br>
+  <!-- Links list -->
+  <ul class="w3-ul">
+    <li ng-repeat="link in links" class="w3-padding-hor-16" style="min-height:100px">
+      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+        <i class="fa fa-remove"></i>
+      </span>
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa fa-link w3-xxlarge"></i>
+      </span>
+      <span class="w3-large">{{link.title}}</span><br>
+      <a ng-href="{{link.url}}">{{link.url}}</a>
+    </li>
+    <!-- Add link -->
+    <li class="w3-padding-hor-16" style="min-height:100px">
+      <span ng-click="addLink(newLinkTitle,newLinkUrl)" class="w3-closebtn w3-padding">
+        <i class="fa fa-plus"></i>
+      </span>
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa fa-link w3-xxlarge"></i>
+      </span>
+      <input id="title" class="w3-small w3-margin-bottom" type="text" placeholder="Title" ng-model="newLinkTitle" style="width:50%">
+      <input id="url" class="w3-small" type="text" placeholder="https://www.url.com" ng-model="newLinkUrl" style="width:50%">
+    </li>
+  </ul>
+</div>
