@@ -146,7 +146,7 @@ tbody {
 						<div class="w3-col s6">
 							<label> <b>Email</b></label> <input id="email"
 								class="w3-input w3-border w3-hover-border-black " type="email"
-								placeholder="Enter email address" required
+								placeholder="Enter email address" pattern="[a-z]\.[a-z]" required
 								ng-model="adminCtrl.user.email">
 						</div>
 					</div>
@@ -166,7 +166,7 @@ tbody {
 							<label> <b>Password</b>
 							</label> <input id="password"
 								class="w3-input w3-border w3-hover-border-black "
-								type="password" placeholder="Enter Password" required
+								type="password" placeholder="Enter Password" pattern=".{6,}" required
 								ng-model="adminCtrl.user.password">
 						</div>
 						<div class="w3-col s6">

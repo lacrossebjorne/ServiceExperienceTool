@@ -6,7 +6,8 @@ angular.module('mainView', [
   'ngRoute',
   'newsfeed',
   'newspublish',
-  'menu'
+  'menu',
+  'useradmin'
 ])
 
 /*

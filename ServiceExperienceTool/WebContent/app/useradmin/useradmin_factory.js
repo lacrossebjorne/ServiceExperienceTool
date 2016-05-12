@@ -1,7 +1,11 @@
-app.factory('AdminFactory', ['$http', '$q', function($http, $q) {
+'use strict';
+
+angular.module('useradmin')
+
+.factory('AdminFactory', ['$resourse','app.paths', '$q', function($resourse, paths, $q) {
     return {
         listAllUsers: function() {
-            return $http.get('http://localhost:8080/ServiceExperienceTool_DOA_Login/UserAdminServlet?getUserList')
+            return $resourse.get(paths.local + 'UserAdminServlet?getUserList')
                 .then(
                     function(response) {
                         return response.data;
@@ -14,7 +18,7 @@ app.factory('AdminFactory', ['$http', '$q', function($http, $q) {
         },
 
         createUser: function(user) {
-            return $http.post('http://localhost:8080/ServiceExperienceTool_DOA_Login/UserAdminServlet?insertUser=' + user)
+            return $resourse.post(paths.local + 'UserAdminServlet?insertUser=' + user)
                 .then(
                     function(response) {
                         return response.data;
@@ -27,7 +31,7 @@ app.factory('AdminFactory', ['$http', '$q', function($http, $q) {
         },
 
         updateUser: function(user, id) {
-            return $http.put('http://localhost:8080/ServiceExperienceTool_DOA_Login/UserAdminServlet?updateUser=' + id, user)
+            return $resourse.put(paths.local + 'UserAdminServlet?updateUser=' + id, user)
                 .then(
                     function(response) {
                         return response.data;
@@ -40,7 +44,7 @@ app.factory('AdminFactory', ['$http', '$q', function($http, $q) {
         },
 
         deleteUser: function(id) {
-            return $http.remove('http://localhost:8080/ServiceExperienceTool_DOA_Login/UserAdminServlet?deleteUser=' + id)
+            return $resourse.remove(paths.local + 'UserAdminServlet?deleteUser=' + id)
                 .then(
                     function(response) {
                         return response.data;

@@ -3,6 +3,7 @@
 <title>SET User administration</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"
 	charset="UTF-8">
+<link rel="stylesheet" href="css/jquery-ui.min.css">
 <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 <link rel="stylesheet"
 	href="http://www.w3schools.com/lib/w3-theme-blue-grey.css">
@@ -10,6 +11,8 @@
 	href="https://fonts.googleapis.com/css?family=Open+Sans">
 <link rel="stylesheet"
 	href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+<script src="js/jquery-2.2.3.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
 <style>
 html, body, h1, h2, h3, h4, h5 {
 	font-family: "Open Sans", sans-serif
@@ -112,7 +115,7 @@ tbody {
 		<div id="addUserModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('addUserView')" class="w3-closebtn">&times;</span>
+				<span onclick="showHide('#addUserView')" class="w3-closebtn">&times;</span>
 				<h3>Create SET-user</h3>
 			</div>
 			<div class="w3-container">
@@ -143,7 +146,7 @@ tbody {
 						<div class="w3-col s6">
 							<label> <b>Email</b></label> <input id="email"
 								class="w3-input w3-border w3-hover-border-black " type="email"
-								placeholder="Enter email address" pattern="[a-z]\.[a-z]" required
+								placeholder="Enter email address" required
 								ng-model="adminCtrl.user.email">
 						</div>
 					</div>
@@ -163,7 +166,7 @@ tbody {
 							<label> <b>Password</b>
 							</label> <input id="password"
 								class="w3-input w3-border w3-hover-border-black "
-								type="password" placeholder="Enter Password" pattern=".{6,}" required
+								type="password" placeholder="Enter Password" required
 								ng-model="adminCtrl.user.password">
 						</div>
 						<div class="w3-col s6">
@@ -193,7 +196,7 @@ tbody {
 		<div id="userListmodal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('userListView')" class="w3-closebtn">&times;</span>
+				<span onclick="showHide('#userListView')" class="w3-closebtn">&times;</span>
 				<h3>SET user list</h3>
 			</div>
 			<div id="constrainer" class="w3-responsive">
@@ -235,7 +238,7 @@ tbody {
 		<div id="manageRolesModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
+				<span onclick="showHide('#manageRolesView')" class="w3-closebtn">&times;</span>
 				<h3>SET manage roles</h3>
 			</div>
 			<div id="constrainer" class="w3-responsive">
@@ -280,6 +283,167 @@ tbody {
 		</div>
 	</div>
 	<script>
+		roleNames = [];
+		$(function() {
+			$("#addUser").click(function() {
+				var data = getRoles(function(data) {
+				if (data.isValid) {
+					//$("#checkDiv").append('<span class="w3-col"> <b>Roles</b></span><br>');
+					$.each(data.roleList, function(index, role) {
+						roleNames.push(role.name);
+						$("#checkDiv").append(
+								'<div class="w3-col l3 m4 s6"><input id="' + role.name + '" class="w3-check" name="' + role.name + '" type="checkbox" value=false> <label for="' + role.name +'">'+ role.name + '</label></div>'	
+						)
+					});
+				}
+				});
+				showHide("#addUserView");
+			});
+			$("#checkDiv").on("change", "#admin", function() {
+				if($(this).is(':checked')){
+					$("#checkDiv :checkbox").not(this).prop("disabled", true);
+				} else
+					$("#checkDiv :checkbox").not(this).prop("disabled", false);
+			});
+			$("#userform").on("change", "input[type='checkbox']", function() {
+				if($(this).is(':checked'))
+					$(this).val(true);
+				else
+					$(this).val(false);
+			});
+			$("#usersTableBody tr:last-child").click(function() {
+				console.log('Click: ' + this);
+			});
+			
+			$("#listUsers").click(
+					function() {
+						showHide("#userListView");
+						$.getJSON({
+							url : 'userAdminServlet',
+							data : "getUserList",
+							success : function(data) {
+								if (data.isValid) {
+									console.log(data);
+								$.each(data.userList, function(index, user) {
+									$("#usersTableBody").append('<tr></tr>');
+									$("#usersTableBody tr:last-child").append(
+											'<td>' + user.userId + '</td>'
+											+ '<td>' + user.firstName + '</td>'
+											+ '<td>' + user.lastName + '</td>'
+											+ '<td>' + user.username + '</td>'
+											+ '<td>' + user.email + '</td>'
+											+ '<td>' + user.phoneNumber + '</td>'
+											+ '<td>' + user.roles + '</td>'
+											+ '<td>' + user.enabled + '</td>'
+											+ '<td>' + user.resetPasswords + '</td>'
+											+ '<td><i class="fa fa-pencil fa-1" aria-hidden="true"></i></td>'
+									);
+								});
+							} else
+								alert("An error occured while retreiving users from database.");
+							}
+						});
+					});
+			$("#manageRoles").click(function() {
+				showHide("#manageRolesView");
+				getRoles(function(data){
+					if (data.isValid) {
+						$.each(data.roleList, function(index, role) {
+							$("#rolesTableBody").append('<tr></tr>');
+							$("#rolesTableBody tr:last-child").append(
+									'<td>' + role.roleId + '</td>'
+											+ '<td>' + role.name
+											+ '</td>' + '<td>'
+											+ role.description + '</td>'
+											+ '<td>' + role.enabled
+											+ '</td>');
+						});
+					} else
+						alert("An error occured while retreiving roles from database.");
+				});
+			});
+			$("#userform")
+					.submit(
+							function(e) {
+								e.preventDefault();
+								if ($("#password").val() !== $("#verifypass")
+										.val()) {
+									alert("Passwords doesn't match");
+									return;
+								} else {
+									var roles = [];
+									$.each(roleNames, function(index, roleName) {
+										if ($("#" + roleName).val() == "true") {
+											var role = {[roleName] : true}
+											roles.push(role);
+										}
+									});
+									var userformObj = {};
+									userformObj.firstName = $("#firstname").val();
+									userformObj.lastName = $("#lastname").val();
+									userformObj.username = $("#username").val().toLowerCase();
+									userformObj.email = $("#email").val();
+									userformObj.phoneNumber = $("#phone").val();
+									userformObj.password = $("#password").val();
+									userformObj.enabled = $("#enabledCheck").val();
+									userformObj.roles = roles;
+									var jsonUser = JSON.stringify(userformObj);
+									$
+											.post({
+												url : 'userAdminServlet',
+												data : {
+													"newUser" : jsonUser
+												},
+												datatype : 'json',
+												success : function(data) {
+													if (data.isValid) {
+														alert("SUCCESS!");
+													} else
+														alert("An error occured while inserting the new user into the database.");
+												}
+											});
+									showHide('#addUserView');
+								}
+							});
+			$("#insertRoleForm").submit(function(e) {
+				e.preventDefault();
+				var rolesFormObj = {};
+				rolesFormObj.name = $("#roleName").val().toLowerCase();
+				rolesFormObj.description = $("#roleDescription").val();
+				rolesFormObj.enabled = $("#roleEnable").val();
+				var jsonRole = JSON.stringify(rolesFormObj);
+				$.post({
+					url: 'userAdminServlet',
+					data: {"newRole" : jsonRole},
+					datatype: 'json',
+					success: function(data) {
+						$("#insertRoleForm").trigger("reset");
+						console.log(data.roleId);
+						if (data.isValid) {
+							$("#rolesTableBody").append('<tr></tr>');
+							$("#rolesTableBody tr:last-child").append(
+									'<td>' + data.roleId + '</td>'
+											+ '<td>' + rolesFormObj.name
+											+ '</td>' + '<td>'
+											+ rolesFormObj.description + '</td>'
+											+ '<td>' + rolesFormObj.enabled
+											+ '</td>');
+						} else
+							alert("An error occured while inserting the new role into the database.");
+					}
+				});
+			});
+		});
+		
+		function getRoles(callback) {
+			$.getJSON({
+				url : 'userAdminServlet',
+				data : "getRolesList",
+				success: function(data) {
+					callback(data);
+				}
+				});
+		}
 		// Open and close the sidenav on medium and small screens
 		function w3_open() {
 			document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
@@ -290,17 +454,17 @@ tbody {
 			document.getElementsByClassName("w3-overlay")[0].style.display = "none";
 		}
 		function showHide(id) {
-			if (document.getElementsById(id).css('display') == 'none')
-				document.getElementsById(id).css('display', 'block');
+			if ($(id).css('display') == 'none')
+				$(id).css('display', 'block');
 			else {
-				document.getElementsById(id).css('display', 'none');
-				/* if(id == "manageRolesView" || id == "addUserView") {
+				$(id).css('display', 'none');
+				if(id == "#manageRolesView" || id == "#addUserView") {
 					$("form").trigger("reset");
-				if (id == "addUserView")
-					$("checkDiv").empty();
+				if (id == "#addUserView")
+					$("#checkDiv").empty();
 				}
-				if(id == "userListView" || id == "manageRolesView")
-					$(id).find("tbody").empty(); */
+				if(id == "#userListView" || id == "#manageRolesView")
+					$(id).find("tbody").empty();
 			}
 		}
 	</script>

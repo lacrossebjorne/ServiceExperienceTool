@@ -2,7 +2,7 @@
 
 angular.module('useradmin')
 
-.controller('AdminController', [$scope, 'AdminFactory', function($scope, AdminFactory) {
+.controller('AdminController', ['$scope', 'AdminFactory', function($scope, AdminFactory) {
     var self = this;
     self.users = [];
     self.resetPassword = {};
@@ -31,6 +31,7 @@ angular.module('useradmin')
             .then(
                 function(data) {
                     self.users = data;
+                    console.log(self.users);
                 },
                 function(errResponse) {
                     console.error('Error fetching data');
@@ -80,12 +81,12 @@ angular.module('useradmin')
     };
 
     self.edit = function(id) {
-        angular.forEach(self.users, function(user) {
-            if (user.id === id) {
-                self.user = angular.copy(user);
-                break;
-            }
-        });
+    	for(var i = 0; i < self.users.length; i++) {
+    		if(self.users[i].id === id) {
+    			self.user = angular.copy(user);
+    			break;
+    		}
+    	}
     };
 
     self.close = function() {
