@@ -11,16 +11,22 @@ angular.module('company')
 
   $scope.tabs = [{
     title: 'History',
-    url: 'app/company/tab.one.html'
+    url: 'app/company/tabs/tab.history.html'
   }, {
     title: 'Atmosphere',
-    url: 'app/company/tab.two.html'
+    url: 'app/company/tabs/tab.atmosphere.html'
   }, {
     title: 'Values',
-    url: 'app/company/tab.three.html'
+    url: 'app/company/tabs/tab.values.html'
+  }, {
+    title: 'Links',
+    url: 'app/company/tabs/tab.links.html'
+  }, {
+    title: 'Documents',
+    url: 'app/company/tabs/tab.documents.html'
   }];
 
-  $scope.currentTab = 'app/company/tab.one.html';
+  $scope.currentTab = 'app/company/tabs/tab.history.html';
 
   $scope.imgA = imageSwitch();
 
