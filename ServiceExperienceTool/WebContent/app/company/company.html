@@ -22,7 +22,7 @@
   <!-- Docs list -->
   <ul class="w3-ul">
     <li ng-repeat="doc in documents" class="w3-padding-hor-16" style="min-height:100px">
-      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+      <span ng-click="removeDocument($index)" class="w3-closebtn w3-padding">
         <i class="fa fa-remove"></i>
       </span>
       <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
@@ -39,21 +39,25 @@
       <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
         <i class="fa fa-file-text w3-xxlarge"></i>
       </span>
-      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newDocTitle"><br>
-      <input id="url" class="w3-small w3-margin-top" type="file" ng-model="upFile" onchange="angular.element(this).scope().setFile(this)">
+      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newDocTitle" style="width:50%">
+      <input id="url" class="w3-small w3-margin-top" type="file" ng-model="upFile" ngchange="angular.element(this).scope().setFile(this)" style="width:50%">
     </li>
   </ul>
 </div>
 
-<div class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom" style="overflow:hidden">
-  <h2>Useful Links</h2>
+<div>
+  <br>
+  <span class="w3-large">Useful Links</span>
+  <br>
   <!-- Links list -->
   <ul class="w3-ul">
     <li ng-repeat="link in links" class="w3-padding-hor-16" style="min-height:100px">
-      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+      <span ng-click="removeLink($index)" class="w3-closebtn w3-padding">
         <i class="fa fa-remove"></i>
       </span>
-      <img src="img/chef.jpg" class="w3-hide-small w3-left w3-circle w3-margin-right" style="width:64px">
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa fa-link w3-xxlarge"></i>
+      </span>
       <span class="w3-large">{{link.title}}</span><br>
       <a ng-href="{{link.url}}">{{link.url}}</a>
     </li>
@@ -62,9 +66,11 @@
       <span ng-click="addLink(newLinkTitle,newLinkUrl)" class="w3-closebtn w3-padding">
         <i class="fa fa-plus"></i>
       </span>
-      <img src="img/chef.jpg" class="w3-hide-small w3-left w3-circle w3-margin-right" style="width:64px">
-      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newLinkTitle"><br>
-      <input id="url" class="w3-small w3-margin-top" type="text" placeholder="https://www.url.com" ng-model="newLinkUrl">
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa fa-link w3-xxlarge"></i>
+      </span>
+      <input id="title" class="w3-small w3-margin-bottom" type="text" placeholder="Title" ng-model="newLinkTitle" style="width:50%">
+      <input id="url" class="w3-small" type="text" placeholder="https://www.url.com" ng-model="newLinkUrl" style="width:50%">
     </li>
   </ul>
 </div>

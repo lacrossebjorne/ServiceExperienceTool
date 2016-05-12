@@ -30,10 +30,18 @@ angular.module('company')
       $scope.newLinkUrl = "";
   }
 
+  $scope.removeLink = function(index){
+      $scope.links.splice(index, 1);
+  }
+
   $scope.addDocument = function(title, url){
       $scope.documents.push({title, icon:'fa-file-text-o', url});
       $scope.newDocTitle = "";
       $scope.newDocUrl = "";
+  }
+
+  $scope.removeDocument = function(index){
+      $scope.documents.splice(index, 1);
   }
 
   $scope.setFile = function(element) {
