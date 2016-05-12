@@ -2,32 +2,17 @@
 
 angular.module('company')
 
-.controller('CompanyController', ['$scope', function($scope) {
+.controller('CompanyController', ['$scope', 'company.data', function($scope, companyData) {
   var imgIndex = 0;
-  var imgUris = ['img/company_main_01.jpg', 'img/company_main_02.jpg'];
+  var imgUris = companyData.imgUris;
   var imageSwitch = function() {
     return imgUris[imgIndex++ % imgUris.length];
   }
 
-  $scope.tabs = [{
-    title: 'History',
-    url: 'app/company/tabs/tab.history.html'
-  }, {
-    title: 'Atmosphere',
-    url: 'app/company/tabs/tab.atmosphere.html'
-  }, {
-    title: 'Values',
-    url: 'app/company/tabs/tab.values.html'
-  }, {
-    title: 'Links',
-    url: 'app/company/tabs/tab.links.html'
-  }, {
-    title: 'Documents',
-    url: 'app/company/tabs/tab.documents.html'
-  }];
-
+  $scope.links = companyData.links;
+  $scope.documents = companyData.docs;
+  $scope.tabs = companyData.tabs;
   $scope.currentTab = 'app/company/tabs/tab.history.html';
-
   $scope.imgA = imageSwitch();
 
   $scope.onClickTab = function(tab) {
@@ -38,4 +23,24 @@ angular.module('company')
   $scope.isActiveTab = function(tabUrl) {
     return tabUrl == $scope.currentTab;
   }
+
+  $scope.addLink = function(title, url){
+      $scope.links.push({title, url});
+      $scope.newLinkTitle = "";
+      $scope.newLinkUrl = "";
+  }
+
+  $scope.addDocument = function(title, url){
+      $scope.documents.push({title, icon:'fa-file-text-o', url});
+      $scope.newDocTitle = "";
+      $scope.newDocUrl = "";
+  }
+
+  $scope.setFile = function(element) {
+    $scope.$apply(function($scope) {
+        $scope.upFile = element.files[0].name;
+        console.log('FileNAME');
+        console.log(element.files[0].name);
+    });
+};
 }]);

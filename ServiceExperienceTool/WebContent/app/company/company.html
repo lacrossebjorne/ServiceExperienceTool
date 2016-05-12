@@ -1,10 +1,7 @@
 <div class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom" style="overflow:hidden">
-  <img ng-src="{{imgA}}" alt="Picture of the restaurant" style="width:100%;" class="w3-margin-bottom w3-margin-top dn-fade">
-  <!-- <button type="button" ng-click="" class="w3-btn w3-theme-d1 w3-margin-bottom">
-      <i class="fa " ng-class="{'fa-plus-circle': true}"></i>
-      Button
-    </button> -->
+  <img ng-src="{{imgA}}" alt="Picture of the restaurant" style="width:100%;" class="w3-margin-bottom w3-margin-top">
   <h2>Restaurang Test</h2>
+  <!-- Tabs navbar -->
   <ul class="w3-navbar w3-theme-d2 w3-left-align">
     <li ng-repeat="tab in tabs" ng-click="onClickTab(tab)">
       <a class="w3-padding" ng-class="{'w3-theme-d4':isActiveTab(tab.url)}" href="javascript:void(0);">
@@ -12,7 +9,62 @@
       </a>
     </li>
   </ul>
+  <!-- Tab view -->
   <div id="mainView">
     <div ng-include="currentTab" style="position:relative"></div>
   </div>
+</div>
+
+<div>
+  <br>
+  <span class="w3-large">Documents</span>
+  <br>
+  <!-- Docs list -->
+  <ul class="w3-ul">
+    <li ng-repeat="doc in documents" class="w3-padding-hor-16" style="min-height:100px">
+      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+        <i class="fa fa-remove"></i>
+      </span>
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa w3-xxlarge" ng-class="doc.icon"></i>
+      </span>
+      <span class="w3-large">{{doc.title}}</span><br>
+      <a ng-href="{{doc.url}}">{{doc.url}}</a>
+    </li>
+    <!-- Add doc -->
+    <li class="w3-padding-hor-16" style="min-height:100px">
+      <span ng-click="addDocument(newDocTitle,upFile)" class="w3-closebtn w3-padding">
+        <i class="fa fa-plus"></i>
+      </span>
+      <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">
+        <i class="fa fa-file-text w3-xxlarge"></i>
+      </span>
+      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newDocTitle"><br>
+      <input id="url" class="w3-small w3-margin-top" type="file" ng-model="upFile" onchange="angular.element(this).scope().setFile(this)">
+    </li>
+  </ul>
+</div>
+
+<div class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom" style="overflow:hidden">
+  <h2>Useful Links</h2>
+  <!-- Links list -->
+  <ul class="w3-ul">
+    <li ng-repeat="link in links" class="w3-padding-hor-16" style="min-height:100px">
+      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+        <i class="fa fa-remove"></i>
+      </span>
+      <img src="img/chef.jpg" class="w3-hide-small w3-left w3-circle w3-margin-right" style="width:64px">
+      <span class="w3-large">{{link.title}}</span><br>
+      <a ng-href="{{link.url}}">{{link.url}}</a>
+    </li>
+    <!-- Add link -->
+    <li class="w3-padding-hor-16" style="min-height:100px">
+      <span ng-click="addLink(newLinkTitle,newLinkUrl)" class="w3-closebtn w3-padding">
+        <i class="fa fa-plus"></i>
+      </span>
+      <img src="img/chef.jpg" class="w3-hide-small w3-left w3-circle w3-margin-right" style="width:64px">
+      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newLinkTitle"><br>
+      <input id="url" class="w3-small w3-margin-top" type="text" placeholder="https://www.url.com" ng-model="newLinkUrl">
+    </li>
+  </ul>
 </div>
