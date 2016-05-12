@@ -4,7 +4,11 @@ angular.module('useradmin')
 
 .controller('AdminController', ['$scope', 'AdminFactory', function($scope, AdminFactory) {
     var self = this;
-    self.users = [];
+    $scope.manageRolesShowHide = false;
+	$scope.userListShowHide = false;
+	$scope.addUserShowHide = false;
+    
+   // self.users = [];
     self.resetPassword = {};
     self.userRoles = {
         reception: false,
@@ -25,8 +29,10 @@ angular.module('useradmin')
         resetPassword: null,
         userRoles: null
     };
+    
+    self.users = AdminFactory.listAllUsers();
 
-    self.listAllUsers = function() {
+    /*self.listAllUsers = function() {
         AdminFactory.listAllUsers()
             .then(
                 function(data) {
@@ -37,7 +43,7 @@ angular.module('useradmin')
                     console.error('Error fetching data');
                 }
             );
-    };
+    };*/
 
     self.createUser = function() {
         AdminFactory.createUser(user)
@@ -69,7 +75,7 @@ angular.module('useradmin')
             );
     };
 
-    self.listAllUsers();
+    //self.listAllUsers();
 
     self.submit = function() {
         if (self.user.id === null) {
@@ -104,4 +110,34 @@ angular.module('useradmin')
         $scope.userForm.$setPristine();
         $location.path('/user_administration');
     };
+    
+    $scope.showHide = function(id) {
+    	
+    	switch (id) {
+    	case 'addUserView':
+    		console.log(id)
+    		if ($scope.addUserShowHide)
+    			 $scope.addUserShowHide = false;
+    		else
+    			$scope.addUserShowHide = true;
+    	    break;
+    	case 'userListView':
+    		console.log(id);
+    		if ($scope.userListShowHide)
+    			$scope.userListShowHide = false;
+    		else
+    			$scope.userListShowHide = true;
+    		console.log($scope.userListShowHide);
+    	    break;
+    	case 'manageRolesView':
+    		console.log(id);
+    		if ($scope.manageRolesShowHide)
+    			 $scope.manageRolesShowHide = false;
+    		else
+    			$scope.manageRolesShowHide = true;
+    	    break;
+    	}
+    		
+    }
+    
 }]);

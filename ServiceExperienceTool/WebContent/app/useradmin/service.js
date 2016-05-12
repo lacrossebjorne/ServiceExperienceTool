@@ -2,11 +2,17 @@
 
 angular.module('useradmin')
 
-.factory('AdminFactory', ['$resourse','app.paths', '$q', function($resourse, paths, $q) {
+.factory('AdminFactory', ['$resource','app.paths', '$q', function($resource, paths, $q) {
     return {
         listAllUsers: function() {
-            return $resourse.get(paths.local + 'UserAdminServlet?getUserList')
-                .then(
+            return $resource(paths.local + 'UserAdminServlet?getUserList', {
+            	query: {
+            		method: 'GET',
+            		params: {},
+            		isArray: true
+            	}
+            });
+                /*.then(
                     function(response) {
                         return response.data;
                     },
@@ -14,11 +20,11 @@ angular.module('useradmin')
                         console.error('Error while fetching users');
                         return $q.reject(errResponse);
                     }
-                );
-        },
+                );*/
+        }/*,
 
         createUser: function(user) {
-            return $resourse.post(paths.local + 'UserAdminServlet?insertUser=' + user)
+            return $resource.post(paths.local + 'UserAdminServlet?insertUser=' + user)
                 .then(
                     function(response) {
                         return response.data;
@@ -31,7 +37,7 @@ angular.module('useradmin')
         },
 
         updateUser: function(user, id) {
-            return $resourse.put(paths.local + 'UserAdminServlet?updateUser=' + id, user)
+            return $resource.put(paths.local + 'UserAdminServlet?updateUser=' + id, user)
                 .then(
                     function(response) {
                         return response.data;
@@ -44,7 +50,7 @@ angular.module('useradmin')
         },
 
         deleteUser: function(id) {
-            return $resourse.remove(paths.local + 'UserAdminServlet?deleteUser=' + id)
+            return $resource.remove(paths.local + 'UserAdminServlet?deleteUser=' + id)
                 .then(
                     function(response) {
                         return response.data;
@@ -55,6 +61,6 @@ angular.module('useradmin')
                     }
                 );
         }
-    };
-
+    };*/
+    }
 }]);

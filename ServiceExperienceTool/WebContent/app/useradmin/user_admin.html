@@ -19,10 +19,6 @@ html, body, h1, h2, h3, h4, h5 {
 	margin-bottom: 8px;
 }
 
-.adminViewModal {
-	margin-top: -55px;
-}
-
 #userListmodal {
 	width: 1300px;
 	max-height: 620px;
@@ -57,21 +53,30 @@ tbody {
 	padding-bottom: 6px;
 	text-align: left;
 }
+
+.modal {
+	z-index: 3;
+	padding-top: 50px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+	
+}
 </style>
 <body class="w3-theme-l5">
-
-	<header class="w3-container w3-blue-grey">
-		<h3>Service Experience Tool</h3>
-	</header>
-
 	<div class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2"
 		style="z-index: 3; width: 250px; posistion: relative; clear: both">
 		<a href="#" class="w3-border-bottom w3-large">User Administration</a>
 		<a href="javascript:void(0)" onclick="w3_close()"
 			class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i
 			class="fa fa-remove"></i></a> <a href="#" class="w3-light-grey w3-medium">Home</a>
-		<a href="#" id="addUser">Add user</a> <a href="#" id="listUsers">List
-			all users</a> <a href="#" id="manageRoles">Manage roles</a>
+		<a href id="addUser" ng-click="showHide('addUserView')">Add user</a> <a href id="listUsers" ng-click="showHide('userListView')">List
+			all users</a> <a href id="manageRoles" ng-click="showHide('manageRolesView')">Manage roles</a>
 	</div>
 
 	<div id="myTop" class="w3-container w3-theme w3-large">
@@ -85,7 +90,7 @@ tbody {
 
 	<div id="useradmin_home" class="w3-main" style="margin-left: 250px;">
 		<div
-			class="w3-container w3-padding-hor-32 w3-padding-ver-64 w3-margin-top">
+			class="w3-container w3-padding-ver-64">
 			<h1 class="w3-text-blue-grey">SET user administration</h1>
 			<h5>Use the navigation menu to administer users and groups.</h5>
 			<ul class="w3-leftbar w3-theme-border" style="list-style-type: none">
@@ -107,12 +112,12 @@ tbody {
 			<br>
 		</div>
 	</div>
-	<div id="addUserView" class="w3-modal adminViewModal"
-		style="display: none">
+	<div id="addUserView" class="modal"
+		ng-show="addUserShowHide">
 		<div id="addUserModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('addUserView')" class="w3-closebtn">&times;</span>
+				<span ng-click="showHide('addUserView')" class="w3-closebtn">&times;</span>
 				<h3>Create SET-user</h3>
 			</div>
 			<div class="w3-container">
@@ -179,21 +184,21 @@ tbody {
 					</div>
 					<button id="insertUser" type="submit" form="userform"
 						class="w3-btn w3-btn-block w3-blue-grey"
-						value="insertUser">Save user</button>
+						value="insertUser"
+						ng-disabled="userForm.$pristine">Save user</button>
 					<button type="button"
 						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
-						ng-click="adminCtrl.close()" onclick="showHide('#addUserView')"
-						ng-disabled="userForm.$pristine">Cancel</button>
+						ng-click="showHide('addUserView')">Cancel</button>
 				</form>
 			</div>
 		</div>
 	</div>
-	<div id="userListView" class="w3-modal adminViewModal"
-		style="display: none">
+	<div id="userListView" class="modal"
+		ng-show="userListShowHide">
 		<div id="userListmodal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('userListView')" class="w3-closebtn">&times;</span>
+				<span ng-click="showHide('userListView')" class="w3-closebtn">&times;</span>
 				<h3>SET user list</h3>
 			</div>
 			<div id="constrainer" class="w3-responsive">
@@ -230,12 +235,12 @@ tbody {
 			</div>
 		</div>
 	</div>
-	<div id="manageRolesView" class="w3-modal adminViewModal"
-		style="display: none">
+	<div id="manageRolesView" class="modal"
+		ng-show="manageRolesShowHide">
 		<div id="manageRolesModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
-				<span onclick="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
+				<span ng-click="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
 				<h3>SET manage roles</h3>
 			</div>
 			<div id="constrainer" class="w3-responsive">
@@ -294,13 +299,6 @@ tbody {
 				document.getElementsById(id).css('display', 'block');
 			else {
 				document.getElementsById(id).css('display', 'none');
-				/* if(id == "manageRolesView" || id == "addUserView") {
-					$("form").trigger("reset");
-				if (id == "addUserView")
-					$("checkDiv").empty();
-				}
-				if(id == "userListView" || id == "manageRolesView")
-					$(id).find("tbody").empty(); */
 			}
 		}
 	</script>
