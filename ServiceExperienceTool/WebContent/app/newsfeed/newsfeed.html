@@ -4,7 +4,7 @@
 
 <tags-input ng-model="tags"></tags-input>
 
-<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news">
+<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news | filterByTags:tags" >
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom">
     <br>
     <img ng-src="{{ x.imgUri=='' ? 'http://placehold.it/477x318&text=noImage' : x.imgUri[0] }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">

@@ -16,13 +16,9 @@ angular.module('newsfeed')
   $scope.isShowingDisabledEntries = false;
   
   $scope.tags = [{
-	    text: 'event'
+	    text: 'Lorem'
 	  }, {
-	    text: 'important'
-	  }, {
-	    text: 'kitchen'
-	  }, {
-	    text: 'service'
+	    text: 'search'
 	  }];
 
   expand();
