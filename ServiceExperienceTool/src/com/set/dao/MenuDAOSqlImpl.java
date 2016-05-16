@@ -41,12 +41,14 @@ public class MenuDAOSqlImpl implements MenuDAO{
 	public List<Menu> getMenuList(){
 		List<Menu> menuList = new ArrayList<Menu>();
 		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
 		
 		try {
 			connection = daoFactory.getConnection();
 
-			PreparedStatement statement = connection.prepareStatement(SQL_LIST_MENUS);
-			ResultSet results = statement.executeQuery();
+			statement = connection.prepareStatement(SQL_LIST_MENUS);
+			results = statement.executeQuery();
 
 			while (results.next()) {
 				int id = results.getInt("id");
@@ -56,11 +58,9 @@ public class MenuDAOSqlImpl implements MenuDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			try { if(results != null) results.close(); } catch (SQLException e) {};
+			try { if(statement != null) statement.close(); } catch (SQLException e) {};
+			try { if(connection != null) connection.close(); } catch (SQLException e) {};
 		}
 		return menuList;
 	}

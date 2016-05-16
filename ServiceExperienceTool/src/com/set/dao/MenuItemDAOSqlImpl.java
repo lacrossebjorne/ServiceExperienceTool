@@ -23,13 +23,15 @@ public class MenuItemDAOSqlImpl implements MenuItemDAO{
 	public List<MenuItem> getItems(int menuId) {		
 		List<MenuItem> items = null;
 		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
 		
 		try {
 			connection = daoFactory.getConnection();
 
-			PreparedStatement statement = connection.prepareStatement(SQL_LIST_ITEM_BY_MENU);
+			statement = connection.prepareStatement(SQL_LIST_ITEM_BY_MENU);
 			statement.setInt(1, menuId);
-			ResultSet results = statement.executeQuery();
+			results = statement.executeQuery();
 
 			items = new ArrayList<MenuItem>();
 			while (results.next()) {
@@ -46,11 +48,9 @@ public class MenuItemDAOSqlImpl implements MenuItemDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			try { if(results != null) results.close(); } catch (SQLException e) {};
+			try { if(statement != null) statement.close(); } catch (SQLException e) {};
+			try { if(connection != null) connection.close(); } catch (SQLException e) {};
 		}
 		
 		return items;

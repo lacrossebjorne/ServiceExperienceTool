@@ -42,12 +42,14 @@ public class MenuCategoryDAOSqlImpl implements MenuCategoryDAO{
 	public List<MenuCategory> getCategories(int menuId) {
 		List<MenuCategory> categories = null;
 		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet results = null;
 		try {
 			connection = daoFactory.getConnection();
 
-			PreparedStatement statement = connection.prepareStatement(SQL_LIST_CATEGORIES_BY_MENU);
+			statement = connection.prepareStatement(SQL_LIST_CATEGORIES_BY_MENU);
 			statement.setInt(1, menuId);
-			ResultSet results = statement.executeQuery();
+			results = statement.executeQuery();
 
 			categories = new ArrayList<MenuCategory>();
 			while (results.next()) {
@@ -59,11 +61,9 @@ public class MenuCategoryDAOSqlImpl implements MenuCategoryDAO{
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			try { if(results != null) results.close(); } catch (SQLException e) {};
+			try { if(statement != null) statement.close(); } catch (SQLException e) {};
+			try { if(connection != null) connection.close(); } catch (SQLException e) {};
 		}	
 		return categories;
 	}
