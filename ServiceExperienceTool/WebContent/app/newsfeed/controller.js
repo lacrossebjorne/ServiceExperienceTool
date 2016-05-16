@@ -14,6 +14,16 @@ angular.module('newsfeed')
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
+  
+  $scope.tags = [{
+	    text: 'event'
+	  }, {
+	    text: 'important'
+	  }, {
+	    text: 'kitchen'
+	  }, {
+	    text: 'service'
+	  }];
 
   expand();
 

@@ -2,6 +2,8 @@
   <span>Loading results...</span>
 </div>
 
+<tags-input ng-model="tags"></tags-input>
+
 <div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news">
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom">
     <br>
