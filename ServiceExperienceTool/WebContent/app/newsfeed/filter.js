@@ -8,7 +8,7 @@ angular.module('newsfeed')
     var filtered = [];
     (items || []).forEach(function(item) {
       var matches = tags.some(function(tag) {
-        return (item.header.toString().indexOf(tag.text) > -1);
+        return (item.tagData.toString().indexOf(tag.text) > -1);
       });
       if (matches) {
         filtered.push(item);

@@ -4,12 +4,13 @@
 
 <tags-input ng-model="tags"></tags-input>
 
-<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news | filterByTags:tags" >
+<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news | filterByTags:tags | orderBy:sortImportant" >
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom">
     <br>
     <img ng-src="{{ x.imgUri=='' ? 'http://placehold.it/477x318&text=noImage' : x.imgUri[0] }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">
     <h4>{{ x.header }}</h4>
     <span>Date: {{ x.createdAt }}</span>
+    <span class="w3-tiny w3-right">Tags: {{ x.tagData }}</span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
     <div ng-if="x.newsUrls.length > 0" class="w3-margin-bottom">
       <strong>Added url:s:</strong>
