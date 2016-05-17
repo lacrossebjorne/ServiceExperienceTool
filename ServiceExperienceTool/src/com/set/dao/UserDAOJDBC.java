@@ -135,6 +135,9 @@ public class UserDAOJDBC implements UserDAO {
 				keys.close();
 				statement.close();
 				connection.setAutoCommit(true);
+				if (connection != null) {
+					connection.close();
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.naming.InitialContext;
@@ -17,7 +19,7 @@ public class FileUploaderImpl implements FileUploader {
 
 	private String[] allowedMimeTypes;
 	private File uploadPath;
-	private Set<String> recentlyUploadedFilenames;
+	private List<String> recentlyUploadedFilenames;
 
 	public FileUploaderImpl() throws NamingException {
 		this(InitialContext.doLookup("java:comp/env/generalUploadPath"), "");
@@ -26,7 +28,7 @@ public class FileUploaderImpl implements FileUploader {
 	public FileUploaderImpl(String absolutePathName, String... allowedMimeTypes) {
 		this.allowedMimeTypes = allowedMimeTypes;
 		this.uploadPath = new File(absolutePathName);
-		this.recentlyUploadedFilenames = new HashSet<String>();
+		this.recentlyUploadedFilenames = new ArrayList<String>();
 	}
 
 	@Override
@@ -127,10 +129,10 @@ public class FileUploaderImpl implements FileUploader {
 		return true;
 	}
 
-	public String[] getRecentlyUploadedFileNames() {
-		Set<String> returnSet = new HashSet<String>();
-		returnSet.addAll(recentlyUploadedFilenames);
+	public List<String> getRecentlyUploadedFileNames() {
+		List<String> listToReturn = new ArrayList<String>();
+		listToReturn.addAll(recentlyUploadedFilenames);
 		this.recentlyUploadedFilenames.clear();
-		return (String[]) returnSet.toArray(new String[returnSet.size()]);
+		return listToReturn;
 	}
 }

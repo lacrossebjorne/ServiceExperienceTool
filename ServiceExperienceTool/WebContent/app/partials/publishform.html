@@ -1,0 +1,56 @@
+<form name="publishForm">
+	<div class="w3-margin-bottom">
+		<label>Subject: </label> <input ng-model="data.newsHeader" type="text"
+			pattern=".{3,}" placeholder="write a subject(minimum 3 characters)"
+			required autofocus class="w3-input w3-border w3-hover-border-black" />
+		<br /> <label>Content:</label> <br />
+		<textarea pattern=".{12,}" ng-model="data.newsContent" rows="4" cols="50"
+			placeholder="write the news(minimum 12 characters)" required
+			class="w3-input w3-border w3-hover-border-black"></textarea>
+	</div>
+
+	<div class="w3-margin-bottom">
+		<label>Choose an image to upload</label> <input type="file"
+			name="file" file-model="data.file" accept=".jpg,.jpeg,.png,.gif" /> 
+	</div>
+
+	<div ng-if="data.urlList.length > 0" class="w3-rest w3-margin-bottom">
+		URLs to add:
+		<div class="w3-row" ng-repeat="urlItem in data.urlList">
+			<div class="w3-quarter" style="word-wrap: break-word;">{{urlItem.title}}</div>
+			<div class="w3-half" style="word-wrap: break-word;">{{urlItem.path}}</div>
+			<div ng-click="removeUrl(data)" class="w3-quarter">
+				<button class="w3-btn w3-red w3-btn-block">
+					<i class="fa fa-remove"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="w3-margin-bottom w3-row">
+		<div class="w3-third">
+			<label class="w3-hide-small">Title:</label> <input type="text"
+				ng-model="data.urlTitle" placeHolder="title of url"
+				class="w3-input w3-border w3-hover-border-black" />
+		</div>
+		<div class="w3-twothird">
+			<label class="w3-hide-small">URL:</label> <input name="urlPath"
+				type="text" ng-pattern='/^https?://.+\..+\..+$/' ng-model="data.urlPath"
+				placeHolder="http://www.link.com"
+				class="w3-input w3-border w3-hover-border-black" />
+		</div>
+		<div class="w3-third">
+			<button type="button" ng-click="addUrl(data)"
+				class="w3-btn w3-btn-block w3-green">add url</button>
+		</div>
+	</div>
+
+	<div class="w3-margin-bottom">
+	{{data.statusMessage != null ? data.statusMessage : "Please enter some news"}}
+	</div>
+
+	 <div class='w3-margin-bottom'>
+	 	<div ng-include="buttonsTemplate"></div>
+	 </div>
+	
+</form>

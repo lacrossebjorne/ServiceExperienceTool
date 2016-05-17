@@ -1,5 +1,6 @@
 package com.set.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,8 +16,8 @@ public class News {
 	private Date updatedAt;
 	private boolean enabled;
 	private Set<NewsImage> newsImages = new HashSet<NewsImage>(0);
-	private List<String> imgUri = new LinkedList<>();
-	private List<NewsUrl> newsUrls = new LinkedList<>();
+	private List<String> imgUri = new ArrayList<String>();
+	private List<NewsUrl> urlList = new ArrayList<NewsUrl>();
 
 	public News() {
 	}
@@ -27,17 +28,28 @@ public class News {
 		this.enabled = enabled;
 	}
 
-	
-	
-	public News(String header, String content, Date createdAt, Date updatedAt, boolean enabled,
-			Set<NewsImage> newsImages, List<NewsUrl> newsUrls) {
+	public News(Long newsId, String header, String content, Date createdAt, Date updatedAt, boolean enabled,
+			Set<NewsImage> newsImages, List<String> imgUri, List<NewsUrl> urlList) {
+		this.newsId = newsId;
 		this.header = header;
 		this.content = content;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.enabled = enabled;
 		this.newsImages = newsImages;
-		this.newsUrls = newsUrls;
+		this.imgUri = imgUri;
+		this.urlList = urlList;
+	}
+
+	public News(String header, String content, Date createdAt, Date updatedAt, boolean enabled,
+			Set<NewsImage> newsImages, List<NewsUrl> urlList) {
+		this.header = header;
+		this.content = content;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.enabled = enabled;
+		this.newsImages = newsImages;
+		this.urlList = urlList;
 	}
 	
 	public Long getNewsId() {
@@ -103,11 +115,11 @@ public class News {
 		this.imgUri = imgUri;
 	}
 	
-	public List<NewsUrl> getNewsUrls() {
-		return this.newsUrls;
+	public List<NewsUrl> getUrlList() {
+		return this.urlList;
 	}
 	
-	public void setNewsUrls(List<NewsUrl> newsUrls) {
-		this.newsUrls = newsUrls;
+	public void setUrlList(List<NewsUrl> urlList) {
+		this.urlList = urlList;
 	}
 }

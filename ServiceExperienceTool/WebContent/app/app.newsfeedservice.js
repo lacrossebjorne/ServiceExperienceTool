@@ -26,13 +26,7 @@ function newsfeedservice($http, $log, $resource, paths) {
 					params: { action : 'publishNews' },
 					transformRequest: formDataObject,
 					headers: {'Content-Type': undefined, enctype:'multipart/form-data' },
-					timeout: 2000 },
-				update: {
-					method: 'POST',
-					params: { action: 'updateNews' },
-					transformRequest: formDataObject,
-					headers: {'Content-Type': undefined, 'Content-Transfer-Encoding': 'binary', enctype:'multipart/form-data' },
-					timeout: 2000
+					timeout: 2000 
 				},
 				disable: {
 					method: 'POST',
@@ -46,10 +40,6 @@ function newsfeedservice($http, $log, $resource, paths) {
 			angular.forEach(data, function(value, key) {
 				console.log("key: " + key);
 				var val = value;
-				/*
-				if (key != "file") {
-					val = encodeURIComponent(value);
-				}*/
 				console.log("value: " + val);
 				fd.append(key, val);
 			});
@@ -59,21 +49,24 @@ function newsfeedservice($http, $log, $resource, paths) {
 	return saveResource;
 	}
 
-	function addUrl(urlTitle, urlPath, callback) {
-    var urlPattern = /https?:\/\/.+\..+\..+/;
+	function addUrl(data) {
+		var urlPattern = /https?:\/\/.+\..+\..+/;
 
-	  if (urlPath != null && urlPath.length > 0 && urlPattern.test(urlPath)) {
-			if (urlTitle == null || urlTitle.length == 0) {
-				urlTitle = urlPath;
+		if (data.urlPath != null && data.urlPath.length > 0 && urlPattern.test(data.urlPath)) {
+			if (data.urlTitle == null || data.urlTitle.length == 0) {
+				data.urlTitle = data.urlPath;
 			}
 
-			var urlItem = { title: urlTitle, path: urlPath};
-			callback(urlItem);
+			var urlItem = { title: data.urlTitle, path: data.urlPath};
+			if (data.urlList == null) {
+				data.urlList = [];
+			}
+			data.urlList.push(urlItem);
 			return true;
-    } else {
+		} else {
 			return false;
 		}
-  }
+	}
 
 	function removeUrl(urlList, urlItem) {
 		var index = urlList.indexOf(urlItem);
