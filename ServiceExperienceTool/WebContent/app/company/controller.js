@@ -26,7 +26,7 @@ angular.module('company')
 
   $scope.addLink = function(title, url){
       $scope.links.push({title: title, url: url});
-      pushService.broadcast({path: $location.path(), message: 'Company update'});
+      pushService.broadcast({path: $location.absUrl(), message: 'Link added: ' + title});
       $scope.newLinkTitle = "";
       $scope.newLinkUrl = "";
   }
@@ -37,6 +37,7 @@ angular.module('company')
 
   $scope.addDocument = function(title, url){
       $scope.documents.push({title: title, icon:'fa-file-text-o', url: url});
+      pushService.broadcast({path: $location.absUrl(), message: 'Document added: ' + title});
       $scope.newDocTitle = "";
       $scope.newDocUrl = "";
   }

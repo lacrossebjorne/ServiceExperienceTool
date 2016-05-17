@@ -13,7 +13,16 @@ function NavbarController($scope, pushService){
 		console.log($scope.pushObjects);
 	}
 	
-	$scope.pushObjects = [];
 	$scope.pushes = 0;
+	$scope.pushObjects = [];
+	$scope.selectPush = function(index){
+		$scope.pushObjects.splice(index, 1);
+		$scope.pushes -= 1;
+	}
+	
+	$scope.hideNotifications = function(){
+		return $scope.pushObjects.length > 0 ? true : false;
+	}
+	
 	pushService.listen(vm.callback);
 }
