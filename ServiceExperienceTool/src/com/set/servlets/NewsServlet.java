@@ -3,18 +3,14 @@ package com.set.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -28,21 +24,13 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.set.dao.DAOFactory;
-import com.set.dao.NewsEditorDAO;
 import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
 import com.set.entities.News;
 import com.set.entities.NewsUrl;
-//import com.set.data_containers.News;
-//import com.set.db.DAOFactory;
-//import com.set.db.NewsPublisher;
-//import com.set.db.NewsReader;
-import com.set.uploaders.FileUploader;
-import com.set.uploaders.FileUploaderFactory;
+import com.set.servlets.helpers.FilePartProcessor;
+import com.set.uploaders.ImageStreamUploader;
 
 /**
  * Servlet implementation class NewsServlet
@@ -84,8 +72,7 @@ public class NewsServlet extends HttpServlet {
 
 		String action = (String) request.getParameter("action");
 
-		//////////////////////////// Printing some Console-info
-		//////////////////////////// ////////////////////////////
+		/////////////// Printing some Console-info //////////////
 		Date currentTime = new Date(System.currentTimeMillis());
 		SimpleDateFormat df = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a");
 		System.out.format("################### Time: %s\n", df.format(currentTime));
@@ -93,7 +80,7 @@ public class NewsServlet extends HttpServlet {
 		System.out.format("Server Path: %s\n", getServerRequestPath(request));
 		System.out.format("Protocol: %s\n", request.getProtocol());
 		System.out.println("Character Encoding: " + request.getCharacterEncoding());
-		////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////
 
 		if (action == null) {
 			response.getWriter().println("No action-parameter was set!");
@@ -106,14 +93,11 @@ public class NewsServlet extends HttpServlet {
 			case "publishNews":
 				publishNews(request, response);
 				break;
-			case "fileUpload":
-				uploadFile(request, response);
-				break;
-			case "updateNews":
-				updateNews(request, response);
-				break;
 			case "disableNews":
 				disableNews(request, response);
+				break;
+			case "fileUpload":
+				uploadFile(request, response);
 				break;
 			default:
 				response.getWriter().println("An invalid value was set to the action-parameter!");
@@ -124,96 +108,7 @@ public class NewsServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		doGet(request, response);
-	}
-
-	private void uploadFile(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/uploadServlet");
-		dispatcher.forward(request, response);
-	}
-
-	private void publishNews(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-
-		System.out.format("subject: %s, content: %s\n", request.getParameter("newsHeader"),
-				request.getParameter("newsContent"));
-		String jsonUrlList = request.getParameter("urlList");
-		System.out.println(jsonUrlList);
-
-		NewsUrl[] urlList = null;
-		
-		if (jsonUrlList != null) {
-			Gson gson = new Gson();
-			urlList = gson.fromJson(jsonUrlList, NewsUrl[].class);
-			System.out.println("urlList-length: " + urlList.length);
-			for (int i = 0; i < urlList.length; i++) {
-				System.out.format("newsUrl.getTitle(): %s, newsUrl.getPath(): %s\n", urlList[i].getTitle(), urlList[i].getPath());
-			}
-		}
-
-		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
-		String[] imageUris = null;
-		Collection<Part> allParts = request.getParts();
-		if (allParts != null) {
-			Set<InputStream> streams = new HashSet<InputStream>();
-			for (Part part : allParts) {
-				if (part.getName().equals("file")) {
-					InputStream inputStream = part.getInputStream();
-					String fileName = part.getSubmittedFileName();
-					if (fileName == null) {
-						sendError(response, HttpServletResponse.SC_BAD_REQUEST);
-						return;
-					}
-					streams.add(part.getInputStream());
-					inputstreamFilenames.put(inputStream, fileName);
-				}
-			}
-			if (inputstreamFilenames.size() > 0) {
-
-				FileUploader imageUploader = FileUploaderFactory.getNewsImageUploader();
-				boolean filesAreUploaded = imageUploader.uploadFiles(inputstreamFilenames);
-				if (filesAreUploaded) {
-					imageUris = imageUploader.getRecentlyUploadedFileNames();
-				} else {
-					sendError(response, HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
-					return;
-				}
-			}
-		}
-
-		/*
-		 * NewsPublisher newsPublisher = DAOFactory.getNewsPublisher();
-		 * 
-		 * String subject = request.getParameter("newsHeader"); String content =
-		 * request.getParameter("newsContent");
-		 * 
-		 * int primaryKey = newsPublisher.publishNews(subject, content,
-		 * imageUris);
-		 */
-
-		String subject = request.getParameter("newsHeader");
-		String content = request.getParameter("newsContent");
-		boolean enabled = false;
-		if (request.getParameter("status") != null)
-			enabled = true;
-		News news = new News(subject, content, enabled);
-		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		NewsPublisherDAO newsPublisher = daoFactory.getNewsPublisherDAO();
-		boolean isPublished = newsPublisher.publishNews(news, imageUris, urlList);
-		System.out.println("isPublished: " + isPublished);
-		// if (primaryKey > -1) {
-		if (isPublished) {
-			try {
-				response.getWriter().println("News are published!");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else {
-			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return;
-		}
 	}
 
 	public void getNews(HttpServletRequest request, HttpServletResponse response) {
@@ -255,12 +150,13 @@ public class NewsServlet extends HttpServlet {
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
-			// NewsReader newsFetcher = DAOFactory.getNewsFetcher();
 			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 			NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
 
-			// temporary fix - temporaryImagesNewsPath is a constant used only
-			// during development phase
+			/*
+			 * Temporary fix - temporaryImagesNewsPath is a constant used only
+			 * during development phase
+			 */
 			try {
 				newsFetcher.setImagePath(InitialContext.doLookup("java:comp/env/temporaryImagesNewsPath"));
 			} catch (NamingException e) {
@@ -299,8 +195,81 @@ public class NewsServlet extends HttpServlet {
 		}
 	}
 
+	private void publishNews(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		System.out.format("subject: %s, content: %s\n", request.getParameter("newsHeader"),
+				request.getParameter("newsContent"));
+
+		String newsHeader = request.getParameter("newsHeader");
+		String newsContent = request.getParameter("newsContent");
+		Long newsId = null;
+
+		try {
+			String idParameter = request.getParameter("newsId");
+
+			if (idParameter != null) {
+				newsId = Long.parseLong(idParameter);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+
+		if (newsHeader == null || newsContent == null) {
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		String jsonUrlList = request.getParameter("urlList");
+		System.out.println("urlList: " + jsonUrlList);
+
+		List<NewsUrl> urlList = parseNewsUrlListFromJson(jsonUrlList);
+
+		List<String> imageUris = null;
+
+		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
+		Collection<Part> allParts = request.getParts();
+
+		FilePartProcessor filePartProcessor = new FilePartProcessor();
+		if (filePartProcessor.processParts(allParts)) {
+			inputstreamFilenames = filePartProcessor.getInputstreamTable();
+			ImageStreamUploader imageStreamUploader = new ImageStreamUploader();
+			if (imageStreamUploader.uploadFiles(inputstreamFilenames)) {
+				imageUris = imageStreamUploader.getRecentlyUploadedFileNames();
+			} else if (imageStreamUploader.isError()) {
+				int errorCode = imageStreamUploader.getErrorCode();
+				sendError(response, errorCode);
+				return;
+			}
+		} else if (filePartProcessor.isError()) {
+			int errorCode = filePartProcessor.getErrorCode();
+			sendError(response, errorCode);
+			return;
+		}
+
+		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, true, null, imageUris, urlList);
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+
+		boolean isPublished = false;
+
+		NewsPublisherDAO newsPublisher = daoFactory.getNewsPublisherDAO();
+		isPublished = newsPublisher.publishNews(newsEntry);
+		System.out.println("isPublished: " + isPublished);
+
+		if (isPublished) {
+			try {
+				response.getWriter().println("News are published!");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+	}
+
 	private void disableNews(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Long id = null;
 		try {
 			String idParameter = request.getParameter("newsId");
@@ -320,8 +289,8 @@ public class NewsServlet extends HttpServlet {
 		System.out.println("id: " + id);
 
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		NewsEditorDAO newsEditorDAO = daoFactory.getNewsEditorDAO();
-		boolean isDisabled = newsEditorDAO.disableNewsEntry(id);
+		NewsPublisherDAO newsPublisherDAO = daoFactory.getNewsPublisherDAO();
+		boolean isDisabled = newsPublisherDAO.disableNewsEntry(id);
 
 		if (isDisabled) {
 			try {
@@ -336,63 +305,30 @@ public class NewsServlet extends HttpServlet {
 
 	}
 
-	private void updateNews(HttpServletRequest request, HttpServletResponse response) {
-		
-		Long id = null;
-		String header = request.getParameter("newsHeader");
-		String content = request.getParameter("newsContent");
-		try {
-			Collection<Part> parts = request.getParts();
-			for (Part part : parts) {
-				System.out.println(part.getName());
-				System.out.println(part.getSubmittedFileName());
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ServletException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
-		try {
-			String idParameter = request.getParameter("newsId");
-
-			if (idParameter != null) {
-				id = Long.parseLong(idParameter);
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+	private List<NewsUrl> parseNewsUrlListFromJson(String jsonUrlList) {
+		if (jsonUrlList == null) {
+			return null;
 		}
 
-		if (id == null || header == null || content == null) {
-			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
-			return;
+		Gson gson = new Gson();
+		NewsUrl[] urlArray = gson.fromJson(jsonUrlList, NewsUrl[].class);
+		System.out.println("urlList-length: " + urlArray.length);
+		for (int i = 0; i < urlArray.length; i++) {
+			System.out.format("newsUrl.getTitle(): %s, newsUrl.getPath(): %s\n", urlArray[i].getTitle(),
+					urlArray[i].getPath());
 		}
 
-		System.out.println("id: " + id);
-		System.out.println("header: " + header);
-		System.out.println("content: " + content);
-
-		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		NewsEditorDAO newsEditorDAO = daoFactory.getNewsEditorDAO();
-
-		News newsEntry = new News(header, content, null, null, true, null, null);
-		newsEntry.setNewsId(id);
-
-		boolean isPublished = newsEditorDAO.updateNews(newsEntry);
-
-		if (isPublished) {
-			try {
-				response.getWriter().println("News are published!");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (urlArray != null && urlArray.length > 0) {
+			return Arrays.asList(urlArray);
 		} else {
-			sendError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return;
+			return null;
 		}
+	}
 
+	private void uploadFile(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/uploadServlet");
+		dispatcher.forward(request, response);
 	}
 
 	private String getServerRequestPath(HttpServletRequest request) {
@@ -413,7 +349,7 @@ public class NewsServlet extends HttpServlet {
 	public void sendError(HttpServletResponse response, Integer errorCode) {
 		String errorName = this.errorMap.get(errorCode);
 		try {
-			System.out.format("Sending Response %d: %s", errorCode, errorName);
+			System.out.format("Sending Response %d: %s\n", errorCode, errorName);
 			response.sendError(errorCode);
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.ServletException;
@@ -35,7 +36,7 @@ public class UploadServlet extends HttpServlet {
 		PrintWriter writer = response.getWriter();
 
 		Hashtable<InputStream, String> inputstreamFilenames = new Hashtable<InputStream, String>();
-		String[] imageUris = null;
+		List<String> imageUris = null;
 		Collection<Part> allParts = request.getParts();
 		if (allParts != null) {
 			Set<InputStream> streams = new HashSet<InputStream>();

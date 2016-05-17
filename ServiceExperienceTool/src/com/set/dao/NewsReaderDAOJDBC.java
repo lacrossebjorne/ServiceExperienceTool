@@ -69,18 +69,18 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				statement.setLong(1, newsEntry.getNewsId());
 				urlResult = statement.executeQuery();
 				while (urlResult.next()) {
-					if (newsEntry.getNewsUrls() == null) {
-						newsEntry.setNewsUrls(new LinkedList<>());
+					if (newsEntry.getUrlList() == null) {
+						newsEntry.setUrlList(new LinkedList<>());
 					}
 					Long newsUrlId = urlResult.getLong("news_url_id");
 					String title = urlResult.getString("title");
 					String path = urlResult.getString("path");
 					
-					newsEntry.getNewsUrls().add(new NewsUrl(newsUrlId, newsEntry.getNewsId(), title, path));
+					newsEntry.getUrlList().add(new NewsUrl(newsUrlId, newsEntry.getNewsId(), title, path));
 				}
 			}
 			
-		}catch (SQLException e){
+		} catch (SQLException e){
 			e.printStackTrace();
 		} finally {
 			try {
@@ -91,6 +91,9 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				}
 				newsResult.close();
 				statement.close();
+				if (connection != null) {
+					connection.close();
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

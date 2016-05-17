@@ -15,6 +15,9 @@ function($scope, Newsfetch, newsfeedservice) {
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
+  $scope.bundle = {};
+  $scope.testScope = { file: null};
+  $scope.buttonsTemplate = "app/partials/editbuttons.html";
 
   expand();
 
@@ -50,54 +53,91 @@ function($scope, Newsfetch, newsfeedservice) {
     news.isEditing = !news.isEditing;
   }
 
-  $scope.saveNews = function(news, index, statusMessage) {
-    //first validate the input
-    var editedHeader = angular.element(document.querySelector('#edit-header-' + index)).val();
-    var editedContent = angular.element(document.querySelector('#edit-content-' + index)).val();
-    var self = this;
+  $scope.fillForm = function(news) {
+    this.data = {};
+    this.data.newsId = news.newsId;
+    this.data.newsHeader = news.header;
+    this.data.newsContent = news.content;
+    this.data.urlList = news.urlList;
+  }
 
-    var formData = { newsHeader: editedHeader, newsContent: editedContent};
-    if (!newsfeedservice.validateFormInput(formData,
-      function(rejectedStatusMessage) {
-        self.statusMessage = rejectedStatusMessage;
-      })) {
-      return;
+  $scope.addUrl = function(data) {
+    if (newsfeedservice.addUrl(data)) {
+      console.log("url was added");
     } else {
-      //do backend call here
-      var publisher = newsfeedservice.getPublisher();
-      publisher.update({
-        newsId: news.newsId, newsHeader: editedHeader, newsContent: editedContent
-      }).$promise.then(function(result) {
-        //if backend call is successful
-        news.header = editedHeader;
-        news.content = editedContent;
-        self.statusMessage = "Successfully updated news!";
-      })
-      .catch(function(errorMsg) {
-        //if backend call is not successful
-        self.statusMessage = "Couldn't update news!";
-      });
+      console.log("url couldn't be added");
     }
   }
 
-  $scope.deleteNews = function(news, statusMessage) {
-    var self = this;
-    var publisher = newsfeedservice.getPublisher();
-    publisher.disable({
-      newsId: news.newsId
-    }).$promise.then(function(result) {
-      //if backend call is successful
-      self.statusMessage = "Successfully deleted news!";
-      if (!$scope.isShowingDisabledEntries) {
-        //removing entry from array
-        var index = $scope.news.indexOf(news);
-        $scope.news.splice(index, 1);
-      }
-    })
-    .catch(function(errorMsg) {
-      //if backend call is not successful
-      self.statusMessage = "Couldn't delete news!";
-    });
+  $scope.removeUrl = function(data) {
+    if(newsfeedservice.removeUrl(data.urlList, this.urlItem)) {
+      console.log("url was removed");
+    } else {
+      console.log("url couldn't be removed");
+    }
   }
 
-}]);
+  $scope.saveNews = function(news, data) {
+    console.log("the data: " + data);
+    	
+    //create the bundle object
+    var bundle = { newsId: data.newsId, newsHeader: data.newsHeader, newsContent: data.newsContent};
+
+    if (data.urlList != null && data.urlList.length > 0) {
+      var jsonUrlList = JSON.stringify(data.urlList);
+      bundle.urlList = jsonUrlList;
+    }
+
+    if (data.file != null) {
+      bundle.file = data.file;
+    }
+
+    var self = this;
+    console.log("the bundle: " + bundle);
+
+    //validate input
+    if (!newsfeedservice.validateFormInput(bundle,
+      function(rejectedStatusMessage) {
+        data.statusMessage = rejectedStatusMessage;
+      })) {
+        return;
+      } else {
+        //do backend call here
+        var publisher = newsfeedservice.getPublisher();
+        //{newsId: news.newsId, newsHeader: editedHeader, newsContent: editedContent, urlList: editedUrls, file: file}
+        publisher.save(bundle).$promise.then(function(result) {
+          //if backend call is successful
+          //change existing news information
+          news.header = data.newsHeader;
+          news.content = data.newsContent;
+          news.urlList = data.urlList;
+          data.statusMessage = "Successfully updated news!";
+        })
+        .catch(function(errorMsg) {
+          //if backend call is not successful
+          data.statusMessage = "Couldn't update news!";
+        });
+      }
+    }
+
+    $scope.deleteNews = function(news, data) {
+      var self = this;
+      var publisher = newsfeedservice.getPublisher();
+      publisher.disable({
+        newsId: news.newsId
+      }).$promise.then(function(result) {
+        //if backend call is successful
+        data.statusMessage = "Successfully deleted news!";
+        if (!$scope.isShowingDisabledEntries) {
+          //removing entry from array
+          var index = $scope.news.indexOf(news);
+          $scope.news.splice(index, 1);
+        }
+      })
+      .catch(function(errorMsg) {
+        //if backend call is not successful
+        data.statusMessage = "Couldn't delete news!";
+      });
+    }
+
+  }]);
