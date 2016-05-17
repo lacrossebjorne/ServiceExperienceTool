@@ -28,14 +28,15 @@
     
     <!-- Push notifications -->
     <li class="w3-hide-small w3-dropdown-hover">
-      <a href="#" class="w3-padding-large w3-hover-white" title="Notifications">
+      <a href="javascript: void(0)" class="w3-padding-large w3-hover-white" title="Notifications">
         <i class="fa fa-bell"></i>
         <span class="w3-badge w3-right w3-small w3-green">{{pushes}}</span>
       </a>
       <div class="w3-dropdown-content w3-white w3-card-4">
-        <a href="#">One new friend request</a>
-        <a href="#">John Doe posted on your wall</a>
-        <a href="#">Jane likes your post</a>
+      <div  ng-repeat="p in pushObjects">
+      <a ng-href="{{p.path}}">{{p.message}}</a>
+      </div>
+        
       </div>
     </li>
 
