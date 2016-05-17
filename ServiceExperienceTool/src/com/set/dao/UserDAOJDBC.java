@@ -184,13 +184,13 @@ public class UserDAOJDBC implements UserDAO {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
 			statement = prepareStatement(connection, SQL_INSERT_USER, true, userObject);
+			Long userID = null;
 			if (statement.executeUpdate() != 1)
 				throw new SQLException("New user failed to be inserted.");
 			else {
 				userKeys = statement.getGeneratedKeys();
 				if (userKeys.next()) {
-					Long userID = userKeys.getLong(1);
-					user.setUserId(userID);
+					userID = userKeys.getLong(1);
 					statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
 					for (Role userRole : user.getRoles()) {
 						statement.setLong(1, userID);
@@ -201,6 +201,7 @@ public class UserDAOJDBC implements UserDAO {
 						throw new SQLException("Could not insert roles into user_roles table.");
 				}
 				connection.commit();
+				user.setUserId(userID);
 				userCreated = true;
 			}
 		} catch (SQLException | IllegalArgumentException e) {

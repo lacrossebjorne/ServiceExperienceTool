@@ -27,34 +27,38 @@ angular.module('useradmin')
     };
 	$scope.userForm = {};
 	$scope.roleForm = {};
+	$scope.userForm.roles = [];
 	
-    self.listAllUsers = function() {
+	$scope.submitUser = function() {
+    	if ($scope.userForm.password === $scope.userForm.verifypassword) {
+    		if ($scope.newUserForm.$valid) {
+    			if ($scope.userForm.userId == null)
+    				self.createUser($scope.userForm);
+    			else
+    				self.updateUser($scope.userForm)
+    			self.close($scope.newUserForm);
+    		}
+    	}
+    };
+	
+	self.listAllUsers = function() {
     	var data = AdminFactory.listAllUsers()
-    	.get().$promise.then(function(data){
+    	.$promise.then(function(data){
     		if (data.isValid) {
     			$scope.users = data.userList;
     		}
     	});
-    }
-    
-    self.listAllRoles = function() {
-    	var data = AdminFactory.listAllRoles()
-    	.get().$promise.then(function(data) {
-    		if(data.isValid) {
-    			$scope.roleList = data.roleList;
-    		}
-    	});
-    }
+    };
 
-    self.createUser = function(user) {
-    	console.log(user);
-        /*AdminFactory.createUser(user)
-            .then(
-                self.listAllUsers(),
-                function(errResponse) {
-                    console.error('Error creating user');
+    self.createUser = function(userForm) {
+        var data = AdminFactory.createUser({user : userForm})
+            .$promise.then(function(data) {
+            	if(data.isValid)
+            		alert("New user (" + userForm.username + ") created with UserID: " + data.userId);
+            	else {
+            		alert('Error creating user');
                 }
-            );*/
+            });
     };
 
     self.updateUser = function() {
@@ -66,33 +70,8 @@ angular.module('useradmin')
                 }
             );
     };
-
-    self.deleteUser = function() {
-        AdminFactory.deleteUser(id)
-            .then(
-                self.listAllUsers(),
-                function(errResponse) {
-                    console.error('Error creating user');
-                }
-            );
-    };
-
-
-    $scope.submitUser = function() {
-    	console.log(self.user);
-    	if ($scope.userForm.password === $scope.userForm.verifypassword) {
-    		if ($scope.submitUser.$valid) {
-    			if ($scope.user.id === null) {
-    				self.createUser($scope.userForm);
-    			} else {
-    				self.updateUser(self.user, self.user.id)
-    			}
-    			self.close();
-    		}
-    	}
-    };
-
-    self.edit = function(id) {
+    
+    self.editUser = function(id) {
     	for(var i = 0; i < self.users.length; i++) {
     		if(self.users[i].id === id) {
     			self.user = angular.copy(user);
@@ -101,7 +80,48 @@ angular.module('useradmin')
     	}
     };
 
-    self.close = function() {
+    self.deleteUser = function() {
+        AdminFactory.deleteUser(id)
+            .then(
+                self.listAllUsers(),
+                function(errResponse) {
+                    console.error('Error deleting user');
+                }
+            );
+    };
+    
+    $scope.submitRole = function() {
+    	if ($scope.newRoleForm.$valid) {
+    		if($scope.roleForm.roleId == null)
+    			self.createRole($scope.roleForm);
+    		else
+    			self.updateRole($scope.roleForm);
+    		self.close($scope.newRoleForm);
+    	}
+    };
+    
+    self.createRole = function(roleForm) {
+    	AdminFactory.createRole({role : roleForm})
+    	.$promise.then(function(data) {
+    		if (data.isValid) {
+    			
+    		}
+    		
+    	});
+    };
+    
+    self.listAllRoles = function() {
+    	var data = AdminFactory.listAllRoles()
+    	.$promise.then(function(data) {
+    		if(data.isValid) {
+    			$scope.roleList = data.roleList;
+    		}
+    	});
+    };
+
+    
+
+    self.close = function(form) {
         //self.roles = {reception: false, service: false, kitchen: false, conference: false, maintenance: false, housekeeping: false, admin: false};
     	$scope.userRoles = [];
     	$scope.user = {
@@ -114,10 +134,18 @@ angular.module('useradmin')
             resetPassword: null,
             userRoles: null
         };
-        $scope.userForm.$setPristine();
+    	if (form == $scope.newUserForm) {
+    		$scope.userForm = {};
+    		$scope.userForm.roles = [];
+    		$scope.newUserForm.$setPristine();
+    	} else {
+    		$scope.roleList = [];
+    		$scope.roleForm = {};
+            $scope.newRoleForm.$setPristine();
+    	}
     };
     
-    $scope.addRemoveUserRole = function (role) {
+/*    $scope.addRemoveUserRole = function (role) {
     	console.log(role);
     	if ($scope.userRoles[role]) {
     		var i = $scope.userRoles(role);
@@ -126,7 +154,7 @@ angular.module('useradmin')
     	else
     		$scope.userRole.push(role);
     	console.log(self.userRole);
-    }
+    }*/
     
     $scope.showHide = function(id) {
     	switch (id) {
@@ -137,7 +165,7 @@ angular.module('useradmin')
     		}
     		else {
     			$scope.addUserShowHide = true;
-    			self.close();
+    			self.close($scope.newUserForm);
     		}
     	    break;
     	case 'userListView':
@@ -157,7 +185,7 @@ angular.module('useradmin')
     		}
     		else {
     			$scope.manageRolesShowHide = true;
-    			$scope.roleList = [];
+    			self.close($scope.newRoleForm);
     		}
     	    break;
     	}		

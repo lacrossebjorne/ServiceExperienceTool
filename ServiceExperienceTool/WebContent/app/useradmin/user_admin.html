@@ -78,6 +78,9 @@ tbody {
 #searchID {
 	width: 50px;
 }
+.w3-select {
+	width: 75%;
+}
 </style>
 <body class="w3-theme-l5">
 	<div id="sideNav" class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2">
@@ -131,20 +134,20 @@ tbody {
 				<h3>Create SET-user</h3>
 			</div>
 			<div class="w3-container">
-				<form id="userform" name="userForm" ng-submit="submitUser()" novalidate>
-					<input type="hidden" ng-model="user.id" />
+				<form name="newUserForm" ng-submit="submitUser()">
+					<input type="hidden" ng-model="userForm.userId" />
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label> <b>First name</b></label> <input id="firstname"
 								class="w3-input w3-border w3-hover-border-black " type="text"
 								placeholder="Enter first name" required
-								ng-model="userForm.firstname">
+								ng-model="userForm.firstName">
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Last name</b></label> <input id="lastname"
 								class="w3-input w3-border w3-hover-border-black " type="text"
 								placeholder="Enter last name" required
-								ng-model="userForm.lastname">
+								ng-model="userForm.lastName">
 						</div>
 					</div>
 					<div class="w3-row-padding">
@@ -165,7 +168,7 @@ tbody {
 						<div class="w3-col s6">
 							<label><b>Phone number</b> </label> <input id="phone"
 								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Enter phone number" ng-model="userForm.phone">
+								placeholder="Enter phone number" ng-model="userForm.phoneNumber">
 						</div>
 						<div class="w3-col s6">
 							<label><b>Enable user</b></label> <input type="checkbox"
@@ -192,16 +195,15 @@ tbody {
 					<span class="w3-col"> <b>Roles</b></span><br>
 						<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
 							<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
-							type="checkbox" ng-model="userForm.roleCheckbox[role.name]">
+							type="checkbox" ng-model="userForm.roles[$index][role.name]">
 							<label for="{{ role.name }}">{{ role.name }}</label>
 						</div>
 					</div>
-					<button id="insertUser" type="submit" form="userForm"
-						class="w3-btn w3-btn-block w3-blue-grey"
-						value="insertUser" ng-disabled="userForm.$pristine">Save user</button>
+					<button type="submit"
+						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="newUserForm.$pristine">Save user</button>
 					<button type="button"
 						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
-						ng-click="showHide('addUserView')">Cancel</button>
+						ng-click="showHide('addUserView')">Exit</button>
 				</form>
 			</div>
 		</div>
@@ -237,12 +239,11 @@ tbody {
 							<td><input type="text" placeholder="Username"></td>
 							<td><input type="text" placeholder="Email"></td>
 							<td><input type="text" placeholder="Phone number"></td>
-							<td><select name="activeUser"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
+							<td><select class="w3-select" name="activeUser"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
 							<td> </td>
 						</tr>
 					</thead>
 					<tbody id="usersTableBody" class="w3-accordion">
-						
 						<tr ng-repeat-start="user in users">
 							<td>{{ user.userId }}</td>
 							<td>{{ user.firstName }}</td>
@@ -284,7 +285,7 @@ tbody {
 			</div>
 			<div id="constrainer" class="w3-responsive">
 				<table id="rolesTable"
-					class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+					class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-accordion">
 					<thead>
 						<tr class="w3-light-grey">
 							<th>Role ID</th>
@@ -292,6 +293,13 @@ tbody {
 							<th>Description</th>
 							<th>Enabled</th>
 							<th><i class="fa fa-search"  aria-hidden="true"  ng-click="expandRow('rolesSearchRow')"></i></th>
+						</tr>
+						<tr id="rolesSearchRow" class="w3-accordion-content hiddenRow">
+							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
+							<td><input type="text" placeholder="Role name"></td>
+							<td><input type="text" placeholder="Description"></td>
+							<td><select class="w3-select" name="activeRole"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
+							<td> </td>
 						</tr>
 					</thead>
 					<tbody id="rolesTableBody">
@@ -305,7 +313,7 @@ tbody {
 					</tbody>
 				</table>
 				<div id="inputRolesDiv" class="w3-display-bottommiddle">
-					<form id="insertRoleForm" class="w3-row-padding" ng-submit="insertRole()">
+					<form name="newRoleForm" class="w3-row-padding" ng-submit="submitRole()">
 						<div class="w3-col s2">
 							<label><b>Role</b></label> <input id="roleName" type="text"
 								class="w3-input w3-border w3-hover-border-black"
@@ -314,7 +322,7 @@ tbody {
 						<div class="w3-col s7">
 							<label><b>Description</b></label> <input id="roleDescription"
 								type="text" class="w3-input w3-border w3-hover-border-black"
-								placeholder="Enter role description" ng-model="roleForm.description">
+								placeholder="Enter role description" ng-model="roleForm.description" required>
 						</div>
 						<div class="w3-col s1">
 							<label><b>Enable</b></label> <input id="roleEnable"
@@ -322,8 +330,8 @@ tbody {
 						</div>
 						<div class="w3-col s2">
 							<label>.</label>
-							<button type="submit" form="insertRoleForm"
-								class="w3-btn w3-btn-block w3-blue-grey" value="insertRole">Save</button>
+							<button type="submit"
+								class="w3-btn w3-btn-block w3-blue-grey" ng-disabled="newRoleForm.$pristine || newRoleForm.name.$invalid || newRoleForm.description.$invalid">Save</button>
 						</div>
 					</form>
 				</div>

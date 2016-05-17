@@ -3,27 +3,53 @@
 angular.module('useradmin')
 
 .factory('AdminFactory', ['$resource','app.paths', '$q', function($resource, paths, $q) {
-    return {
-        listAllUsers: function() {
-            return $resource(paths.local + 'userAdminServlet?getUserList', {});
-                
+    return $resource(paths.local + 'userAdminServlet', {}, {
+        listAllUsers: {
+        	method: 'GET',
+        	params: {'getUserList' : ''},
+    		isArray: false
+        },
+        
+        get: {
+        	method: 'GET',
+        	params: { 'findUser' : '@id' },
+    		isArray: false
         },
     
-    	listAllRoles: function() {
-    		return $resource(paths.local + 'userAdminServlet?getRolesList', {});
-    		
+    	listAllRoles: {
+    		method: 'GET',
+    		params: { 'getRolesList' : ''},
+    		isArray: false
     	},
     	
-    	createUser: function(user) {
-            return $resource.post(paths.local + 'userAdminServlet?insertUser=' + user)
+    	createUser: {
+            method: 'POST',
+            params: { 'insertUser': '@user'},
     	},
     	
-    	updateUser: function(user, id) {
-            return $resource.put(paths.local + 'userAdminServlet?updateUser=' + id, user)
+    	updateUser: {
+            method: 'POST',
+            params: { 'updateUser' : '@user'}
     	},
     	
-    	deleteUser: function(id) {
-            return $resource.remove(paths.local + 'userAdminServlet?deleteUser=' + id)
+    	deleteUser: {
+            method: 'POST',
+            params: { 'deleteUser' : '@id'}
+    	},
+    	
+    	createRole: {
+            method: 'POST',
+            params: { 'insertRole': '@role'},
+    	},
+    	
+    	updateRole: {
+            method: 'POST',
+            params: { 'updateRole' : '@role'}
+    	},
+    	
+    	deleteRole: {
+            method: 'POST',
+            params: { 'deleteRole' : '@id'}
     	}
-    }
+    });
 }]);

@@ -60,18 +60,21 @@ public class UserAdminServlet extends HttpServlet {
 		builder.registerTypeAdapter(User.class, new UserDeserializer());
 		final Gson gson = builder.create();
 
-		if (request.getParameter("newUser") != null) {
-			User user = gson.fromJson(request.getParameter("newUser"), User.class);
+		if (request.getParameter("insertUser") != null) {
+			System.out.println(request.getParameter("insertUser"));
+			User user = gson.fromJson(request.getParameter("insertUser"), User.class);
 			System.out.println(user);
 			UserDAO userDAO = getDAOFactory().getUserDAO();
 			boolean isValid = userDAO.createUser(user);
 			Map<String, Object> map = new HashMap<>();
+			if(isValid)
+				map.put("userId", user.getUserId());
 			map.put("isValid", isValid);
 			writeJson(response, map);
 		}
 		
-		if (request.getParameter("newRole") != null) {
-			Role role = gson.fromJson(request.getParameter("newRole"), Role.class);
+		if (request.getParameter("insertRole") != null) {
+			Role role = gson.fromJson(request.getParameter("insertRole"), Role.class);
 			RoleDAO roleDAO = getDAOFactory().getRoleDAO();
 			Long roleId = roleDAO.createRole(role);
 			boolean isValid = false;
