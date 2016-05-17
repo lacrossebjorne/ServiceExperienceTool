@@ -39,7 +39,6 @@ html, body, h1, h2, h3, h4, h5 {
 table {
 	overflow-y: scroll;
 }
-
 tbody {
 	height: 580px;
 	overflow-y: scroll;
@@ -65,14 +64,25 @@ tbody {
 	overflow: auto;
 	background-color: rgb(0,0,0);
 	background-color: rgba(0,0,0,0.4);
-	
+}
+#sideNav {
+	z-index: 3; 
+	width: 250px;
+	max-height: 71.5%;
+	posistion: relative; 
+	clear: both"
+}
+.hiddenRow {
+	display: none;
+}
+#searchID {
+	width: 50px;
 }
 </style>
 <body class="w3-theme-l5">
-	<div class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2"
-		style="z-index: 3; width: 250px; posistion: relative; clear: both">
-		<a href="#" class="w3-border-bottom w3-large">User Administration</a>
-		<a href="javascript:void(0)" onclick="w3_close()"
+	<div id="sideNav" class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2">
+		<a href class="w3-border-bottom w3-large">User Administration</a>
+		<a href="javascript:void(0)" ng-click="w3_close()"
 			class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i
 			class="fa fa-remove"></i></a> <a href="#" class="w3-light-grey w3-medium">Home</a>
 		<a href id="addUser" ng-click="showHide('addUserView')">Add user</a> <a href id="listUsers" ng-click="showHide('userListView')">List
@@ -82,11 +92,11 @@ tbody {
 	<div id="myTop" class="w3-container w3-theme w3-large">
 		<i
 			class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right w3-margin-top"
-			onclick="w3_open()"></i>
+			ng-click="w3_open()"></i>
 	</div>
 
 	<div class="w3-overlay w3-hide-large w3-animate-opacity"
-		onclick="w3_close()" style="cursor: pointer"></div>
+		ng-click="w3_close()" style="cursor: pointer"></div>
 
 	<div id="useradmin_home" class="w3-main" style="margin-left: 250px;">
 		<div
@@ -113,7 +123,7 @@ tbody {
 		</div>
 	</div>
 	<div id="addUserView" class="modal"
-		ng-show="addUserShowHide">
+		ng-hide="addUserShowHide">
 		<div id="addUserModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
@@ -121,21 +131,20 @@ tbody {
 				<h3>Create SET-user</h3>
 			</div>
 			<div class="w3-container">
-				<form id="userform" name="userForm" action="UserAdminServlet"
-					method="post">
-					<input type="hidden" ng-model="adminCtrl.user.id" />
+				<form id="userform" name="userForm" ng-submit="submitUser()" novalidate>
+					<input type="hidden" ng-model="user.id" />
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label> <b>First name</b></label> <input id="firstname"
 								class="w3-input w3-border w3-hover-border-black " type="text"
 								placeholder="Enter first name" required
-								ng-model="adminCtrl.user.firstname">
+								ng-model="userForm.firstname">
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Last name</b></label> <input id="lastname"
 								class="w3-input w3-border w3-hover-border-black " type="text"
 								placeholder="Enter last name" required
-								ng-model="adminCtrl.user.lastname">
+								ng-model="userForm.lastname">
 						</div>
 					</div>
 					<div class="w3-row-padding">
@@ -143,24 +152,24 @@ tbody {
 							<label><b>Username</b></label> <input id="username"
 								class="w3-input w3-border w3-hover-border-black " type="text"
 								placeholder="Username" required
-								ng-model="adminCtrl.user.username">
+								ng-model="userForm.username">
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Email</b></label> <input id="email"
 								class="w3-input w3-border w3-hover-border-black " type="email"
-								placeholder="Enter email address" pattern="[a-z]\.[a-z]" required
-								ng-model="adminCtrl.user.email">
+								placeholder="Enter email address"
+								ng-model="userForm.email">
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label><b>Phone number</b> </label> <input id="phone"
 								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Enter phone number" ng-model="adminCtrl.user.email">
+								placeholder="Enter phone number" ng-model="userForm.phone">
 						</div>
 						<div class="w3-col s6">
 							<label><b>Enable user</b></label> <input type="checkbox"
-								class="w3-check w3-input" id="enable" value="false">
+								class="w3-check w3-input" id="enable" ng-model="userForm.enabled">
 						</div>
 					</div>
 					<div class="w3-row-padding">
@@ -169,23 +178,27 @@ tbody {
 							</label> <input id="password"
 								class="w3-input w3-border w3-hover-border-black "
 								type="password" placeholder="Enter Password" pattern=".{6,}" required
-								ng-model="adminCtrl.user.password">
+								ng-model="userForm.password">
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Verify password</b>
 							</label> <input id="verifypass"
 								class="w3-input w3-border w3-hover-border-black "
 								type="password" placeholder="Verify Password" required
-								ng-model="adminCtrl.user.verifypassword">
+								ng-model="userForm.verifypassword">
 						</div>
 					</div>
 					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">
 					<span class="w3-col"> <b>Roles</b></span><br>
+						<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
+							<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
+							type="checkbox" ng-model="userForm.roleCheckbox[role.name]">
+							<label for="{{ role.name }}">{{ role.name }}</label>
+						</div>
 					</div>
-					<button id="insertUser" type="submit" form="userform"
+					<button id="insertUser" type="submit" form="userForm"
 						class="w3-btn w3-btn-block w3-blue-grey"
-						value="insertUser"
-						ng-disabled="userForm.$pristine">Save user</button>
+						value="insertUser" ng-disabled="userForm.$pristine">Save user</button>
 					<button type="button"
 						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
 						ng-click="showHide('addUserView')">Cancel</button>
@@ -194,7 +207,7 @@ tbody {
 		</div>
 	</div>
 	<div id="userListView" class="modal"
-		ng-show="userListShowHide">
+		ng-hide="userListShowHide">
 		<div id="userListmodal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
@@ -203,7 +216,7 @@ tbody {
 			</div>
 			<div id="constrainer" class="w3-responsive">
 				<table id="userTable"
-					class="w3-table w3-bordered w3-striped w3-border w3-hoverable">
+					class="w3-table w3-bordered w3-border w3-hoverable w3-accordion">
 					<thead>
 						<tr class="w3-light-grey">
 							<th>User ID</th>
@@ -212,13 +225,39 @@ tbody {
 							<th>Username</th>
 							<th>Email address</th>
 							<th>Phone number</th>
-							<th>Role</th>
+							<!-- <th>Role</th> -->
 							<th>Enabled</th>
-							<th>Password reset</th>
-							<th> </th>
+						<!-- 	<th>Password reset</th> -->
+							<th><i class="fa fa-search"  aria-hidden="true"  ng-click="expandRow('userSearchRow')"></i></th>
+						</tr>
+						<tr id="userSearchRow" class="w3-accordion-content hiddenRow">
+							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
+							<td><input type="text" placeholder="First Name"></td>
+							<td><input type="text" placeholder="Last Name"></td>
+							<td><input type="text" placeholder="Username"></td>
+							<td><input type="text" placeholder="Email"></td>
+							<td><input type="text" placeholder="Phone number"></td>
+							<td><select name="activeUser"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
+							<td> </td>
 						</tr>
 					</thead>
-					<tbody id="usersTableBody">
+					<tbody id="usersTableBody" class="w3-accordion">
+						
+						<tr ng-repeat-start="user in users">
+							<td>{{ user.userId }}</td>
+							<td>{{ user.firstName }}</td>
+							<td>{{ user.lastName }}</td>
+							<td>{{ user.username }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.phoneNumber }}</td>
+							<!-- <td>{{ user.roles.length > 0 ? "-" : user.roles.name }}</td> -->
+							<td>{{ user.enabled }}</td>
+							<!-- <td>{{ resetPassword }}</td> -->
+							<td><i class="fa fa-info-circle"  aria-hidden="true"  ng-click="expandRow(user.username)"></i></td>
+						</tr>
+						<tr id="{{ user.username }}" class="w3-accordion-content hiddenRow" ng-repeat-end="">
+							<td colspan="8"><div>¡Hola!</div><div>Si, senor?</div></td>
+						</tr>
 					</tbody>
 				</table>
 				<!-- <div class="w3-center">
@@ -236,7 +275,7 @@ tbody {
 		</div>
 	</div>
 	<div id="manageRolesView" class="modal"
-		ng-show="manageRolesShowHide">
+		ng-hide="manageRolesShowHide">
 		<div id="manageRolesModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
@@ -252,27 +291,34 @@ tbody {
 							<th>Role name</th>
 							<th>Description</th>
 							<th>Enabled</th>
+							<th><i class="fa fa-search"  aria-hidden="true"  ng-click="expandRow('rolesSearchRow')"></i></th>
 						</tr>
 					</thead>
 					<tbody id="rolesTableBody">
+						<tr id="{{role.name}}" ng-repeat="role in roleList">
+							<td>{{ role.roleId }}</td>
+							<td>{{ role.name }}</td>
+							<td>{{ role.description }}</td>
+							<td>{{ role.enabled }}</td>
+							<td><i class="fa fa-info-circle"  aria-hidden="true"  ng-click="expandRow(role.name)"></i></td>
+						</tr>
 					</tbody>
 				</table>
 				<div id="inputRolesDiv" class="w3-display-bottommiddle">
-					<form id="insertRoleForm" action="UserAdminServlet" method="post"
-						class="w3-row-padding">
+					<form id="insertRoleForm" class="w3-row-padding" ng-submit="insertRole()">
 						<div class="w3-col s2">
 							<label><b>Role</b></label> <input id="roleName" type="text"
 								class="w3-input w3-border w3-hover-border-black"
-								placeholder="Enter role name" required>
+								placeholder="Enter role name" ng-model="roleForm.name" required>
 						</div>
 						<div class="w3-col s7">
 							<label><b>Description</b></label> <input id="roleDescription"
 								type="text" class="w3-input w3-border w3-hover-border-black"
-								placeholder="Enter role description">
+								placeholder="Enter role description" ng-model="roleForm.description">
 						</div>
 						<div class="w3-col s1">
 							<label><b>Enable</b></label> <input id="roleEnable"
-								type="checkbox" class="w3-check w3-input" value="false">
+								type="checkbox" class="w3-check w3-input" ng-model="roleForm.enabled">
 						</div>
 						<div class="w3-col s2">
 							<label>.</label>
@@ -284,23 +330,5 @@ tbody {
 			</div>
 		</div>
 	</div>
-	<script>
-		// Open and close the sidenav on medium and small screens
-		function w3_open() {
-			document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
-			document.getElementsByClassName("w3-overlay")[0].style.display = "block";
-		}
-		function w3_close() {
-			document.getElementsByClassName("w3-sidenav")[0].style.display = "none";
-			document.getElementsByClassName("w3-overlay")[0].style.display = "none";
-		}
-		function showHide(id) {
-			if (document.getElementsById(id).css('display') == 'none')
-				document.getElementsById(id).css('display', 'block');
-			else {
-				document.getElementsById(id).css('display', 'none');
-			}
-		}
-	</script>
 </body>
 </html>

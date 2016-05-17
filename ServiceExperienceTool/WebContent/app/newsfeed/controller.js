@@ -3,6 +3,7 @@
 angular.module('newsfeed')
 
 .controller('NewsfeedController', ['$scope', 'NewsfetchService', 'NewsEditService', function($scope, Newsfetch, NewsEditor) {
+  
   var minArticleTextLimit = 50;
   var initialStatusMessage = "Enter you news.";
   $scope.TEST = "Newsfetch.get";
@@ -14,7 +15,6 @@ angular.module('newsfeed')
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
-
   expand();
 
   function expand() {

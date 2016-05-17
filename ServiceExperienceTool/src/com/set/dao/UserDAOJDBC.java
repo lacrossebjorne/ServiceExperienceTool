@@ -161,6 +161,7 @@ public class UserDAOJDBC implements UserDAO {
 			try {
 				resultSet.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -214,6 +215,7 @@ public class UserDAOJDBC implements UserDAO {
 				userKeys.close();
 				statement.close();
 				connection.setAutoCommit(true);
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -249,6 +251,7 @@ public class UserDAOJDBC implements UserDAO {
 			try {
 				statement.close();
 				connection.setAutoCommit(true);
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

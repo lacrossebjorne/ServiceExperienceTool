@@ -71,7 +71,6 @@ public class UserAdminServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("newRole") != null) {
-			System.out.println(request.getParameter("newRole"));
 			Role role = gson.fromJson(request.getParameter("newRole"), Role.class);
 			RoleDAO roleDAO = getDAOFactory().getRoleDAO();
 			Long roleId = roleDAO.createRole(role);
