@@ -14,18 +14,24 @@ import java.util.Set;
 import com.set.entities.Image;
 import com.set.entities.News;
 import com.set.entities.NewsUrl;
+import com.set.entities.Tag;
 
 public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 	private final String SQL_INSERT_INTO_NEWS = "INSERT INTO news(header, content, created_at) VALUES(?, ?, NOW())";
 	private final String SQL_INSERT_INTO_IMAGE = "INSERT INTO image (image_uri) VALUE (?)";
 	private final String SQL_INSERT_INTO_NEWS_IMAGE = "INSERT INTO news_image(news_id, image_id) VALUES(?, ?)";
 	private final String SQL_INSERT_INTO_NEWS_URL = "INSERT INTO news_url(news_id, title, path) VALUES (?, ?, ?)";
-	private final String SQL_REMOVE_FROM_NEWS_URL = "DELETE FROM news_url WHERE news_url_id=?";
+	private final String SQL_DELETE_FROM_NEWS_URL = "DELETE FROM news_url WHERE news_url_id=?";
 	private final String SQL_IMAGE_NEWS_DELETE = "DELETE FROM news_image WHERE news_id = ?";
 	private final String SQL_NEWS_URL_SELECT = "SELECT news_url_id, news_id, title, path FROM news_url WHERE news_id=?";
 	private final String SQL_UPDATE_NEWS = "UPDATE news SET header=?, content=?, updated_at=NOW() WHERE news_id=?";
 	private final String SQL_DISABLE_NEWS = "UPDATE news SET enabled=false WHERE news_id=?";
-
+	private final String SQL_SELECT_TAGS = "SELECT t.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id WHERE news_id = ?";
+	private final String SQL_DELETE_FROM_NEWS_TAG = "DELETE FROM news_tag WHERE news_id=? AND tag_id=?";
+	private final String SQL_SELECT_TAG = "SELECT * FROM tag WHERE text=?";
+	private final String SQL_INSERT_TAG = "INSERT INTO tag(text) VALUES(?)";
+	private final String SQL_INSERT_NEWS_TAG = "INSERT INTO news_tag(news_id, tag_id) VALUES(?, ?)";
+	
 	private DAOFactory daoFactory;
 
 	public NewsPublisherDAOJDBC(DAOFactory daoFactory) {
@@ -42,6 +48,12 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		List<NewsUrl> urlsFromDB = new ArrayList<NewsUrl>();
 		List<NewsUrl> urlsToAdd = new ArrayList<NewsUrl>();
 		List<NewsUrl> urlsToRemove = new ArrayList<NewsUrl>();
+		
+		List<Tag> tagsFromNewsEntry = news.getTagData() == null ? new ArrayList<Tag>() : news.getTagData();
+		List<Tag> tagsFromDB = new ArrayList<Tag>();
+		List<Tag> tagsToAdd = new ArrayList<Tag>();
+		List<Tag> tagsToRemove = new ArrayList<Tag>();
+		
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet result = null;
@@ -66,6 +78,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 				statement.clearParameters();
 
 				urlsToAdd = news.getUrlList();
+				tagsToAdd = news.getTagData();
 			} else {
 				// UPDATE NEWS
 				newsID = news.getNewsId();
@@ -74,10 +87,11 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 				if (statement.executeUpdate() == 0) {
 					throw new SQLException("Couldn't update rows in table news");
 				}
-
+				
+				//SELECT URLS FROM DB
 				statement = prepareStatement(connection, SQL_NEWS_URL_SELECT, false, news.getNewsId());
 				result = statement.executeQuery();
-
+				
 				while (result.next()) {
 					Long newsUrlId = result.getLong("news_url_id");
 					Long newsId = result.getLong("news_id");
@@ -93,23 +107,48 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 
 				urlsToAdd.addAll(urlsFromNewsEntry);
 				urlsToAdd.removeAll(urlsFromDB);
+				
+				//SELECT TAGS FROM DB
+				statement = prepareStatement(connection, SQL_SELECT_TAGS, false, news.getNewsId());
+				result = statement.executeQuery();
+				
+				while (result.next()) {
+					Long tagId = result.getLong("tag_id");
+					String text = result.getString("text");
+					
+					Tag tag = new Tag(tagId, text);
+					tagsFromDB.add(tag);
+				}
+				
+				tagsToRemove.addAll(tagsFromDB);
+				tagsToRemove.removeAll(tagsFromNewsEntry);
+				
+				tagsToAdd.addAll(tagsFromNewsEntry);
+				tagsToAdd.removeAll(tagsFromDB);
 			}
 
-			// REMOVE IMAGEURIS (if any)
+			// REMOVE/ADD IMAGEURIS (if any)
 			if (imgUris != null && imgUris.size() > 0 && newsID != null) {
 				removeNewsImages(newsID, statement, connection);
 			}
-			// ADD IMAGEURIS (if any)
 			if (imgUris != null && imgUris.size() > 0) {
 				addImageUris(imgUris, newsID, connection, statement, result, batchResult);
 			}
-			// REMOVE LINKS (if any)
+			
+			// REMOVE/ADD URLS (if any)
 			if (urlsToRemove != null && urlsToRemove.size() > 0) {
-				removeUrls(urlsToRemove, statement, connection, batchResult);
+				removeUrls(urlsToRemove, connection, statement, batchResult);
 			}
-			// ADD LINKS (if any)
 			if (urlsToAdd != null && urlsToAdd.size() > 0) {
-				addUrls(urlsToAdd, newsID, statement, connection, batchResult);
+				addUrls(urlsToAdd, newsID, connection, statement, batchResult);
+			}
+			
+			// REMOVE/ADD TAGS (if any)
+			if (tagsToRemove != null && tagsToRemove.size() > 0) {
+				removeTagsFromNews(tagsToRemove, newsID, connection, statement, batchResult);
+			}
+			if (tagsToAdd != null && tagsToAdd.size() > 0) {
+				addTagsToNews(tagsToAdd, newsID, connection, statement, result);
 			}
 
 			connection.commit();
@@ -137,10 +176,9 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		}
 		return published;
 	}
-	
+
 	@Override
 	public boolean disableNewsEntry(Long id) {
-		
 		boolean isDisabled = false;
 		Object[] newsObj = { id };
 		Connection connection = null;
@@ -212,7 +250,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		}
 	}
 
-	private void addUrls(List<NewsUrl> urlList, Long newsID, PreparedStatement statement, Connection connection,
+	private void addUrls(List<NewsUrl> urlList, Long newsID, Connection connection, PreparedStatement statement, 
 			int[] batchResult) throws SQLException {
 		if (urlList != null && urlList.size() > 0) {
 			statement = connection.prepareStatement(SQL_INSERT_INTO_NEWS_URL);
@@ -229,12 +267,58 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		}
 	}
 
-	private void removeUrls(List<NewsUrl> urlList, PreparedStatement statement, Connection connection,
+	private void removeUrls(List<NewsUrl> urlList, Connection connection, PreparedStatement statement,
 			int[] batchResult) throws SQLException {
 		if (urlList != null && urlList.size() > 0) {
-			statement = connection.prepareStatement(SQL_REMOVE_FROM_NEWS_URL);
+			statement = connection.prepareStatement(SQL_DELETE_FROM_NEWS_URL);
 			for (NewsUrl newsUrl : urlList) {
 				statement.setLong(1, newsUrl.getNewsUrlId());
+				statement.addBatch();
+			}
+			batchResult = statement.executeBatch();
+			if (!isBatchSuccessful(batchResult)) {
+				throw new SQLException("Couldn't insert into table newsUrl");
+			}
+		}
+	}
+	
+	private void addTagsToNews(List<Tag> tagsToAdd, Long newsID, Connection connection, PreparedStatement statement, ResultSet result) throws SQLException {
+		if (tagsToAdd != null && tagsToAdd.size() > 0) {
+			
+			for (Tag tag : tagsToAdd) {
+				statement = prepareStatement(connection, SQL_SELECT_TAG, false, tag.getText());
+				result = statement.executeQuery();
+				if (result.next()) {
+					tag.setTagId(result.getLong("tag_id"));
+				} else {
+					statement = prepareStatement(connection, SQL_INSERT_TAG, true, tag.getText());
+					if (statement.executeUpdate() == 0) {
+						throw new SQLException("Couldn't insert rows into table tag");
+					}
+					result = statement.getGeneratedKeys();
+					
+					if (result.next()) {
+						tag.setTagId(result.getLong(1));
+					}
+				}
+				
+				statement = prepareStatement(connection, SQL_INSERT_NEWS_TAG, false, new Object[] { newsID, tag.getTagId()});
+				
+				if (statement.executeUpdate() == 0) {
+					throw new SQLException("Couldn't insert rows into table news_tag");
+				}
+			}
+		}
+	}
+
+	private void removeTagsFromNews(List<Tag> tagsToRemove, Long newsID, Connection connection, PreparedStatement statement,
+			int[] batchResult) throws SQLException {
+		if (tagsToRemove != null && tagsToRemove.size() > 0) {
+			
+			statement = connection.prepareStatement(SQL_DELETE_FROM_NEWS_TAG);
+			for (Tag tag : tagsToRemove) {
+				statement.setLong(1, newsID);
+				statement.setLong(2, tag.getTagId());
 				statement.addBatch();
 			}
 			batchResult = statement.executeBatch();

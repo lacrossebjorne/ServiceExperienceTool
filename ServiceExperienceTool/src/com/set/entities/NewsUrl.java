@@ -66,8 +66,8 @@ public class NewsUrl implements java.io.Serializable {
 		if (!NewsUrl.class.isAssignableFrom(obj.getClass())) {
 			return false;
 		}
-		final NewsUrl other = (NewsUrl) obj;
 		
+		final NewsUrl other = (NewsUrl) obj;
 		if (!isValueEqual(this.newsId, other.newsId)) {
 			return false;
 		}
@@ -90,5 +90,4 @@ public class NewsUrl implements java.io.Serializable {
 		}
 		return true;
 	}
-
 }

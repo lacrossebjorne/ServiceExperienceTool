@@ -53,6 +53,10 @@ angular.module('newspublish')
     if (data.file != null) {
     	bundle.file = data.file;
     }
+    
+    if (data.tagData != null) {
+    	bundle.tagData = JSON.stringify(data.tagData);
+    }
 
     console.log(bundle);
     var publisher = newsfeedservice.getPublisher();

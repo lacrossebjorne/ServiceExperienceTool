@@ -29,6 +29,7 @@ import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
 import com.set.entities.News;
 import com.set.entities.NewsUrl;
+import com.set.entities.Tag;
 import com.set.servlets.helpers.FilePartProcessor;
 import com.set.uploaders.ImageStreamUploader;
 
@@ -222,8 +223,11 @@ public class NewsServlet extends HttpServlet {
 
 		String jsonUrlList = request.getParameter("urlList");
 		System.out.println("urlList: " + jsonUrlList);
+		String jsonTags = request.getParameter("tagData");
+		System.out.println("tagData: " + jsonTags);
 
 		List<NewsUrl> urlList = parseNewsUrlListFromJson(jsonUrlList);
+		List<Tag> tagData = parseTagListFromJson(jsonTags);
 
 		List<String> imageUris = null;
 
@@ -247,7 +251,7 @@ public class NewsServlet extends HttpServlet {
 			return;
 		}
 
-		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, true, null, imageUris, urlList);
+		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, true, null, imageUris, urlList, null, tagData);
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 
 		boolean isPublished = false;
@@ -303,6 +307,20 @@ public class NewsServlet extends HttpServlet {
 			return;
 		}
 
+	}
+	
+	private List<Tag> parseTagListFromJson(String jsonTags) {
+		if (jsonTags == null) {
+			return null;
+		}
+		
+		Gson gson = new Gson();
+		Tag[] tagArray = gson.fromJson(jsonTags, Tag[].class);
+		if (tagArray != null && tagArray.length > 0) {
+			return Arrays.asList(tagArray);
+		} else {
+			return null;
+		}
 	}
 
 	private List<NewsUrl> parseNewsUrlListFromJson(String jsonUrlList) {

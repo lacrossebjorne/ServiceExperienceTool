@@ -44,13 +44,23 @@
 				class="w3-btn w3-btn-block w3-green">add url</button>
 		</div>
 	</div>
-
+	
 	<div class="w3-margin-bottom">
-	{{data.statusMessage != null ? data.statusMessage : "Please enter some news"}}
+		<div ng-if="data.tags">
+		Added tags:
+			<div ng-repeat="tag in data.tags">
+				{{tag.text}}
+			</div> 
+		</div>
+		<tags-input ng-model="data.tagData"></tags-input>
 	</div>
 
-	 <div class='w3-margin-bottom'>
-	 	<div ng-include="buttonsTemplate"></div>
-	 </div>
+	<div class="w3-margin-bottom">
+		{{data.statusMessage != null ? data.statusMessage : "Please enter some news"}}
+	</div>
+
+	<div class='w3-margin-bottom'>
+		<div ng-include="buttonsTemplate"></div>
+	</div>
 	
 </form>

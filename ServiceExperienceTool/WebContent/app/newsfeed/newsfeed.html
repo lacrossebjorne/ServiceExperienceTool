@@ -10,7 +10,8 @@
     <img ng-src="{{ x.imgUri=='' ? 'http://placehold.it/477x318&text=noImage' : x.imgUri[0] }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">
     <h4>{{ x.header }}</h4>
     <span>Date: {{ x.createdAt }}</span>
-    <span class="w3-tiny w3-right">Tags: {{ x.tagData }}</span>
+    <!-- span class="w3-tiny w3-right">Tags: {{ x.tagData }}</span>  -->
+    <span class="w3-tiny w3-right"><tag-display tags="x.tagData" title="Tags:" /></span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
     <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
       <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
