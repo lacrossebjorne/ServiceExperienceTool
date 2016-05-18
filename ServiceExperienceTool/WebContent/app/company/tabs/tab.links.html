@@ -1,11 +1,11 @@
-<div id="viewTwo">
+<div>
   <br>
   <span class="w3-large">Useful Links</span>
   <br>
   <!-- Links list -->
   <ul class="w3-ul">
     <li ng-repeat="link in links" class="w3-padding-hor-16" style="min-height:100px">
-      <span onclick="javascript:void(0);" class="w3-closebtn w3-padding">
+      <span ng-click="removeLink($index)" class="w3-closebtn w3-padding">
         <i class="fa fa-remove"></i>
       </span>
       <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round">

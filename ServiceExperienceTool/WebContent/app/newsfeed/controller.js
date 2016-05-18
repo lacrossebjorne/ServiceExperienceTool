@@ -19,6 +19,20 @@ function($scope, Newsfetch, newsfeedservice) {
   $scope.testScope = { file: null};
   $scope.buttonsTemplate = "app/partials/editbuttons.html";
 
+  var tagsData = [{
+	    text: '#important'
+	  }, {
+	    text: '#kitchen'
+	  }, {
+	    text: '#service'
+	  }, {
+	    text: '#hotel'
+	  }, {
+	    text: '#cleaning'
+	  }];
+  
+  $scope.tags = [];
+
   expand();
 
   function expand() {

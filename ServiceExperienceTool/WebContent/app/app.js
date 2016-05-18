@@ -5,6 +5,7 @@
 angular.module('app', [
   'ngRoute',
   'ngAnimate-animate.css',
+  'ngTagsInput',
   'mainView'
 ])
 .run(['$route', function($route)  {
