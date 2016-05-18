@@ -43,10 +43,28 @@ function($scope, Newsfetch, newsfeedservice) {
     }, function(newsobject) {
       for (var i = 0; i < newsobject.news.length; i++) {
         newsobject.news[i].isEditing = false;
+        newsobject.news[i].tagData = dummyTags();
         $scope.news.push(newsobject.news[i]);
       }
     });
   }
+  
+  function dummyTags(){
+	  var temp = [];
+	  var r = Math.floor((Math.random() * 4));
+	  
+	  temp.push(tagsData[r].text);
+	  
+	  if (Math.random() < .5){
+		  temp.push(tagsData[r + 1].text);
+	  }
+	  
+	  return temp;
+  }
+   
+   $scope.sortImportant = function(t) {
+	    return t.tagData.toString().indexOf("important") > -1 ? 1 : void(0);
+	  }
 
   // Expands article
   $scope.expandArticle = function(textLimit) {
