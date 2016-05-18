@@ -2,8 +2,8 @@
 
 angular.module('company')
 
-.controller('CompanyController', ['$scope', 'company.data', function($scope, companyData) {
-  var imgIndex = 0;
+.controller('CompanyController', ['$scope', '$location', 'company.data', 'pushService', function($scope, $location, companyData, pushService) {
+  var imgIndex = 0; 
   var imgUris = companyData.imgUris;
   var imageSwitch = function() {
     return imgUris[imgIndex++ % imgUris.length];
@@ -25,7 +25,8 @@ angular.module('company')
   }
 
   $scope.addLink = function(title, url){
-      $scope.links.push({title, url});
+      $scope.links.push({title: title, url: url});
+      pushService.broadcast({path: $location.absUrl(), message: 'Link added: ' + title});
       $scope.newLinkTitle = "";
       $scope.newLinkUrl = "";
   }
@@ -35,7 +36,8 @@ angular.module('company')
   }
 
   $scope.addDocument = function(title, url){
-      $scope.documents.push({title, icon:'fa-file-text-o', url});
+      $scope.documents.push({title: title, icon:'fa-file-text-o', url: url});
+      pushService.broadcast({path: $location.absUrl(), message: 'Document added: ' + title});
       $scope.newDocTitle = "";
       $scope.newDocUrl = "";
   }
