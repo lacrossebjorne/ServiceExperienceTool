@@ -90,7 +90,7 @@ public class RoleDAOJDBC implements RoleDAO {
 	}
 
 	@Override
-	public Long createRole(Role role) {
+	public Role createRole(Role role) {
 		if (role.getRoleId() != null)
 			throw new IllegalArgumentException("Role already exist");
 		Object[] roleObj = { role.getName(), role.getDescription(), role.isEnabled() };
@@ -126,7 +126,7 @@ public class RoleDAOJDBC implements RoleDAO {
 				e1.printStackTrace();
 			}
 		}
-		return role.getRoleId();
+		return role;
 	}
 
 	@Override

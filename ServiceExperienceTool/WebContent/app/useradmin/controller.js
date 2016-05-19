@@ -7,6 +7,7 @@ angular.module('useradmin')
     //Hides left and right columns
     hideLeftRightColumns();
     
+//Variables 
     $scope.manageRolesShowHide = true;
 	$scope.userListShowHide = true;
 	$scope.addUserShowHide = true;
@@ -28,7 +29,13 @@ angular.module('useradmin')
 	$scope.userForm = {};
 	$scope.roleForm = {};
 	$scope.userForm.roles = [];
+	$scope.today = new Date();
+	$scope.isExpanded = false
+	$scope.searchIsExpanded = false
+	$scope.regexUserName = '([a-z])\\w+\\.([a-z])\\w+';
+	$scope.regexNumber = '\\d+';
 	
+//Functions
 	$scope.submitUser = function() {
     	if ($scope.userForm.password === $scope.userForm.verifypassword) {
     		if ($scope.newUserForm.$valid) {
@@ -46,6 +53,9 @@ angular.module('useradmin')
     	.$promise.then(function(data){
     		if (data.isValid) {
     			$scope.users = data.userList;
+    			angular.forEach($scope.users, function(user){
+    			});
+    			
     		}
     	});
     };
@@ -104,9 +114,8 @@ angular.module('useradmin')
     	AdminFactory.createRole({role : roleForm})
     	.$promise.then(function(data) {
     		if (data.isValid) {
-    			
+    			$scope.roleList.push(data.role);
     		}
-    		
     	});
     };
     
@@ -121,8 +130,7 @@ angular.module('useradmin')
 
     
 
-    self.close = function(form) {
-        //self.roles = {reception: false, service: false, kitchen: false, conference: false, maintenance: false, housekeeping: false, admin: false};
+    self.close = function(view) {
     	$scope.userRoles = [];
     	$scope.user = {
             id: null,
@@ -134,27 +142,20 @@ angular.module('useradmin')
             resetPassword: null,
             userRoles: null
         };
-    	if (form == $scope.newUserForm) {
+    	if (view == 'addUserView') {
     		$scope.userForm = {};
     		$scope.userForm.roles = [];
     		$scope.newUserForm.$setPristine();
-    	} else {
+    	} else if (view == 'manageRolesView') {
+    		$scope.manageRolesShowHide = true;
     		$scope.roleList = [];
     		$scope.roleForm = {};
             $scope.newRoleForm.$setPristine();
+    	} else if (view == 'userListView') {
+    		$scope.users = [];
     	}
+    	$scope.searchIsExpanded = false;
     };
-    
-/*    $scope.addRemoveUserRole = function (role) {
-    	console.log(role);
-    	if ($scope.userRoles[role]) {
-    		var i = $scope.userRoles(role);
-    		$scope.userRole.splice(i, 1);
-    	}
-    	else
-    		$scope.userRole.push(role);
-    	console.log(self.userRole);
-    }*/
     
     $scope.showHide = function(id) {
     	switch (id) {
@@ -165,7 +166,7 @@ angular.module('useradmin')
     		}
     		else {
     			$scope.addUserShowHide = true;
-    			self.close($scope.newUserForm);
+    			self.close('addUserView');
     		}
     	    break;
     	case 'userListView':
@@ -175,7 +176,7 @@ angular.module('useradmin')
     		}
     		else{
     			$scope.userListShowHide = true;
-    			$scope.users = [];
+    			self.close('userListView');
     		}
     	    break;
     	case 'manageRolesView':
@@ -184,20 +185,18 @@ angular.module('useradmin')
     			self.listAllRoles();
     		}
     		else {
-    			$scope.manageRolesShowHide = true;
-    			self.close($scope.newRoleForm);
+    			self.close('manageRolesView');
     		}
     	    break;
     	}		
     };
     
-    $scope.expandRow = function (id) {
-    	var hidden = angular.element(document.getElementById(id));
-    	if(hidden.css('display') != 'table-row')
-    		hidden.css('display', 'table-row');
-    	else
-    		hidden.css('display', 'none');
-    };
+    $scope.expandRow = function(id) {
+    	if(id == 'userSearchRow' | id == 'rolesSearchRow')
+    		this.searchIsExpanded = !this.searchIsExpanded;
+    	else 
+    		this.isExpanded = !this.isExpanded;
+    }
     
     $scope.w3_open = function() {
     	document.getElementsByClassName("w3-sidenav")[0].style.display = "block";

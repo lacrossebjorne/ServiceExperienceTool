@@ -157,6 +157,35 @@ public class User implements java.io.Serializable {
 		this.resetPasswords = resetPasswords;
 	}
 
+	public User merge(User other) {
+		this.roles.addAll(other.roles);
+		this.resetPasswords.addAll(other.resetPasswords);
+		return this;
+	}
+	
+	 // Object overrides ---------------------------------------------------------------------------
+
+    /**
+     * The user ID is unique for each User. So this should compare User by ID only.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof User) && (userId != null)
+             ? userId.equals(((User) other).userId)
+             : (other == this);
+    }
+
+    /**
+     * The user ID is unique for each User. So User with same ID should return same hashcode.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return (userId != null) 
+             ? (this.getClass().hashCode() + userId.hashCode()) 
+             : super.hashCode();
+    }
 	
 	@Override
 	public String toString() {

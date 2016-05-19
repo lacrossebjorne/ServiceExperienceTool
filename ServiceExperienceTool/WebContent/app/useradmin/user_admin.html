@@ -29,7 +29,7 @@ html, body, h1, h2, h3, h4, h5 {
 }
 
 #manageRolesModal {
-	height: 600px;
+	height: 520px;
 }
 
 #constrainer {
@@ -72,14 +72,18 @@ tbody {
 	posistion: relative; 
 	clear: both"
 }
-.hiddenRow {
-	display: none;
-}
+
 #searchID {
 	width: 50px;
 }
 .w3-select {
 	width: 75%;
+}
+li {
+    list-style-type: none;
+}
+.has-error {
+	border: red;
 }
 </style>
 <body class="w3-theme-l5">
@@ -134,73 +138,107 @@ tbody {
 				<h3>Create SET-user</h3>
 			</div>
 			<div class="w3-container">
-				<form name="newUserForm" ng-submit="submitUser()">
+				<form name="newUserForm" ng-submit="submitUser()" novalidate>
 					<input type="hidden" ng-model="userForm.userId" />
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label> <b>First name</b></label> <input id="firstname"
-								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Enter first name" required
+							<label> <b>First name</b></label>
+							<input class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.firstname.$touched && newUserForm.firstname.$invalid}"
+								ng-minlength="5" ng-maxlength="45"
+								type="text"	name="firstname" placeholder="Enter first name" required
 								ng-model="userForm.firstName">
+							<span ng-messages="newUserForm.firstname.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</span>
 						</div>
 						<div class="w3-col s6">
-							<label> <b>Last name</b></label> <input id="lastname"
-								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Enter last name" required
+							<label> <b>Last name</b></label> <input name="lastname"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.lastname.$touched && newUserForm.lastname.$invalid}"
+								ng-minlength="2" ng-maxlength="45"
+								type="text" placeholder="Enter last name" required
 								ng-model="userForm.lastName">
+							<div ng-messages="newUserForm.lastname.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label><b>Username</b></label> <input id="username"
-								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Username" required
+							<label><b>Username</b></label> <input name="username"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.username.$touched && newUserForm.username.$invalid }"
+								type="text"	ng-pattern="regexUserName"
+								ng-minlength="5" ng-maxlength="45"
+								placeholder="Username as in firstname.lastname" required
 								ng-model="userForm.username">
+							<div ng-messages="newUserForm.username.$error">
+								<div ng-message="pattern">Username must have the form firstname.lastname</div>
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
 						</div>
 						<div class="w3-col s6">
-							<label> <b>Email</b></label> <input id="email"
-								class="w3-input w3-border w3-hover-border-black " type="email"
-								placeholder="Enter email address"
+							<label> <b>Email</b></label> <input name="email"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.email.$touched && newUserForm.email.$invalid }"
+								type="email" placeholder="Enter email address"
 								ng-model="userForm.email">
+								<div ng-messages="newUserForm.email.$error">
+									<div ng-messages-include="static/messages.html"></div>
+								</div>
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label><b>Phone number</b> </label> <input id="phone"
-								class="w3-input w3-border w3-hover-border-black " type="text"
-								placeholder="Enter phone number" ng-model="userForm.phoneNumber">
+							<label><b>Phone number</b> </label> <input name="phoneNumber"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.phoneNumber.$touched && newUserForm.phoneNumber.$invalid }"
+								type="text" ng-pattern="regexNumber"
+								placeholder="Enter phone number - 0701234567" ng-model="userForm.phoneNumber">
+							<div ng-messages="newUserForm.phoneNumber.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
 						</div>
 						<div class="w3-col s6">
 							<label><b>Enable user</b></label> <input type="checkbox"
-								class="w3-check w3-input" id="enable" ng-model="userForm.enabled">
+								class="w3-check w3-input" name="enable" ng-model="userForm.enabled">
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label> <b>Password</b>
-							</label> <input id="password"
-								class="w3-input w3-border w3-hover-border-black "
-								type="password" placeholder="Enter Password" pattern=".{6,}" required
+							</label> <input name="password"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.password.$touched && newUserForm.password.$invalid }"
+								type="password" placeholder="Enter Password" ng-minlength="6" ng-maxlength="45" required
 								ng-model="userForm.password">
+							<div ng-messages="newUserForm.password.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Verify password</b>
-							</label> <input id="verifypass"
-								class="w3-input w3-border w3-hover-border-black "
+							</label> <input name="verifypass"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'has-error': newUserForm.verifypass.$touched && newUserForm.password != newUserForm.verifypass}"
 								type="password" placeholder="Verify Password" required
 								ng-model="userForm.verifypassword">
+							<div ng-messages="newUserForm.verifypassword.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
 						</div>
 					</div>
 					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">
 					<span class="w3-col"> <b>Roles</b></span><br>
 						<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
 							<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
-							type="checkbox" ng-model="userForm.roles[$index][role.name]">
-							<label for="{{ role.name }}">{{ role.name }}</label>
+							type="checkbox" ng-model="userForm.roles[$index][role.name]" ng-if="role.enabled !== false">
+							<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
 						</div>
 					</div>
 					<button type="submit"
-						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="newUserForm.$pristine">Save user</button>
+						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="!newUserForm.$valid">Save user</button>
 					<button type="button"
 						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
 						ng-click="showHide('addUserView')">Exit</button>
@@ -218,7 +256,7 @@ tbody {
 			</div>
 			<div id="constrainer" class="w3-responsive">
 				<table id="userTable"
-					class="w3-table w3-bordered w3-border w3-hoverable w3-accordion">
+					class="w3-table w3-bordered w3-border w3-striped">
 					<thead>
 						<tr class="w3-light-grey">
 							<th>User ID</th>
@@ -227,37 +265,61 @@ tbody {
 							<th>Username</th>
 							<th>Email address</th>
 							<th>Phone number</th>
-							<!-- <th>Role</th> -->
 							<th>Enabled</th>
-						<!-- 	<th>Password reset</th> -->
-							<th><i class="fa fa-search"  aria-hidden="true"  ng-click="expandRow('userSearchRow')"></i></th>
+							<th ng-click="expandRow('userSearchRow')">
+								<i class="fa fa-search-plus" aria-hidden="true"
+								 ng-if="!searchIsExpanded"></i>
+								<i class="fa fa-search-minus" aria-hidden="true"
+								 ng-if="searchIsExpanded"></i>
+							</th>
 						</tr>
-						<tr id="userSearchRow" class="w3-accordion-content hiddenRow">
-							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
+						<tr id="userSearchRow" ng-show="searchIsExpanded">
+							<td><input type="number" min="1" id="searchID"
+								placeholder="ID"></td>
 							<td><input type="text" placeholder="First Name"></td>
 							<td><input type="text" placeholder="Last Name"></td>
 							<td><input type="text" placeholder="Username"></td>
 							<td><input type="text" placeholder="Email"></td>
 							<td><input type="text" placeholder="Phone number"></td>
-							<td><select class="w3-select" name="activeUser"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
-							<td> </td>
+							<td><select class="w3-select" name="activeUser"><option
+										value="enabled">Enabled</option>
+									<option value="disabled">Disabled</option></select></td>
+							<td></td>
 						</tr>
 					</thead>
-					<tbody id="usersTableBody" class="w3-accordion">
-						<tr ng-repeat-start="user in users">
+					<tbody id="usersTableBody">
+						<tr ng-repeat-start="user in users" ng-click="expandRow()">
 							<td>{{ user.userId }}</td>
 							<td>{{ user.firstName }}</td>
 							<td>{{ user.lastName }}</td>
 							<td>{{ user.username }}</td>
 							<td>{{ user.email }}</td>
 							<td>{{ user.phoneNumber }}</td>
-							<!-- <td>{{ user.roles.length > 0 ? "-" : user.roles.name }}</td> -->
 							<td>{{ user.enabled }}</td>
-							<!-- <td>{{ resetPassword }}</td> -->
-							<td><i class="fa fa-info-circle"  aria-hidden="true"  ng-click="expandRow(user.username)"></i></td>
+							<td>
+								<i class="fa fa-plus-square" aria-hidden="true" ng-show="!isExpanded"></i>
+								<i class="fa fa-minus-square" aria-hidden="true" ng-show="isExpanded">
+							</td>
 						</tr>
-						<tr id="{{ user.username }}" class="w3-accordion-content hiddenRow" ng-repeat-end="">
-							<td colspan="8"><div>¡Hola!</div><div>Si, senor?</div></td>
+						<tr id="{{ user.username }}" ng-repeat-end ng-show="isExpanded">
+							<td colspan="8">
+								<div class="w3-row">
+									<div class="w3-col l3 m4 s12">
+											<li><b>Roles</b></li>
+											<li ng-repeat="role in user.roles">{{ role.name }}</li>
+									</div>
+									<div class="w3-col l3 m4 s12">
+										<span>Created:&#8195;</span><span>{{ user.createdAt | date:'yyyy-MM-dd' }}</span><br>
+										<span>Updated:&#8195;</span><span>{{ user.updatedAt | date:'yyyy-MM-dd' }}</span><br>
+									</div>
+									<div class="w3-col l3 m4 s12">
+										<span>Password reset:&#8195;</span>
+										<span ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</span>
+										<span ng-if="reset == null || reset.expirationTime !='' || reset.expirationTime < today">Deactivated</span><br>
+										<span ng-repeat-end>Valid until:&#8195;{{reset.expirationTime }}</span><br>
+									</div>
+								</div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
@@ -285,16 +347,19 @@ tbody {
 			</div>
 			<div id="constrainer" class="w3-responsive">
 				<table id="rolesTable"
-					class="w3-table w3-bordered w3-striped w3-border w3-hoverable w3-accordion">
+					class="w3-table w3-striped w3-bordered w3-border w3-hoverable">
 					<thead>
 						<tr class="w3-light-grey">
 							<th>Role ID</th>
 							<th>Role name</th>
 							<th>Description</th>
 							<th>Enabled</th>
-							<th><i class="fa fa-search"  aria-hidden="true"  ng-click="expandRow('rolesSearchRow')"></i></th>
+							<th ng-click="expandRow('rolesSearchRow')">
+								<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
+								<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+							</th>
 						</tr>
-						<tr id="rolesSearchRow" class="w3-accordion-content hiddenRow">
+						<tr id="rolesSearchRow" ng-show="searchIsExpanded">
 							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
 							<td><input type="text" placeholder="Role name"></td>
 							<td><input type="text" placeholder="Description"></td>
@@ -308,7 +373,7 @@ tbody {
 							<td>{{ role.name }}</td>
 							<td>{{ role.description }}</td>
 							<td>{{ role.enabled }}</td>
-							<td><i class="fa fa-info-circle"  aria-hidden="true"  ng-click="expandRow(role.name)"></i></td>
+							<td><i class="fa fa-pencil-square-o"  aria-hidden="true"  ng-click="expandRow(role.name)"></i></td>
 						</tr>
 					</tbody>
 				</table>
@@ -338,5 +403,6 @@ tbody {
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

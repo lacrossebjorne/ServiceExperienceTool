@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.set.dao.DAOFactory;
-import com.set.dao.RoleDAO;
-import com.set.dao.UserDAO;
 import com.set.entities.Role;
 import com.set.entities.User;
 import com.set.helpers.UserDeserializer;
@@ -28,8 +26,7 @@ public class UserAdminServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		if (request.getParameter("getUserList") != null) {
-			UserDAO userDAO = getDAOFactory().getUserDAO();
-			List<User> userList = userDAO.listUsers();			
+			List<User> userList = getDAOFactory().getUserDAO().listUsers();
 			Map<String, Object> map = new HashMap<>();
 			boolean isValid = false;
 			if (!userList.isEmpty()) {
@@ -41,8 +38,7 @@ public class UserAdminServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("getRolesList") != null) {
-			RoleDAO roleDAO = getDAOFactory().getRoleDAO();
-			List<Role> roleList = roleDAO.listRoles();			
+			List<Role> roleList = getDAOFactory().getRoleDAO().listRoles();
 			Map<String, Object> map = new HashMap<>();
 			boolean isValid = false;
 			if (!roleList.isEmpty()) {
@@ -61,27 +57,22 @@ public class UserAdminServlet extends HttpServlet {
 		final Gson gson = builder.create();
 
 		if (request.getParameter("insertUser") != null) {
-			System.out.println(request.getParameter("insertUser"));
-			User user = gson.fromJson(request.getParameter("insertUser"), User.class);
-			System.out.println(user);
-			UserDAO userDAO = getDAOFactory().getUserDAO();
-			boolean isValid = userDAO.createUser(user);
+			User user = getDAOFactory().getUserDAO().createUser(gson.fromJson(request.getParameter("insertUser"), User.class));
 			Map<String, Object> map = new HashMap<>();
-			if(isValid)
-				map.put("userId", user.getUserId());
+			boolean isValid = false;
+			if(user != null)
+				map.put("user", user);
 			map.put("isValid", isValid);
 			writeJson(response, map);
 		}
 		
 		if (request.getParameter("insertRole") != null) {
-			Role role = gson.fromJson(request.getParameter("insertRole"), Role.class);
-			RoleDAO roleDAO = getDAOFactory().getRoleDAO();
-			Long roleId = roleDAO.createRole(role);
+			Role role = getDAOFactory().getRoleDAO().createRole(gson.fromJson(request.getParameter("insertRole"), Role.class));
 			boolean isValid = false;
 			Map<String, Object> map = new HashMap<>();
-			if (roleId != null) {
+			if (role != null) {
 				isValid = true;
-				map.put("roleId", roleId);
+				map.put("role", role);
 			}
 			map.put("isValid", isValid);
 			writeJson(response, map);
@@ -92,6 +83,7 @@ public class UserAdminServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		try {
+			System.out.println(new Gson().toJson(map));
 			response.getWriter().write(new Gson().toJson(map));
 		} catch (IOException e) {
 			e.printStackTrace();

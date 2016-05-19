@@ -20,7 +20,7 @@ public interface UserDAO {
 	
 	public List<User> listUsers();
 	
-	public boolean createUser(User user);
+	public User createUser(User user);
 	
 	public void updateUser(User user);
 	

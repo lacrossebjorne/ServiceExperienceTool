@@ -11,7 +11,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.set.dao.DAOFactory;
@@ -32,7 +31,6 @@ public class UserDeserializer implements JsonDeserializer<User> {
 		Type mapType = new TypeToken<Map<String, Boolean>>() {}.getType();
 		Map<String, Boolean> rolesMap = new HashMap<>();
 		for (JsonElement jsonElement : jsonRolesArray) {
-			System.out.println(jsonElement);
 			if(!jsonElement.isJsonNull())
 				rolesMap.putAll(new Gson().fromJson(jsonElement, mapType));
 		}

@@ -6,7 +6,7 @@ public class Role implements java.io.Serializable {
 	private Long roleId;
 	private String name;
 	private String description;
-	private Boolean enabled;
+	private Boolean enabled = false;
 
 	public Role() {
 	}

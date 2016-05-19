@@ -5,7 +5,8 @@
 angular.module('app', [
   'ngRoute',
   'ngAnimate-animate.css',
-  'mainView'
+  'mainView',
+  'ngMessages'
 ])
 .run(['$route', function($route)  {
   $route.reload();

@@ -19,7 +19,7 @@ public interface RoleDAO {
 	
 	public List<Role> listRoles();
 	
-	public Long createRole(Role role);
+	public Role createRole(Role role);
 	
 	public void updateRole(Role role);
 	
