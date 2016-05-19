@@ -2,7 +2,7 @@
 
 angular.module('menu')
 
-.controller('MenuController', ['$scope', 'MenuService', 'Category', function($scope, MenuService, Category) {
+.controller('MenuController', ['$scope', 'MenuService', 'Category', 'Allergen', function($scope, MenuService, Category, Allergen) {
 	
   $scope.menus = MenuService.query();  
   $scope.selectedCat = 0;
@@ -11,7 +11,7 @@ angular.module('menu')
   $scope.aDropVisible = false;
   
   //testdata
-  $scope.allergenList = [{id: '1', name: 'gluten'},{id: '2', name: 'laktos'},{id: '3', name: 'nötter'},{id: '4', name: 'ägg'}];
+//  $scope.allergenList = [{id: '1', name: 'gluten'},{id: '2', name: 'laktos'},{id: '3', name: 'nötter'},{id: '4', name: 'ägg'}];
   //end testdata
   
   $scope.selectedAllergens = [];
@@ -53,14 +53,10 @@ angular.module('menu')
 			  return item.parent;
 			});
 	  });
+	  
+	  $scope.allergenList = Allergen.query({menuId : id});
 
 	  $scope.menuItems = MenuService.query({menuId: id}, function(result){
-		  //testdata
-		  $scope.menuItems[1].allergens = [{id: '1', name: 'gluten'}];
-		  $scope.menuItems[2].allergens = [{id: '2', name: 'laktos'}];
-		  $scope.menuItems[3].allergens = [{id: '3', name: 'nötter'}];
-		  $scope.menuItems[4].allergens = [{id: '4', name: 'ägg'}];
-		  //end testdata
 		  $scope.itemGroups = groupBy(result, function(item){
 			  return item.category;
 		  });
