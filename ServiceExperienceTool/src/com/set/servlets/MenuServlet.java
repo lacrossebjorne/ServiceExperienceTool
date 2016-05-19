@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.set.dao.AllergenDAO;
 import com.set.dao.DAOFactory;
 import com.set.dao.MenuCategoryDAO;
 import com.set.dao.MenuDAO;
 import com.set.dao.MenuItemDAO;
+import com.set.entities.Allergen;
 import com.set.entities.Menu;
 import com.set.entities.MenuCategory;
 import com.set.entities.MenuItem;
@@ -58,6 +60,10 @@ public class MenuServlet extends HttpServlet {
 				data = getCategoryList(resourceValues.getMenuId(), response);
 				//TODO handle single category request
 				break;
+			case ALLERGEN:
+				data = getAllergenList(resourceValues.getMenuId());
+				//TODO handle single allergen request
+				break;
 			default:
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				return;
@@ -94,6 +100,13 @@ public class MenuServlet extends HttpServlet {
 		return items;
 	}
 	
+	private List<Allergen> getAllergenList(int menuId){
+		DAOFactory daoFactory = DAOFactory.getInstance("local.jndi");
+		AllergenDAO allergenDAO = daoFactory.getAllergenDAO();
+		List<Allergen> allergenList = allergenDAO.getAllergenListByMenu(menuId);
+		return allergenList;
+	}
+	
 	
 	/*
 	 * Inner class for parsing RESTful URLs
@@ -104,9 +117,13 @@ public class MenuServlet extends HttpServlet {
 		private Pattern regExIdPattern = Pattern.compile("/([0-9]+)");
 		private Pattern regExCategoryAllPattern = Pattern.compile("/([0-9]+)/category");
 		private Pattern regExCategoryIdPattern = Pattern.compile("/([0-9]+)/category/([0-9]+)");
+		private Pattern regExAllergenAllPattern = Pattern.compile("/([0-9]+)/allergen");
+		private Pattern regExAllergenIdPattern = Pattern.compile("/([0-9]+)/allergen/([0-9]+)");
+		
 
 		private Integer menuId;
 		private Integer categoryId;
+		private Integer allergenId;
 		private ResourceType resourceType;
 
 		public RestRequest(String pathInfo) throws ServletException {
@@ -129,6 +146,21 @@ public class MenuServlet extends HttpServlet {
 			if (matcher.find()) {
 				menuId = Integer.parseInt(matcher.group(1));
 				resourceType = ResourceType.CATEGORY;
+				return;
+			}
+			
+			matcher = regExAllergenIdPattern.matcher(pathInfo);
+			if (matcher.find()) {
+				menuId = Integer.parseInt(matcher.group(1));
+				allergenId = Integer.parseInt(matcher.group(2));
+				resourceType = ResourceType.ALLERGEN;
+				return;
+			}
+			
+			matcher = regExAllergenAllPattern.matcher(pathInfo);
+			if (matcher.find()) {
+				menuId = Integer.parseInt(matcher.group(1));
+				resourceType = ResourceType.ALLERGEN;
 				return;
 			}
 
@@ -154,6 +186,9 @@ public class MenuServlet extends HttpServlet {
 		public Integer getCategoryId() {
 			return categoryId;
 		}
+		public Integer getAllergenId() {
+			return allergenId;
+		}
 
 		public ResourceType getResourceType(){
 			return this.resourceType;
@@ -163,6 +198,7 @@ public class MenuServlet extends HttpServlet {
 	private enum ResourceType {
 		CATEGORY,
 		MENU,
+		ALLERGEN,
 		UNDEFINED;
 	}
 

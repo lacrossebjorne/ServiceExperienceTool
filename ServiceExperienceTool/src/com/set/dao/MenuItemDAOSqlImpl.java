@@ -40,7 +40,8 @@ public class MenuItemDAOSqlImpl implements MenuItemDAO{
 				String description = results.getString("description");
 				String details = results.getString("details");
 				int category = results.getInt("category");
-				List<Allergen> allergens = getAllergenList(id, connection);
+				List<Allergen> allergens = new AllergenDAOSqlImpl(daoFactory)
+						.getAllergenListByItem(id, connection);
 				
 				MenuItem menuItem = new MenuItem(id, name, description, details, category, allergens);
 				items.add(menuItem);
@@ -78,14 +79,6 @@ public class MenuItemDAOSqlImpl implements MenuItemDAO{
 	public List<MenuItem> getItems(int menuId, int categoryId) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	private List<Allergen> getAllergenList(int itemId, Connection connection) throws SQLException{
-		List<Allergen> allergenList = new ArrayList<>();
-		
-		//TODO Return actual data instead of empty list
-			
-		return allergenList;
 	}
 
 	@Override
