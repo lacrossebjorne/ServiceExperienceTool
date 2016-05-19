@@ -80,28 +80,28 @@ public class MenuServlet extends HttpServlet {
 	}
 	
 	private List<MenuItem> getMenuItems(int menuId, HttpServletResponse response) throws IOException{
-		DAOFactory daoFactory = DAOFactory.getInstance("local.jndi");
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		MenuItemDAO itemDAO = daoFactory.getMenuItemDAO();
 		List<MenuItem> items = itemDAO.getItems(menuId);
 		return items;
 	}
 	
 	private List<MenuCategory> getCategoryList(int menuId, HttpServletResponse response) throws IOException{
-		DAOFactory daoFactory = DAOFactory.getInstance("local.jndi");
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		MenuCategoryDAO categoryDAO = daoFactory.getMenuCategoryDAO();
 		List<MenuCategory> items = categoryDAO.getCategories(menuId);
 		return items;
 	}
 	
 	private List<Menu> getMenuList(HttpServletResponse response) throws ServletException, IOException {
-		DAOFactory daoFactory = DAOFactory.getInstance("local.jndi");
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		MenuDAO menuDAO = daoFactory.getMenuDAO();
 		List<Menu> items = menuDAO.getMenuList();
 		return items;
 	}
 	
 	private List<Allergen> getAllergenList(int menuId){
-		DAOFactory daoFactory = DAOFactory.getInstance("local.jndi");
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 		AllergenDAO allergenDAO = daoFactory.getAllergenDAO();
 		List<Allergen> allergenList = allergenDAO.getAllergenListByMenu(menuId);
 		return allergenList;
