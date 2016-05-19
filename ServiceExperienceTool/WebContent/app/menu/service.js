@@ -4,7 +4,7 @@ angular.module('menu')
 
 .factory('MenuService', ['$resource', 'app.paths',
   function($resource, paths) {
-    return $resource(paths.local+"menu/:menuId", {menuId: '@menuId'}, {
+    return $resource(paths.api+"menu/:menuId", {menuId: '@menuId'}, {
     	query: {
             method: 'GET',
             params: {},
@@ -16,7 +16,7 @@ angular.module('menu')
 
 angular.module('menu').factory('Category', ['$resource', 'app.paths',
   function($resource, paths) {
-    return $resource(paths.local+"menu/:menuId/category/:categoryId", 
+    return $resource(paths.api+"menu/:menuId/category/:categoryId", 
     		{menuId: '@menuId', categoryId: '@categoryId'}, {
     });
   }
@@ -24,7 +24,7 @@ angular.module('menu').factory('Category', ['$resource', 'app.paths',
 
 angular.module('menu').factory('Allergen', ['$resource', 'app.paths',
   function($resource, paths) {
-	return $resource(paths.local+"menu/:menuId/allergen/:allergenId", 
+	return $resource(paths.api+"menu/:menuId/allergen/:allergenId", 
 			{menuId: '@menuId', allergenId: '@allergenId'}, {
 	});
   }
@@ -32,7 +32,7 @@ angular.module('menu').factory('Allergen', ['$resource', 'app.paths',
 
 angular.module('menu').factory('MenuItem', ['$resource', 'app.paths',
   function($resource, paths) {
-	var MenuItem = $resource(paths.local+"menu/:menuId/item/:itemId", 
+	var MenuItem = $resource(paths.api+"menu/:menuId/item/:itemId", 
 			{menuId: '@menuId', categoryId: '@itemId'}, {
 			});
 	return MenuItem;
