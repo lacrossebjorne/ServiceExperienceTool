@@ -15,6 +15,7 @@ function($scope, Newsfetch, newsfeedservice) {
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
+  $scope.isShowingImportantEntries = false;
   $scope.bundle = {};
   $scope.testScope = { file: null};
   $scope.buttonsTemplate = "app/partials/editbuttons.html";
@@ -32,19 +33,62 @@ function($scope, Newsfetch, newsfeedservice) {
   }];
 
   $scope.tags = [];
+  $scope.tagButtonData = [{
+    tagId: 2,
+    text: 'kitchen',
+    selected: false
+  }, {
+    tagId: 3,
+    text: 'service',
+    selected: false
+  }, {
+    tagId: 4,
+    text: 'hotel',
+    selected: false
+  }, {
+    tagId: 5,
+    text: 'cleaning',
+    selected: false
+  }];
 
   expand();
 
   function expand() {
-    $scope.limit += 5;
-    $scope.selectedPage++;
+    if ($scope.limit == 0) {
+      $scope.isShowingImportantEntries = true;
+    } else {
+        $scope.limit += 5;
+        $scope.selectedPage++;
+    }
+//	  $scope.limit += 5;
+//      $scope.selectedPage++;
+    fetchNews();
+  }
+
+  function fetchNews() {
     Newsfetch.get({
-      action:'getNews', type: 'json', selectedPage: $scope.selectedPage, resultsPerPage: '5', showDisabled: $scope.isShowingDisabledEntries
+      action:'getNews',
+      type: 'json',
+      selectedPage: $scope.selectedPage,
+      resultsPerPage: '5',
+      showDisabled: $scope.isShowingDisabledEntries,
+      selectImportant: $scope.isShowingImportantEntries,
+      tags: JSON.stringify($scope.tags),
+      date: new Date()
     }, function(newsobject) {
       for (var i = 0; i < newsobject.news.length; i++) {
         newsobject.news[i].isEditing = false;
         $scope.news.push(newsobject.news[i]);
       }
+      if ($scope.isShowingImportantEntries) {
+    	  //turn $scope.isShowingImportantEntries to false
+    	  $scope.isShowingImportantEntries = false;
+    	  //increase limit to avoid an endless loop
+    	  $scope.limit = $scope.news.length;
+    	  //call expand, since more news-entries should be fetched
+    	  expand();
+      }
+      console.log(new Date());
     });
   }
 
@@ -58,7 +102,28 @@ function($scope, Newsfetch, newsfeedservice) {
       temp.push(tagsData[r + 1].text);
     }
 
+    $scope.limit = 0;
+    $scope.selectedPage = 0;
+
     return temp;
+  }
+
+  $scope.tagClicked = function(tag) {
+    tag.selected = !tag.selected;
+
+    if (tag.selected) {
+      $scope.tags.push(tag);
+    } else {
+      var index = $scope.tags.indexOf(tag);
+      $scope.tags.splice(index, 1);
+    }
+
+    //set variables to initial values and empty the $scope.news-array
+    $scope.limit = 0;
+    $scope.selectedPage = 0;
+    $scope.news = []; //or $scope.news.length = 0;
+    //get news by calling expand()
+    expand();
   }
 
   $scope.sortImportant = function(t) {
@@ -69,7 +134,7 @@ function($scope, Newsfetch, newsfeedservice) {
       }
     });
     return isImportant ? 1 : void(0);
-  }
+  };
 
   // Expands article
   $scope.expandArticle = function(textLimit) {
@@ -128,10 +193,10 @@ function($scope, Newsfetch, newsfeedservice) {
 
     if (data.file != null) {
       bundle.file = data.file;
-    } 
+    }
 
     if (data.tagData != null) {
-    	bundle.tagData = JSON.stringify(data.tagData);
+      bundle.tagData = JSON.stringify(data.tagData);
     }
 
     var self = this;
@@ -144,42 +209,42 @@ function($scope, Newsfetch, newsfeedservice) {
       })) {
         return;
       }
-    else {
-      //do backend call here
+      else {
+        //do backend call here
+        var publisher = newsfeedservice.getPublisher();
+        //{newsId: news.newsId, newsHeader: editedHeader, newsContent: editedContent, urlList: editedUrls, file: file}
+        publisher.save(bundle).$promise.then(function(result) {
+          //if backend call is successful
+          //change existing news information
+          news.header = data.newsHeader;
+          news.content = data.newsContent;
+          news.urlList = data.urlList;
+          data.statusMessage = "Successfully updated news!";
+        })
+        .catch(function(errorMsg) {
+          //if backend call is not successful
+          data.statusMessage = "Couldn't update news!";
+        });
+      }
+    }
+
+    $scope.deleteNews = function(news, data) {
+      var self = this;
       var publisher = newsfeedservice.getPublisher();
-      //{newsId: news.newsId, newsHeader: editedHeader, newsContent: editedContent, urlList: editedUrls, file: file}
-      publisher.save(bundle).$promise.then(function(result) {
+      publisher.disable({
+        newsId: news.newsId
+      }).$promise.then(function(result) {
         //if backend call is successful
-        //change existing news information
-        news.header = data.newsHeader;
-        news.content = data.newsContent;
-        news.urlList = data.urlList;
-        data.statusMessage = "Successfully updated news!";
+        data.statusMessage = "Successfully deleted news!";
+        if (!$scope.isShowingDisabledEntries) {
+          //removing entry from array
+          var index = $scope.news.indexOf(news);
+          $scope.news.splice(index, 1);
+        }
       })
       .catch(function(errorMsg) {
         //if backend call is not successful
-        data.statusMessage = "Couldn't update news!";
+        data.statusMessage = "Couldn't delete news!";
       });
     }
-  }
-
-  $scope.deleteNews = function(news, data) {
-    var self = this;
-    var publisher = newsfeedservice.getPublisher();
-    publisher.disable({
-      newsId: news.newsId
-    }).$promise.then(function(result) {
-      //if backend call is successful
-      data.statusMessage = "Successfully deleted news!";
-      if (!$scope.isShowingDisabledEntries) {
-        //removing entry from array
-        var index = $scope.news.indexOf(news);
-        $scope.news.splice(index, 1);
-      }
-    })
-    .catch(function(errorMsg) {
-      //if backend call is not successful
-      data.statusMessage = "Couldn't delete news!";
-    });
-  }
-}]);
+  }]);

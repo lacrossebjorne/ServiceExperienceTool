@@ -13,16 +13,18 @@ public class News {
 	private String content;
 	private Date createdAt;
 	private Date updatedAt;
+	private Date importantUntil;
 	private boolean enabled;
 	private Set<NewsImage> newsImages = new HashSet<NewsImage>(0);
 	private List<String> imgUri = new ArrayList<String>();
 	private List<NewsUrl> urlList = new ArrayList<NewsUrl>();
 	private Set<NewsTag> newsTags = new HashSet<NewsTag>();
 	private List<Tag> tagData = new ArrayList<Tag>();
+	private boolean isImportant; //isImportant: this field should not be saved in database and only be set at runtime
 
 	public News() {}
 	
-	public News(Long newsId, String header, String content, Date createdAt, Date updatedAt, boolean enabled,
+	public News(Long newsId, String header, String content, Date createdAt, Date updatedAt, Date importantUntil, boolean enabled,
 			Set<NewsImage> newsImages, List<String> imgUri, List<NewsUrl> urlList, Set<NewsTag> newsTags,
 			List<Tag> tagData) {
 		super();
@@ -37,6 +39,7 @@ public class News {
 		this.urlList = urlList;
 		this.newsTags = newsTags;
 		this.tagData = tagData;
+		this.isImportant = false;
 	}
 
 	public Long getNewsId() {
@@ -77,6 +80,14 @@ public class News {
 
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+	
+	public Date getImportantUntil() {
+		return this.importantUntil;
+	}
+	
+	public void setImportantUntil(Date importantUntil) {
+		this.importantUntil = importantUntil;
 	}
 
 	public boolean isEnabled() {
@@ -124,5 +135,13 @@ public class News {
 
 	public void setTagData(List<Tag> tagData) {
 		this.tagData = tagData;
+	}
+	
+	public boolean isImportant() {
+		return this.isImportant;
+	}
+	
+	public void setIsImportant(boolean isImportant) {
+		this.isImportant = isImportant;
 	}
 }

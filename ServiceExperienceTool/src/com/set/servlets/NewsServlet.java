@@ -3,10 +3,12 @@ package com.set.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -116,10 +118,21 @@ public class NewsServlet extends HttpServlet {
 
 		Integer selectedPage = 1;
 		Integer resultsPerPage = 5;
-		Boolean isDisabledEntriesIncluded = false;
+		boolean isDisabledEntriesIncluded = false;
+		boolean isImportantSelected = false;
 
 		String type = request.getParameter("type");
 		System.out.format("Type: %s\n", type);
+		String jsonTags = request.getParameter("tags");
+		System.out.format("jsonTags: %s\n", jsonTags);
+		
+		String dateParam = request.getParameter("date");
+		System.out.println(dateParam);
+		
+		Date date = new Date();
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		System.out.println("Date: " + dateFormat.format(date));
 
 		try {
 			String selectedPageParameter = request.getParameter("selectedPage");
@@ -136,6 +149,21 @@ public class NewsServlet extends HttpServlet {
 		System.out.println("showDisabled: " + showDisabled);
 		if (showDisabled != null && showDisabled.equals("true")) {
 			isDisabledEntriesIncluded = true;
+		}
+		
+		String selectImportant = request.getParameter("selectImportant");
+		System.out.println("selectImportant: " + selectImportant);
+		if (selectImportant != null && selectImportant.equals("true")) {
+			isImportantSelected = true;
+		}
+		
+		List<Tag> tags = parseTagListFromJson(jsonTags);
+		
+		if (tags != null) {
+			System.out.println("Printing tag-info");
+			for (Tag tag : tags) {
+				System.out.format("tagId: %d, text: %s\n", tag.getTagId(), tag.getText());
+			}
 		}
 
 		System.out.println("selectedPage " + selectedPage);
@@ -166,7 +194,7 @@ public class NewsServlet extends HttpServlet {
 				newsFetcher.setImagePath(getServerRequestPath(request) + "/images/news/");
 			}
 
-			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset, isDisabledEntriesIncluded);
+			allNews = newsFetcher.getNews(selectedPage, resultsPerPage, offset, isDisabledEntriesIncluded, isImportantSelected, tags);
 
 			if (allNews != null) {
 
@@ -251,7 +279,7 @@ public class NewsServlet extends HttpServlet {
 			return;
 		}
 
-		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, true, null, imageUris, urlList, null, tagData);
+		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, null, true, null, imageUris, urlList, null, tagData);
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 
 		boolean isPublished = false;
