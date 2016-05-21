@@ -18,10 +18,9 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 
 	private final String SQL_NEWS_SELECT_ALL = "SELECT news_id, header, content, created_at, important_until FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
 	
-	private final String SQL_NEWS_SELECT_IMPORTANT = "SELECT news_id, header, content, created_at, important_until FROM news WHERE enabled=true AND important_until > NOW() ORDER BY created_at DESC, news_id DESC;";
-	private final String SQL_NEWS_SELECT_ENABLED = "SELECT news_id, header, content, created_at, important_until FROM news WHERE enabled=true AND important_until IS NULL ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
+	private final String SQL_NEWS_SELECT_IMPORTANT = "SELECT news_id, header, content, created_at, important_until FROM news WHERE enabled=true AND important_until > NOW() ORDER BY created_at DESC, news_id DESC";
+	private final String SQL_NEWS_SELECT_ENABLED = "SELECT news_id, header, content, created_at, important_until FROM news WHERE enabled=true AND important_until IS NULL OR important_until <= NOW() ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
 	private final String SQL_IN_PLACEHOLDER_NEWS_SELECT_ENABLED_WITH_TAGS = "SELECT DISTINCT N.news_id, header, content, created_at, important_until FROM news AS N JOIN news_tag AS NT ON N.news_id = NT.news_id JOIN tag AS T ON NT.tag_id = T.tag_id WHERE N.enabled = true AND important_until IS NULL AND T.text IN (#) ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
-
 	private final String SQL_IMAGE_SELECT = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
 	private final String SQL_NEWS_URL_SELECT = "SELECT news_url_id, news_id, title, path FROM news_url WHERE news_id=?";
 	private final String SQL_SELECT_TAGS = "SELECT t.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id WHERE news_id = ?";
@@ -84,10 +83,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				
 				Date date = newsResult.getDate("created_at");
 				Time time = newsResult.getTime("created_at");
-			
-				long dateMillis = date.getTime();
-				long timeMillis = time.getTime();
-				long dateTimeMillis = dateMillis + timeMillis;
+				long dateTimeMillis = date.getTime() + time.getTime();
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 'at' hh:mm:ss a");
 				String dateString = format.format(dateTimeMillis);
 				System.out.println("Fetched a News-entry, created: " + dateString);

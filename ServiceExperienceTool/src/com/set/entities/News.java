@@ -33,6 +33,7 @@ public class News {
 		this.content = content;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
+		this.importantUntil = importantUntil;
 		this.enabled = enabled;
 		this.newsImages = newsImages;
 		this.imgUri = imgUri;

@@ -57,11 +57,11 @@ function($scope, Newsfetch, newsfeedservice) {
     if ($scope.limit == 0) {
       $scope.isShowingImportantEntries = true;
     } else {
-        $scope.limit += 5;
-        $scope.selectedPage++;
+      $scope.limit += 5;
+      $scope.selectedPage++;
     }
-//	  $scope.limit += 5;
-//      $scope.selectedPage++;
+    //	  $scope.limit += 5;
+    //      $scope.selectedPage++;
     fetchNews();
   }
 
@@ -73,22 +73,20 @@ function($scope, Newsfetch, newsfeedservice) {
       resultsPerPage: '5',
       showDisabled: $scope.isShowingDisabledEntries,
       selectImportant: $scope.isShowingImportantEntries,
-      tags: JSON.stringify($scope.tags),
-      date: new Date()
+      tags: JSON.stringify($scope.tags)
     }, function(newsobject) {
       for (var i = 0; i < newsobject.news.length; i++) {
         newsobject.news[i].isEditing = false;
         $scope.news.push(newsobject.news[i]);
       }
       if ($scope.isShowingImportantEntries) {
-    	  //turn $scope.isShowingImportantEntries to false
-    	  $scope.isShowingImportantEntries = false;
-    	  //increase limit to avoid an endless loop
-    	  $scope.limit = $scope.news.length;
-    	  //call expand, since more news-entries should be fetched
-    	  expand();
+        //turn $scope.isShowingImportantEntries to false
+        $scope.isShowingImportantEntries = false;
+        //increase limit to avoid an endless loop
+        $scope.limit = $scope.news.length;
+        //call expand, since more news-entries should be fetched
+        expand();
       }
-      console.log(new Date());
     });
   }
 
@@ -155,6 +153,10 @@ function($scope, Newsfetch, newsfeedservice) {
     news.isEditing = !news.isEditing;
   }
 
+  $scope.dateAsString = function(days) {
+    return newsfeedservice.dateAsString(days);
+  }
+
   $scope.fillForm = function(news) {
     this.data = {};
     this.data.newsId = news.newsId;
@@ -162,6 +164,25 @@ function($scope, Newsfetch, newsfeedservice) {
     this.data.newsContent = news.content;
     this.data.urlList = news.urlList;
     this.data.tagData = news.tagData;
+    var daysImportant = getDaysImportant(news.importantUntil);
+    if (daysImportant > 0) {
+      this.data.daysImportant = daysImportant;
+    }
+  }
+
+  function getDaysImportant(date) {
+    if (date == null) {
+      return 0;
+    }
+
+    var millisLeft = new Date(date).getTime() - Date.now();
+    var daysLeft = Math.ceil(millisLeft / 1000 / 60 / 60 / 24);
+
+    if (daysLeft > 0) {
+      return daysLeft;
+    } else {
+      return 0;
+    }
   }
 
   $scope.addUrl = function(data) {
@@ -197,6 +218,11 @@ function($scope, Newsfetch, newsfeedservice) {
 
     if (data.tagData != null) {
       bundle.tagData = JSON.stringify(data.tagData);
+    }
+
+    if (data.daysImportant != null && !isNaN(data.daysImportant)) {
+      var date = newsfeedservice.dateAsMillis(data.daysImportant);
+      bundle.importantUntil = date;
     }
 
     var self = this;

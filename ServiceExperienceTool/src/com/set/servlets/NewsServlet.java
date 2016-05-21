@@ -125,14 +125,6 @@ public class NewsServlet extends HttpServlet {
 		System.out.format("Type: %s\n", type);
 		String jsonTags = request.getParameter("tags");
 		System.out.format("jsonTags: %s\n", jsonTags);
-		
-		String dateParam = request.getParameter("date");
-		System.out.println(dateParam);
-		
-		Date date = new Date();
-		
-		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		System.out.println("Date: " + dateFormat.format(date));
 
 		try {
 			String selectedPageParameter = request.getParameter("selectedPage");
@@ -233,21 +225,33 @@ public class NewsServlet extends HttpServlet {
 		String newsHeader = request.getParameter("newsHeader");
 		String newsContent = request.getParameter("newsContent");
 		Long newsId = null;
+		Long importantUntilMillis = null;
+		Date importantUntil = null;
 
 		try {
 			String idParameter = request.getParameter("newsId");
+			String importantUntilParameter = request.getParameter("importantUntil");
 
 			if (idParameter != null) {
 				newsId = Long.parseLong(idParameter);
 			}
+			if (importantUntilParameter != null) {
+				importantUntilMillis = Long.parseLong(importantUntilParameter);
+			}
+			
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 		}
 
 		if (newsHeader == null || newsContent == null) {
 			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
+		
+		if (importantUntilMillis != null) {
+			importantUntil = new Date(importantUntilMillis);
+		}
+		
 
 		String jsonUrlList = request.getParameter("urlList");
 		System.out.println("urlList: " + jsonUrlList);
@@ -278,8 +282,8 @@ public class NewsServlet extends HttpServlet {
 			sendError(response, errorCode);
 			return;
 		}
-
-		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, null, true, null, imageUris, urlList, null, tagData);
+		
+		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, importantUntil, true, null, imageUris, urlList, null, tagData);
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 
 		boolean isPublished = false;

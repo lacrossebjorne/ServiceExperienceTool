@@ -17,14 +17,14 @@ import com.set.entities.NewsUrl;
 import com.set.entities.Tag;
 
 public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
-	private final String SQL_INSERT_INTO_NEWS = "INSERT INTO news(header, content, created_at) VALUES(?, ?, NOW())";
+	private final String SQL_INSERT_INTO_NEWS = "INSERT INTO news(header, content, created_at, important_until) VALUES(?, ?, NOW(), ?)";
 	private final String SQL_INSERT_INTO_IMAGE = "INSERT INTO image (image_uri) VALUE (?)";
 	private final String SQL_INSERT_INTO_NEWS_IMAGE = "INSERT INTO news_image(news_id, image_id) VALUES(?, ?)";
 	private final String SQL_INSERT_INTO_NEWS_URL = "INSERT INTO news_url(news_id, title, path) VALUES (?, ?, ?)";
 	private final String SQL_DELETE_FROM_NEWS_URL = "DELETE FROM news_url WHERE news_url_id=?";
 	private final String SQL_IMAGE_NEWS_DELETE = "DELETE FROM news_image WHERE news_id = ?";
 	private final String SQL_NEWS_URL_SELECT = "SELECT news_url_id, news_id, title, path FROM news_url WHERE news_id=?";
-	private final String SQL_UPDATE_NEWS = "UPDATE news SET header=?, content=?, updated_at=NOW() WHERE news_id=?";
+	private final String SQL_UPDATE_NEWS = "UPDATE news SET header=?, content=?, updated_at=NOW(), important_until=? WHERE news_id=?";
 	private final String SQL_DISABLE_NEWS = "UPDATE news SET enabled=false WHERE news_id=?";
 	private final String SQL_SELECT_TAGS = "SELECT t.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id WHERE news_id = ?";
 	private final String SQL_DELETE_FROM_NEWS_TAG = "DELETE FROM news_tag WHERE news_id=? AND tag_id=?";
@@ -59,13 +59,14 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		ResultSet result = null;
 		Long newsID = null;
 		int[] batchResult = null;
+		
 		try {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
 
 			if (news.getNewsId() == null) {
 				// INSERT INTO NEWS
-				Object[] newsObj = { news.getHeader(), news.getContent() };
+				Object[] newsObj = { news.getHeader(), news.getContent(), news.getImportantUntil() };
 				// Insert news article in news-table and retreive news PK
 				statement = prepareStatement(connection, SQL_INSERT_INTO_NEWS, true, newsObj);
 				if (statement.executeUpdate() == 0) {
@@ -82,7 +83,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 			} else {
 				// UPDATE NEWS
 				newsID = news.getNewsId();
-				Object[] newsObj = { news.getHeader(), news.getContent(), news.getNewsId() };
+				Object[] newsObj = { news.getHeader(), news.getContent(), news.getImportantUntil(), news.getNewsId() };
 				statement = prepareStatement(connection, SQL_UPDATE_NEWS, false, newsObj);
 				if (statement.executeUpdate() == 0) {
 					throw new SQLException("Couldn't update rows in table news");

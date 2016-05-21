@@ -54,6 +54,14 @@
 		</div>
 		<tags-input ng-model="data.tagData"></tags-input>
 	</div>
+	
+	<div class='w3-margin-bottom'>
+		Days as important:<br /> 
+		<input type="text" ng-model="data.daysImportant" /> 
+		<span ng-if="data.daysImportant && data.daysImportant > 0">
+			Important until: {{dateAsString(data.daysImportant)}}
+		</span>
+	</div>
 
 	<div class="w3-margin-bottom">
 		{{data.statusMessage != null ? data.statusMessage : "Please enter some news"}}

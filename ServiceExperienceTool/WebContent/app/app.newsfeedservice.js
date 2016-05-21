@@ -8,9 +8,12 @@ function newsfeedservice($http, $log, $resource, paths) {
 		test : test,
 		getMovie : getMovie,
 		getPublisher : getPublisher,
-		validateFormInput : validateFormInput,
 		addUrl : addUrl,
-		removeUrl : removeUrl
+		removeUrl : removeUrl,
+		validateFormInput : validateFormInput,
+		dateAsString : dateAsString,
+		dateAsDate: dateAsDate,
+		dateAsMillis: dateAsMillis
 	};
 
 	return service;
@@ -89,6 +92,49 @@ function newsfeedservice($http, $log, $resource, paths) {
 			callbackMessage("Either you typed to little or to much!");
 			return false;
 		}
+	}
+	
+	/**
+	 * return date as string with the format yyyy-MM-dd
+	 * @param days Difference from todays date
+	 */
+	function dateAsString(days) {
+		var date = dateAsDate(days);
+		if (date == undefined) 
+			return;
+
+		var fullYear = date.getFullYear();
+		var monthNum = date.getMonth() + 1;
+		var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+		var month = date.getMonth() < 9 ? "0" + monthNum : monthNum; //month is zero based
+		var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+		var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+		var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+		
+		var dateFormatted = fullYear + "-" + month + "-" + day;
+		var timeFormatted = " at " + hours + ":" + minutes + ":" + seconds // not including this part for now
+		return dateFormatted;
+	}
+	
+	/**
+	 * return date as Date.
+	 * @param days Difference from todays date
+	 */
+	function dateAsDate(days) {
+		var millis = dateAsMillis(days);
+		if (millis == undefined) 
+			return undefined;
+		return new Date(millis);
+	}
+	
+	/**
+	 * return date as milliseconds.
+	 * @param days Difference from todays date
+	 */
+	function dateAsMillis(days) {
+		if (isNaN(days)) 
+			return undefined;
+		return Date.now() + 1000 * 60 * 60 * 24 * days;
 	}
 
 	function getMovie(t, y, plot) {
