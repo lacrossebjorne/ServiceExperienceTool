@@ -80,4 +80,8 @@ public abstract class DAOFactory {
 	public MenuDAO getMenuDAO(){
 		return new MenuDAOSqlImpl(this);
 	}
+	
+	public AllergenDAO getAllergenDAO(){
+		return new AllergenDAOSqlImpl(this);
+	}
 }
