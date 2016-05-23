@@ -1,6 +1,6 @@
-<div class="w3-row-padding">
+<div class="w3-row-padding" ng-controller="MainViewController">
   <!-- Left Column -->
-  <div class="w3-col m2">
+  <div class="w3-col m2 dn-fade" ng-show="hideCol">
     <div ng-include src="'app/main-view/left-column.html'"></div>
   </div>
   <!-- Middle Column -->
@@ -8,7 +8,7 @@
     <div ng-view></div>
   </div>
   <!-- Right Column -->
-  <div class="w3-col m3">
+  <div class="w3-col m3 dn-fade" ng-show="hideCol">
     <div ng-include src="'app/main-view/right-column.html'"></div>
   </div>
 </div>
