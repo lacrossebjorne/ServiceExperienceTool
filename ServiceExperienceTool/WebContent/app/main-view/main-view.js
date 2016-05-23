@@ -24,12 +24,10 @@ function MainViewController($rootScope, $scope, $location, $log) {
 	$scope.hideCol;
 	hideColumn();
 	$scope.$on("$locationChangeSuccess", function(event, next, current) {
-		$log.info("location changing to:" + next);
 		hideColumn();
 	});
 
 	function hideColumn(url) {
-		$log.info($location.path());
 		if ($location.path() === '/menu')
 			$scope.hideCol = false;
 		else
