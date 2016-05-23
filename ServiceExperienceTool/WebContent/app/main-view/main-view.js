@@ -30,7 +30,7 @@ function MainViewController($rootScope, $scope, $location, $log) {
 
 	function hideColumn(url) {
 		$log.info($location.path());
-		if ($location.path() === '/newsfeed')
+		if ($location.path() === '/menu')
 			$scope.hideCol = false;
 		else
 			$scope.hideCol = true;
