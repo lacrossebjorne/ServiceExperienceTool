@@ -11,7 +11,7 @@ angular.module('mainView', [
   'useradmin'
 ])
 angular.module('mainView',
-		[ 'ngRoute', 'newsfeed', 'newspublish', 'menu', 'company' ])
+		[ 'ngRoute', 'newsfeed', 'newspublish', 'menu', 'company', 'useradmin' ])
 
 /*
  * This routing should only redirect on '.otherwise'. Separate routing in
@@ -24,11 +24,6 @@ angular.module('mainView',
 	});
 } ])
 
-function MainViewController($scope, newsfeedservice) {
-//	console.log('MainViewController initialized');
-	var vm = this;
-	vm.test = newsfeedservice.test();
-	vm.testRes = newsfeedservice.getMovie('Titanic', '1997', 'short');
 .controller('MainViewController', MainViewController);
 
 MainViewController.$inject = [ '$rootScope', '$scope', '$location', '$log' ];
