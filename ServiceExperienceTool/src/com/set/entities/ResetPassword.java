@@ -1,22 +1,23 @@
 package com.set.entities;
 
-
 import java.util.Date;
 
-public class ResetPassword {
-	
+
+public class ResetPassword implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private Long resetPasswordId;
-	private User user;
+	private Long userId;
 	private String securitycode;
-	private Date experationTime;
+	private Date expirationTime;
 
 	public ResetPassword() {
 	}
 
-	public ResetPassword(User user, String securitycode, Date experationTime) {
-		this.user = user;
+	public ResetPassword(Long userId, String securitycode, Date experationTime) {
+		this.userId = userId;
 		this.securitycode = securitycode;
-		this.experationTime = experationTime;
+		this.expirationTime = experationTime;
 	}
 
 	public Long getResetPasswordId() {
@@ -27,12 +28,12 @@ public class ResetPassword {
 		this.resetPasswordId = resetPasswordId;
 	}
 
-	public User getUser() {
-		return this.user;
+	public Long getUserId() {
+		return this.userId;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public String getSecuritycode() {
@@ -43,12 +44,16 @@ public class ResetPassword {
 		this.securitycode = securitycode;
 	}
 
-	public Date getExperationTime() {
-		return this.experationTime;
+	public Date getExpirationTime() {
+		return this.expirationTime;
 	}
 
-	public void setExperationTime(Date experationTime) {
-		this.experationTime = experationTime;
+	public void setExpirationTime(Date experationTime) {
+		this.expirationTime = experationTime;
 	}
-
+	
+	public String toString() {
+		return "ResetID: " + resetPasswordId + " Securitycode: " + securitycode + " Expiration time: " + expirationTime;
+		
+	}
 }

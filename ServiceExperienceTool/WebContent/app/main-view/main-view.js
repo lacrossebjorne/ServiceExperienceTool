@@ -7,7 +7,8 @@ angular.module('mainView', [
   'newsfeed',
   'newspublish',
   'menu',
-  'company'
+  'company',
+  'useradmin'
 ])
 
 /*
@@ -32,5 +33,4 @@ function MainViewController($scope, newsfeedservice) {
 	var vm = this;
 	vm.test = newsfeedservice.test();
 	vm.testRes = newsfeedservice.getMovie('Titanic', '1997', 'short');
-
 };

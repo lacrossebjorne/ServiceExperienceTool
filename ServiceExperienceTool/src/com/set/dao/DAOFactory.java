@@ -84,4 +84,8 @@ public abstract class DAOFactory {
 	public AllergenDAO getAllergenDAO(){
 		return new AllergenDAOSqlImpl(this);
 	}
+	
+	public RoleDAO getRoleDAO() {
+		return new RoleDAOJDBC(this);
+	}
 }

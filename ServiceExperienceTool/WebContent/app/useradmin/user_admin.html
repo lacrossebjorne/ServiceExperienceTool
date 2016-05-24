@@ -1,35 +1,35 @@
-
-
-	<div class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2"
-		style="z-index: 3; width: 250px; posistion: relative; clear: both">
-		<a href="#" class="w3-border-bottom w3-large"><img
-			src="http://www.w3schools.com/images/w3schools.png"
-			style="width: 80%;"></a> <a href="javascript:void(0)"
-			onclick="w3_close()"
+<title>SET User administration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"
+	charset="UTF-8">
+<body class="w3-theme-l5">
+	<div id="sideNav" class="w3-sidenav w3-collapse w3-white w3-animate-left w3-card-2">
+		<a href class="w3-border-bottom w3-large">User Administration</a>
+		<a href="javascript:void(0)" ng-click="w3_close()"
 			class="w3-text-teal w3-hide-large w3-closenav w3-large">Close <i
 			class="fa fa-remove"></i></a> <a href="#" class="w3-light-grey w3-medium">Home</a>
-		<a href="#/userview" onclick="showHide('addUserView')">Add user</a> <a href="#/userlist">List
-			users</a> <a href="#">Manage groups</a>
+		<a href id="addUser" ng-click="showHide('addUserView')">Add user</a> <a href id="listUsers" ng-click="showHide('userListView')">List
+			all users</a> <a href id="manageRoles" ng-click="showHide('manageRolesView')">Manage roles</a>
 	</div>
 
 	<div id="myTop" class="w3-container w3-theme w3-large">
 		<i
 			class="fa fa-bars w3-opennav w3-hide-large w3-xlarge w3-margin-left w3-margin-right w3-margin-top"
-			onclick="w3_open()"></i>
+			ng-click="w3_open()"></i>
 	</div>
 
 	<div class="w3-overlay w3-hide-large w3-animate-opacity"
-		onclick="w3_close()" style="cursor: pointer"></div>
+		ng-click="w3_close()" style="cursor: pointer"></div>
 
 	<div id="useradmin_home" class="w3-main" style="margin-left: 250px;">
-		<div class="w3-container w3-padding-hor-32 w3-padding-ver-64 w3-margin-top">
+		<div
+			class="w3-container w3-padding-ver-64">
 			<h1 class="w3-text-blue-grey">SET user administration</h1>
 			<h5>Use the navigation menu to administer users and groups.</h5>
 			<ul class="w3-leftbar w3-theme-border" style="list-style-type: none">
 				<li>Add user: add a new user to the Service Experience Tool.</li>
 				<li>List users: get a complete list of all users in the system.</li>
-				<li>Manage groups: to add new groups and add users to the
-					groups.</li>
+				<li>Manage roles: to add new roles/groups and add users to the
+					roles.</li>
 			</ul>
 			<br>
 
@@ -44,16 +44,281 @@
 			<br>
 		</div>
 	</div>
-	<div class="w3-modal"></div>
-	<div ng-view></div>
-	<script>
-		// Open and close the sidenav on medium and small screens
-		function w3_open() {
-			document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
-			document.getElementsByClassName("w3-overlay")[0].style.display = "block";
-		}
-		function w3_close() {
-			document.getElementsByClassName("w3-sidenav")[0].style.display = "none";
-			document.getElementsByClassName("w3-overlay")[0].style.display = "none";
-		}
-	</script>
+	<div id="addUserView" class="modal"
+		ng-hide="addUserShowHide">
+		<div id="addUserModal"
+			class="w3-modal-content w3-card-8 w3-animate-zoom">
+			<div class="w3-blue-grey w3-padding-ver-16">
+				<span ng-click="showHide('addUserView')" class="w3-closebtn">&times;</span>
+				<h3>Create SET-user</h3>
+			</div>
+			<div class="w3-container">
+				<form name="newUserForm" ng-submit="submitUser()" novalidate>
+					<input type="hidden" ng-model="userForm.userId" />
+					<div class="w3-row-padding">
+						<div class="w3-col s6">
+							<label> <b>First name</b></label>
+							<input class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.firstname.$touched && newUserForm.firstname.$invalid}"
+								ng-minlength="5" ng-maxlength="45"
+								type="text"	name="firstname" placeholder="Enter first name" required
+								ng-model="userForm.firstName">
+							<span ng-messages="newUserForm.firstname.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</span>
+						</div>
+						<div class="w3-col s6">
+							<label> <b>Last name</b></label> <input name="lastname"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.lastname.$touched && newUserForm.lastname.$invalid}"
+								ng-minlength="2" ng-maxlength="45"
+								type="text" placeholder="Enter last name" required
+								ng-model="userForm.lastName">
+							<div ng-messages="newUserForm.lastName.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
+						</div>
+					</div>
+					<div class="w3-row-padding">
+						<div class="w3-col s6">
+							<label><b>Username</b></label> <input name="username"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.username.$touched && newUserForm.username.$invalid }"
+								type="text"	ng-pattern="regexUserName"
+								ng-minlength="5" ng-maxlength="45"
+								placeholder="Username as in firstname.lastname" required
+								ng-model="userForm.username">
+							<div ng-messages="newUserForm.username.$error">
+								<div ng-message="pattern">Username must have the form firstname.lastname</div>
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
+						</div>
+						<div class="w3-col s6">
+							<label> <b>Email</b></label> <input name="email"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.email.$touched && newUserForm.email.$invalid }"
+								type="email" placeholder="Enter email address"
+								ng-model="userForm.email">
+								<div ng-messages="newUserForm.email.$error">
+									<div ng-messages-include="static/messages.html"></div>
+								</div>
+						</div>
+					</div>
+					<div class="w3-row-padding">
+						<div class="w3-col s6">
+							<label><b>Phone number</b> </label> <input name="phoneNumber"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.phoneNumber.$touched && newUserForm.phoneNumber.$invalid }"
+								type="text" ng-pattern="regexNumber"
+								placeholder="Enter phone number - 0701234567" ng-model="userForm.phoneNumber">
+							<div ng-messages="newUserForm.phoneNumber.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
+						</div>
+						<div class="w3-col s6">
+							<label><b>Enable user</b></label> <input type="checkbox"
+								class="w3-check w3-input" name="enable" ng-model="userForm.enabled">
+						</div>
+					</div>
+					<div class="w3-row-padding">
+						<div class="w3-col s6">
+							<label> <b>Password</b>
+							</label> <input name="password"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'w3-validate': newUserForm.password.$touched && newUserForm.password.$invalid }"
+								type="password" placeholder="Enter Password" ng-minlength="6" ng-maxlength="45" required
+								ng-model="userForm.password">
+							<div ng-messages="newUserForm.password.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
+						</div>
+						<div class="w3-col s6">
+							<label> <b>Verify password</b>
+							</label> <input name="verifypass"
+								class="w3-input w3-border w3-hover-border-black"
+								ng-class="{'has-error': newUserForm.verifypass.$touched && newUserForm.password != newUserForm.verifypass}"
+								type="password" placeholder="Verify Password" required
+								ng-model="userForm.verifypassword">
+							<div ng-messages="newUserForm.verifypassword.$error">
+								<div ng-messages-include="static/messages.html"></div>
+							</div>
+						</div>
+					</div>
+					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">
+					<span class="w3-col"> <b>Roles</b></span><br>
+						<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
+							<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
+							type="checkbox" ng-model="userForm.roles[$index][role.name]" ng-if="role.enabled !== false">
+							<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
+						</div>
+					</div>
+					<button type="submit"
+						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="!newUserForm.$valid">Save user</button>
+					<button type="button"
+						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
+						ng-click="showHide('addUserView')">Exit</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div id="userListView" class="modal"
+		ng-hide="userListShowHide">
+		<div id="userListmodal"
+			class="w3-modal-content w3-card-8 w3-animate-zoom">
+			<div class="w3-blue-grey w3-padding-ver-16">
+				<span ng-click="showHide('userListView')" class="w3-closebtn">&times;</span>
+				<h3>SET user list</h3>
+			</div>
+			<div id="constrainer" class="w3-responsive">
+				<table id="userTable"
+					class="w3-table w3-bordered w3-border w3-striped">
+					<thead>
+						<tr class="w3-light-grey">
+							<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">User ID  <i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'firstname'; sortReverse = !sortReverse">First name  <i class="fa fa-caret-up" ng-show="sortType == 'firstname' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'firstname' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Last name  <i class="fa fa-caret-up" ng-show="sortType == 'lastname' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'lastname' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'username'; sortReverse = !sortReverse">Username  <i class="fa fa-caret-up" ng-show="sortType == 'username' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'username' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'email'; sortReverse = !sortReverse">Email address  <i class="fa fa-caret-up" ng-show="sortType == 'email' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'email' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'phonenumber'; sortReverse = !sortReverse">Phone number  <i class="fa fa-caret-up" ng-show="sortType == 'phonenumber' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'phonenumber' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'enabled'; sortReverse = !sortReverse">Enabled  <i class="fa fa-caret-up" ng-show="sortType == 'enabled' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'enabled' && !sortReverse"></i></th>
+							<th ng-click="expandRow('userSearchRow')">
+								<i class="fa fa-search-plus" aria-hidden="true"
+								 ng-if="!searchIsExpanded"></i>
+								<i class="fa fa-search-minus" aria-hidden="true"
+								 ng-if="searchIsExpanded"></i>
+							</th>
+						</tr>
+						<tr id="userSearchRow" ng-show="searchIsExpanded">
+							<td><input type="number" id="searchID" value=""
+								placeholder="ID"  ng-model="search.userId"></td>
+							<td><input type="text" placeholder="First Name" ng-model="search.firstName"></td>
+							<td><input type="text" placeholder="Last Name"  ng-model="search.lastName"></td>
+							<td><input type="text" placeholder="Username"  ng-model="search.username"></td>
+							<td><input type="text" placeholder="Email"  ng-model="search.email"></td>
+							<td><input type="text" placeholder="Phone number"  ng-model="search.phoneNumber"></td>
+							<td><select class="w3-select" name="activeUser"  ng-model="search.enabled"><option
+										value=""></option><option
+										value="true">Enabled</option>
+									<option value="false">Disabled</option></select></td>
+							<td></td>
+						</tr>
+					</thead>
+					<tbody id="usersTableBody">
+						<tr ng-repeat-start="user in users | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
+							<td>{{ user.userId }}</td>
+							<td>{{ user.firstName }}</td>
+							<td>{{ user.lastName }}</td>
+							<td>{{ user.username }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.phoneNumber }}</td>
+							<td>{{ user.enabled }}</td>
+							<td>
+								<i class="fa fa-plus-square" aria-hidden="true" ng-show="!isExpanded"></i>
+								<i class="fa fa-minus-square" aria-hidden="true" ng-show="isExpanded">
+							</td>
+						</tr>
+						<tr id="{{ user.username }}" ng-repeat-end ng-show="isExpanded">
+							<td colspan="8">
+								<div class="w3-row">
+									<div class="w3-col l3 m4 s12">
+											<li><b>Roles</b></li>
+											<li ng-repeat="role in user.roles">{{ role.name }}</li>
+									</div>
+									<div class="w3-col l3 m4 s12">
+										<span>Created:&#8195;</span><span>{{ user.createdAt | date:'yyyy-MM-dd' }}</span><br>
+										<span>Updated:&#8195;</span><span>{{ user.updatedAt | date:'yyyy-MM-dd' }}</span><br>
+									</div>
+									<div class="w3-col l3 m4 s12">
+										<span>Password reset:&#8195;</span>
+										<span ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</span>
+										<span ng-if="reset == null || reset.expirationTime !='' || reset.expirationTime < today">Deactivated</span><br>
+										<span ng-repeat-end>Valid until:&#8195;{{reset.expirationTime }}</span><br>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="w3-center">
+				<ul class="w3-pagination w3-border" ng-if="users.length > 10">
+					<li><a href="#">«</a></li>
+					<li><a class="w3-green" href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li><a href="#">»</a></li>
+				</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="manageRolesView" class="modal"
+		ng-hide="manageRolesShowHide">
+		<div id="manageRolesModal"
+			class="w3-modal-content w3-card-8 w3-animate-zoom">
+			<div class="w3-blue-grey w3-padding-ver-16">
+				<span ng-click="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
+				<h3>SET manage roles</h3>
+			</div>
+			<div id="constrainer" class="w3-responsive">
+				<table id="rolesTable"
+					class="w3-table w3-striped w3-bordered w3-border w3-hoverable">
+					<thead>
+						<tr class="w3-light-grey">
+							<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role ID  <i class="fa fa-caret-up" ng-show="sortType == 'roleId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleId' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role name  <i class="fa fa-caret-up" ng-show="sortType == 'roleName' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleName' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Description  <i class="fa fa-caret-up" ng-show="sortType == 'roleDesc' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleDesc' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled  <i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i></th>
+							<th ng-click="expandRow('rolesSearchRow')">
+								<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
+								<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+							</th>
+						</tr>
+						<tr id="rolesSearchRow" ng-show="searchIsExpanded">
+							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
+							<td><input type="text" placeholder="Role name"></td>
+							<td><input type="text" placeholder="Description"></td>
+							<td><select class="w3-select" name="activeRole"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
+							<td> </td>
+						</tr>
+					</thead>
+					<tbody id="rolesTableBody">
+						<tr id="{{role.name}}" ng-repeat="role in roleList | orderBy:sortType:sortReverse">
+							<td>{{ role.roleId }}</td>
+							<td>{{ role.name }}</td>
+							<td>{{ role.description }}</td>
+							<td>{{ role.enabled }}</td>
+							<td><i class="fa fa-pencil-square-o"  aria-hidden="true"  ng-click="expandRow(role.name)"></i></td>
+						</tr>
+					</tbody>
+				</table>
+				<div id="inputRolesDiv" class="w3-display-bottommiddle">
+					<form name="newRoleForm" class="w3-row-padding" ng-submit="submitRole()">
+						<div class="w3-col s2">
+							<label><b>Role</b></label> <input id="roleName" type="text"
+								class="w3-input w3-border w3-hover-border-black"
+								placeholder="Enter role name" ng-model="roleForm.name" required>
+						</div>
+						<div class="w3-col s7">
+							<label><b>Description</b></label> <input id="roleDescription"
+								type="text" class="w3-input w3-border w3-hover-border-black"
+								placeholder="Enter role description" ng-model="roleForm.description" required>
+						</div>
+						<div class="w3-col s1">
+							<label><b>Enable</b></label> <input id="roleEnable"
+								type="checkbox" class="w3-check w3-input" ng-model="roleForm.enabled">
+						</div>
+						<div class="w3-col s2">
+							<label>.</label>
+							<button type="submit"
+								class="w3-btn w3-btn-block w3-blue-grey" ng-disabled="newRoleForm.$pristine || newRoleForm.name.$invalid || newRoleForm.description.$invalid">Save</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

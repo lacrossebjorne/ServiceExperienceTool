@@ -2,8 +2,8 @@
 
 angular.module('newsfeed')
 
-.controller('NewsfeedController', ['$scope', 'NewsfetchService', 'newsfeedservice',
-function($scope, Newsfetch, newsfeedservice) {
+.controller('NewsfeedController', ['$scope', 'NewsfetchService', 'newsfeedservice', function($scope, Newsfetch, newsfeedservice) {
+  
   var minArticleTextLimit = 50;
   var initialStatusMessage = "Enter you news.";
   $scope.TEST = "Newsfetch.get";
@@ -51,6 +51,7 @@ function($scope, Newsfetch, newsfeedservice) {
     selected: false
   }];
 
+>>>>>>> refs/heads/bjornesGren
   expand();
 
   function expand() {
