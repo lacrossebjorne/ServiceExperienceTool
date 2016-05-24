@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.set.entities.News;
 import com.set.entities.NewsUrl;
@@ -81,13 +83,34 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				newsEntry.setCreatedAt(newsResult.getDate("created_at"));
 				newsEntry.setImportantUntil(newsResult.getDate("important_until"));
 				
-				Date date = newsResult.getDate("created_at");
-				Time time = newsResult.getTime("created_at");
-				long dateTimeMillis = date.getTime() + time.getTime();
-				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 'at' hh:mm:ss a");
-				String dateString = format.format(dateTimeMillis);
-				System.out.println("Fetched a News-entry, created: " + dateString);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd 'at' hh:mm:ss a z");
+				SimpleDateFormat utfFormat = new SimpleDateFormat("yyyy-MM-dd 'at' hh:mm:ss a z");
+				TimeZone timeZone = TimeZone.getTimeZone("UTC");
+				format.setTimeZone(timeZone);
 				
+				Date createdAtDate = newsResult.getDate("created_at");
+				Time createdAtTime = newsResult.getTime("created_at");
+		
+				if (createdAtDate != null && createdAtTime != null) {
+					
+					Date createdAtDateTime = new Date(createdAtDate.getTime() + createdAtTime.getTime());
+					
+					System.out.println("Fetched a News-entry, created: " + format.format(createdAtDateTime));
+				}
+				
+				System.out.println("-");
+				System.out.println(newsResult.getString("created_at"));
+				Timestamp timestamp = newsResult.getTimestamp("created_at");
+				Date tDate = new Date(timestamp.getTime());
+				System.out.println(format.format(tDate));
+				
+//				Date date = newsResult.getDate("created_at");
+//				Time time = newsResult.getTime("created_at");
+//				long dateTimeMillis = date.getTime() + time.getTime();
+//				
+//				String dateString = format.format(dateTimeMillis);
+//				System.out.println("Fetched a News-entry, created: " + dateString);
+//				
 				if (isImportantSelected) {
 					newsEntry.setIsImportant(true);
 				} else {

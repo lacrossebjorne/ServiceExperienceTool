@@ -174,7 +174,7 @@ function($scope, Newsfetch, newsfeedservice) {
     if (date == null) {
       return 0;
     }
-
+    console.log("Date: " + new Date(date));
     var millisLeft = new Date(date).getTime() - Date.now();
     var daysLeft = Math.ceil(millisLeft / 1000 / 60 / 60 / 24);
 
