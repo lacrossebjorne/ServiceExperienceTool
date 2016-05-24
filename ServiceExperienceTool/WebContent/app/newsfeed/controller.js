@@ -78,6 +78,7 @@ function($scope, Newsfetch, newsfeedservice) {
       for (var i = 0; i < newsobject.news.length; i++) {
         newsobject.news[i].isEditing = false;
         $scope.news.push(newsobject.news[i]);
+        var date = new Date(newsobject.news[i].createdAt);
       }
       if ($scope.isShowingImportantEntries) {
         //turn $scope.isShowingImportantEntries to false
@@ -152,6 +153,10 @@ function($scope, Newsfetch, newsfeedservice) {
     console.log(news);
     news.isEditing = !news.isEditing;
   }
+  
+  $scope.formatISODate = function(days) {
+    return newsfeedservice.formatISODate(days);
+  }
 
   $scope.dateAsString = function(days) {
     return newsfeedservice.dateAsString(days);
@@ -174,10 +179,9 @@ function($scope, Newsfetch, newsfeedservice) {
     if (date == null) {
       return 0;
     }
-    console.log("Date: " + new Date(date));
-    var millisLeft = new Date(date).getTime() - Date.now();
+    var futureDate = new Date(date);
+    var millisLeft = futureDate.getTime() - Date.now();
     var daysLeft = Math.ceil(millisLeft / 1000 / 60 / 60 / 24);
-
     if (daysLeft > 0) {
       return daysLeft;
     } else {
@@ -221,8 +225,8 @@ function($scope, Newsfetch, newsfeedservice) {
     }
 
     if (data.daysImportant != null && !isNaN(data.daysImportant)) {
-      var date = newsfeedservice.dateAsMillis(data.daysImportant);
-      bundle.importantUntil = date;
+      var date = newsfeedservice.dateAsDate(data.daysImportant);
+      bundle.importantUntil = date.toISOString();
     }
 
     var self = this;

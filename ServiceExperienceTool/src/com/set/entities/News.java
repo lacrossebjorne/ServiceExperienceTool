@@ -11,9 +11,9 @@ public class News {
 	private Long newsId;
 	private String header;
 	private String content;
-	private Date createdAt;
-	private Date updatedAt;
-	private Date importantUntil;
+	private String createdAt;
+	private String updatedAt;
+	private String importantUntil;
 	private boolean enabled;
 	private Set<NewsImage> newsImages = new HashSet<NewsImage>(0);
 	private List<String> imgUri = new ArrayList<String>();
@@ -24,7 +24,7 @@ public class News {
 
 	public News() {}
 	
-	public News(Long newsId, String header, String content, Date createdAt, Date updatedAt, Date importantUntil, boolean enabled,
+	public News(Long newsId, String header, String content, String createdAt, String updatedAt, String importantUntil, boolean enabled,
 			Set<NewsImage> newsImages, List<String> imgUri, List<NewsUrl> urlList, Set<NewsTag> newsTags,
 			List<Tag> tagData) {
 		super();
@@ -67,27 +67,27 @@ public class News {
 		this.content = content;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return this.createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Date getUpdatedAt() {
+	public String getUpdatedAt() {
 		return this.updatedAt;
 	}
 
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 	
-	public Date getImportantUntil() {
+	public String getImportantUntil() {
 		return this.importantUntil;
 	}
 	
-	public void setImportantUntil(Date importantUntil) {
+	public void setImportantUntil(String importantUntil) {
 		this.importantUntil = importantUntil;
 	}
 

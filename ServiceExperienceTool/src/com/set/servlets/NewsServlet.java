@@ -226,17 +226,18 @@ public class NewsServlet extends HttpServlet {
 		Long newsId = null;
 		Long importantUntilMillis = null;
 		Date importantUntil = null;
+		String importantUntilParameter = request.getParameter("importantUntil");
 
 		try {
 			String idParameter = request.getParameter("newsId");
-			String importantUntilParameter = request.getParameter("importantUntil");
+//			String importantUntilParameter = request.getParameter("importantUntil");
 
 			if (idParameter != null) {
 				newsId = Long.parseLong(idParameter);
 			}
-			if (importantUntilParameter != null) {
-				importantUntilMillis = Long.parseLong(importantUntilParameter);
-			}
+//			if (importantUntilParameter != null) {
+//				importantUntilMillis = Long.parseLong(importantUntilParameter);
+//			}
 			
 		} catch (NumberFormatException e) {
 			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
@@ -282,7 +283,7 @@ public class NewsServlet extends HttpServlet {
 			return;
 		}
 		
-		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, importantUntil, true, null, imageUris, urlList, null, tagData);
+		News newsEntry = new News(newsId, newsHeader, newsContent, null, null, importantUntilParameter, true, null, imageUris, urlList, null, tagData);
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
 
 		boolean isPublished = false;

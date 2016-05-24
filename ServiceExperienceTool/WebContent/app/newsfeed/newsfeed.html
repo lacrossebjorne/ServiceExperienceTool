@@ -20,25 +20,25 @@ name="theName" id="theId" ng-model="theModel">
     <br>
     <img ng-src="{{ x.imgUri=='' ? 'http://placehold.it/477x318&text=noImage' : x.imgUri[0] }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">
     <h4>{{ x.header }}</h4>
-    <span>Date: {{ x.createdAt }}</span>
-    <!-- span class="w3-tiny w3-right">Tags: {{ x.tagData }}</span>  -->
+    <span>Date: {{ formatISODate(x.createdAt) }}</span>
+    <!-- span class="w3-tiny w3-right">Taggar: {{ x.tagData }}</span>  -->
     <span class="w3-tiny w3-right">
     	<tag-display tags="x.tagData" title="Tags:" />
-    	<div ng-if="x.isImportant" class="w3-container w3-blue"><strong>Important!</strong></div>
+    	<div ng-if="x.isImportant" class="w3-container w3-blue"><strong>Viktig nyhet!</strong></div>
     	<div>newsId: {{x.newsId}}</div>
     </span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
     <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
-      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Read
+      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> L&auml;s mer
     </button>
     <div ng-if="x.urlList.length > 0" class="w3-margin-bottom">
-      <strong>Added url:s:</strong>
+      <strong>Tillagda l&auml;nkar:</strong>
       <div ng-repeat="url in x.urlList">
           <a href="{{url.path}}">{{url.title}}</a>
       </div>
     </div>
     <button type="button" ng-click="toggleEdit(x)" class="w3-btn w3-theme-d1 w3-margin-bottom w3-rest">
-      <i class="fa fa-pencil" ></i> Edit
+      <i class="fa fa-pencil" ></i> Redigera
     </button>
     <div ng-if="x.isEditing">
     	<div ng-include="'app/partials/publishform.html'" onload="fillForm(x)"></div>

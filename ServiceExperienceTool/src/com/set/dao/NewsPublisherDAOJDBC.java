@@ -7,10 +7,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.set.dao.helpers.IsoDateConverter;
 import com.set.entities.Image;
 import com.set.entities.News;
 import com.set.entities.NewsUrl;
@@ -60,13 +62,19 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		Long newsID = null;
 		int[] batchResult = null;
 		
+		IsoDateConverter isoDateConverter = new IsoDateConverter();
+		
+		
 		try {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
-
+			
+			Date importantUntil = isoDateConverter.parseToUTCDate(news.getImportantUntil());
+			
 			if (news.getNewsId() == null) {
 				// INSERT INTO NEWS
-				Object[] newsObj = { news.getHeader(), news.getContent(), news.getImportantUntil() };
+				
+				Object[] newsObj = { news.getHeader(), news.getContent(), importantUntil };
 				// Insert news article in news-table and retreive news PK
 				statement = prepareStatement(connection, SQL_INSERT_INTO_NEWS, true, newsObj);
 				if (statement.executeUpdate() == 0) {
@@ -83,7 +91,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 			} else {
 				// UPDATE NEWS
 				newsID = news.getNewsId();
-				Object[] newsObj = { news.getHeader(), news.getContent(), news.getImportantUntil(), news.getNewsId() };
+				Object[] newsObj = { news.getHeader(), news.getContent(), importantUntil, news.getNewsId() };
 				statement = prepareStatement(connection, SQL_UPDATE_NEWS, false, newsObj);
 				if (statement.executeUpdate() == 0) {
 					throw new SQLException("Couldn't update rows in table news");
