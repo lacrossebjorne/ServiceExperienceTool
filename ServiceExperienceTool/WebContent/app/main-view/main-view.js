@@ -10,8 +10,6 @@ angular.module('mainView', [
   'company',
   'useradmin'
 ])
-angular.module('mainView',
-		[ 'ngRoute', 'newsfeed', 'newspublish', 'menu', 'company', 'useradmin' ])
 
 /*
  * This routing should only redirect on '.otherwise'. Separate routing in
