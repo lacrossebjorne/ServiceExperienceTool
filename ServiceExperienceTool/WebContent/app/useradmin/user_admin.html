@@ -21,7 +21,7 @@ html, body, h1, h2, h3, h4, h5 {
 
 #userListmodal {
 	width: 1300px;
-	max-height: 620px;
+	height: 520px;
 }
 
 #addUserModal {
@@ -159,7 +159,7 @@ li {
 								ng-minlength="2" ng-maxlength="45"
 								type="text" placeholder="Enter last name" required
 								ng-model="userForm.lastName">
-							<div ng-messages="newUserForm.lastname.$error">
+							<div ng-messages="newUserForm.lastName.$error">
 								<div ng-messages-include="static/messages.html"></div>
 							</div>
 						</div>
@@ -259,13 +259,13 @@ li {
 					class="w3-table w3-bordered w3-border w3-striped">
 					<thead>
 						<tr class="w3-light-grey">
-							<th>User ID</th>
-							<th>First name</th>
-							<th>Last name</th>
-							<th>Username</th>
-							<th>Email address</th>
-							<th>Phone number</th>
-							<th>Enabled</th>
+							<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">User ID  <i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'firstname'; sortReverse = !sortReverse">First name  <i class="fa fa-caret-up" ng-show="sortType == 'firstname' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'firstname' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Last name  <i class="fa fa-caret-up" ng-show="sortType == 'lastname' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'lastname' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'username'; sortReverse = !sortReverse">Username  <i class="fa fa-caret-up" ng-show="sortType == 'username' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'username' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'email'; sortReverse = !sortReverse">Email address  <i class="fa fa-caret-up" ng-show="sortType == 'email' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'email' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'phonenumber'; sortReverse = !sortReverse">Phone number  <i class="fa fa-caret-up" ng-show="sortType == 'phonenumber' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'phonenumber' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'enabled'; sortReverse = !sortReverse">Enabled  <i class="fa fa-caret-up" ng-show="sortType == 'enabled' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'enabled' && !sortReverse"></i></th>
 							<th ng-click="expandRow('userSearchRow')">
 								<i class="fa fa-search-plus" aria-hidden="true"
 								 ng-if="!searchIsExpanded"></i>
@@ -274,21 +274,22 @@ li {
 							</th>
 						</tr>
 						<tr id="userSearchRow" ng-show="searchIsExpanded">
-							<td><input type="number" min="1" id="searchID"
-								placeholder="ID"></td>
-							<td><input type="text" placeholder="First Name"></td>
-							<td><input type="text" placeholder="Last Name"></td>
-							<td><input type="text" placeholder="Username"></td>
-							<td><input type="text" placeholder="Email"></td>
-							<td><input type="text" placeholder="Phone number"></td>
-							<td><select class="w3-select" name="activeUser"><option
-										value="enabled">Enabled</option>
-									<option value="disabled">Disabled</option></select></td>
+							<td><input type="number" id="searchID" value=""
+								placeholder="ID"  ng-model="search.userId"></td>
+							<td><input type="text" placeholder="First Name" ng-model="search.firstName"></td>
+							<td><input type="text" placeholder="Last Name"  ng-model="search.lastName"></td>
+							<td><input type="text" placeholder="Username"  ng-model="search.username"></td>
+							<td><input type="text" placeholder="Email"  ng-model="search.email"></td>
+							<td><input type="text" placeholder="Phone number"  ng-model="search.phoneNumber"></td>
+							<td><select class="w3-select" name="activeUser"  ng-model="search.enabled"><option
+										value=""></option><option
+										value="true">Enabled</option>
+									<option value="false">Disabled</option></select></td>
 							<td></td>
 						</tr>
 					</thead>
 					<tbody id="usersTableBody">
-						<tr ng-repeat-start="user in users" ng-click="expandRow()">
+						<tr ng-repeat-start="user in users | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
 							<td>{{ user.userId }}</td>
 							<td>{{ user.firstName }}</td>
 							<td>{{ user.lastName }}</td>
@@ -323,8 +324,8 @@ li {
 						</tr>
 					</tbody>
 				</table>
-				<!-- <div class="w3-center">
-				<ul class="w3-pagination w3-border">
+				<div class="w3-center">
+				<ul class="w3-pagination w3-border" ng-if="users.length > 10">
 					<li><a href="#">«</a></li>
 					<li><a class="w3-green" href="#">1</a></li>
 					<li><a href="#">2</a></li>
@@ -333,7 +334,7 @@ li {
 					<li><a href="#">5</a></li>
 					<li><a href="#">»</a></li>
 				</ul>
-				</div> -->
+				</div>
 			</div>
 		</div>
 	</div>
@@ -350,10 +351,10 @@ li {
 					class="w3-table w3-striped w3-bordered w3-border w3-hoverable">
 					<thead>
 						<tr class="w3-light-grey">
-							<th>Role ID</th>
-							<th>Role name</th>
-							<th>Description</th>
-							<th>Enabled</th>
+							<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role ID  <i class="fa fa-caret-up" ng-show="sortType == 'roleId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleId' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role name  <i class="fa fa-caret-up" ng-show="sortType == 'roleName' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleName' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Description  <i class="fa fa-caret-up" ng-show="sortType == 'roleDesc' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleDesc' && !sortReverse"></i></th>
+							<th ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled  <i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i></th>
 							<th ng-click="expandRow('rolesSearchRow')">
 								<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
 								<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
@@ -368,7 +369,7 @@ li {
 						</tr>
 					</thead>
 					<tbody id="rolesTableBody">
-						<tr id="{{role.name}}" ng-repeat="role in roleList">
+						<tr id="{{role.name}}" ng-repeat="role in roleList | orderBy:sortType:sortReverse">
 							<td>{{ role.roleId }}</td>
 							<td>{{ role.name }}</td>
 							<td>{{ role.description }}</td>

@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.set.dao.DAOFactory;
-import com.set.dao.UserDAO;
 import com.set.entities.User;
 
 
@@ -30,6 +30,9 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		//Gson gson = new Gson();
+		
+		
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
@@ -37,9 +40,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println(username + " " + password);
 
 		if (!username.isEmpty() && !password.isEmpty()) {
-			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-			UserDAO userDAO = daoFactory.getUserDAO();
-			User user = userDAO.find(username, password);
+			User user = DAOFactory.getInstance("setdb.jndi").getUserDAO().find(username, password);
 			if (user != null && user.isEnabled()) {
 				request.getSession().setAttribute("user", user);
 				response.sendRedirect(request.getContextPath() + "/user_admin.html");

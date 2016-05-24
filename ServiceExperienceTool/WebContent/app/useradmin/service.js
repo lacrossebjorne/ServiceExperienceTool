@@ -4,7 +4,8 @@ angular.module('useradmin')
 
 .factory('AdminFactory', ['$resource','app.paths', '$q', function($resource, paths, $q) {
     return $resource(paths.local + 'userAdminServlet', {}, {
-        listAllUsers: {
+        
+    	listAllUsers: {
         	method: 'GET',
         	params: {'getUserList' : ''},
     		isArray: false

@@ -1,4 +1,4 @@
-'user strict'
+'use strict'
 
 angular.module('useradmin')
 
@@ -34,6 +34,8 @@ angular.module('useradmin')
 	$scope.searchIsExpanded = false
 	$scope.regexUserName = '([a-z])\\w+\\.([a-z])\\w+';
 	$scope.regexNumber = '\\d+';
+	$scope.sortType = 'userId';
+	$scope.sortReverse = false;
 	
 //Functions
 	$scope.submitUser = function() {
@@ -128,17 +130,17 @@ angular.module('useradmin')
     	});
     };
 
-    
-
     self.close = function(view) {
     	$scope.userRoles = [];
     	$scope.user = {
-            id: null,
-            first_name: '',
-            last_name: '',
-            user_name: '',
+            userId: null,
+            firstName: '',
+            lastName: '',
+            username: '',
             email: '',
             password: '',
+            phoneNumber:'',
+            enable: false,
             resetPassword: null,
             userRoles: null
         };
@@ -155,6 +157,7 @@ angular.module('useradmin')
     		$scope.users = [];
     	}
     	$scope.searchIsExpanded = false;
+    	$scope.search = {};
     };
     
     $scope.showHide = function(id) {
@@ -196,7 +199,7 @@ angular.module('useradmin')
     		this.searchIsExpanded = !this.searchIsExpanded;
     	else 
     		this.isExpanded = !this.isExpanded;
-    }
+    };
     
     $scope.w3_open = function() {
     	document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
@@ -217,6 +220,6 @@ angular.module('useradmin')
     		rightCol.css('display', 'none');
     		midCol.removeClass('m7').addClass('m12');
     	}
-    }
+    };
 
 }]);
