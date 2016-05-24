@@ -1,14 +1,5 @@
 <div class="w3-row-padding" ng-controller="MainViewController">
   <!-- Left Column -->
-  <div id="mainLeftColumn"class="w3-col m2">
-    <div ng-include src="'app/main-view/left-column.html'" ng-show="{{ !isCurrentPage('/useradmin') }}"></div>
-  </div>
-  <!-- Middle Column -->
-  <div id="mainMiddleColumn" class="w3-col m7">
-    <div ng-view></div>
-  </div>
-  <!-- Right Column -->
-  <div id="mainRightColumn" class="w3-col m3">
   <div class="w3-col m2" ng-show="hideCol">
     <div ng-include src="'app/main-view/left-column.html'"></div>
   </div>
