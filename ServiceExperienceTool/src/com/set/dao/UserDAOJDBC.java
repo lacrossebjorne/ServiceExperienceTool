@@ -5,8 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.set.entities.ResetPassword;
+import com.set.entities.Role;
 import com.set.entities.User;
 
 import static com.set.dao.DAOUtil.*;
@@ -19,16 +25,17 @@ import static com.set.dao.DAOUtil.*;
 
 public class UserDAOJDBC implements UserDAO {
 
-	private static final String SQL_FIND_BY_ID = "SELECT user_id, user_name, first_name, last_name, email, phone_number, created_at, updated_at, enabled FROM user WHERE user_id = ?";
-	private static final String SQL_FIND_BY_USERNAME_AND_PASSWORD = "SELECT user_id, user_name, first_name, last_name, email, phone_number, created_at, updated_at, enabled FROM user WHERE user_name = ? AND password = MD5(?)";
-	private static final String SQL_LIST_USERS_BY_ID = "SELECT user_id, user_name, first_name, last_name, email, phone_number, created_at, updated_at, enabled FROM user ORDER BY user_id";
+	private static final String SQL_FIND_BY_ID = "CALL setdb.listUserByID(?)";
+	private static final String SQL_FIND_BY_USERNAME_AND_PASSWORD = "CALL setdb.listUserByUsernameAndPassword(?, MD5(?))";
+	private static final String SQL_LIST_USERS = "CALL setdb.listUsers()";
+	private static final String SQL_EXIST_USERNAME = "CALL setdb.listUserByUsername(?)";
 	private static final String SQL_INSERT_USER = "INSERT INTO user (first_name, last_name, email, user_name, password, phone_number, enabled) VALUES (?, ?, ?, ?, MD5(?), ?, ?)";
 	private static final String SQL_UPDATE_USER = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_name = ?, phone_number = ?,  enabled = ? WHERE user_id = ?";
 	private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE user_id = ?";
 	private static final String SQL_ENABLE_USER = "UPDATE user SET enable = 1 WHERE user_id = ?";
 	private static final String SQL_DISABLE_USER = "UPDATE user SET enable = 0 WHERE user_id = ?";
-	private static final String SQL_EXIST_USERNAME = "SELECT user_id FROM user WHERE user_name = ?";
 	private static final String SQL_DELETE_USER = "DELETE FROM user WHERE user_id = ?";
+	private static final String SQL_INSERT_USER_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
 	private DAOFactory daoFactory;
 
 	public UserDAOJDBC(DAOFactory daoFactory) {
@@ -51,7 +58,7 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	private User find(String sql, Object... values) {
-		User user = null;
+		List<User> userAsList = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -60,7 +67,7 @@ public class UserDAOJDBC implements UserDAO {
 			statement = prepareStatement(connection, sql, false, values);
 			resultSet = statement.executeQuery();
 			if (resultSet.next()) {
-				user = processResult(resultSet);
+				userAsList.add(processUser(resultSet));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,7 +80,7 @@ public class UserDAOJDBC implements UserDAO {
 				e.printStackTrace();
 			}
 		}
-		return user;
+		return mergeAll(userAsList).get(0);
 	}
 
 	@Override
@@ -84,10 +91,10 @@ public class UserDAOJDBC implements UserDAO {
 		ResultSet resultSet = null;
 		try {
 			connection = daoFactory.getConnection();
-			statement = connection.prepareStatement(SQL_LIST_USERS_BY_ID);
+			statement = connection.prepareStatement(SQL_LIST_USERS);
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				users.add(processResult(resultSet));
+				users.add(processUser(resultSet));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -100,28 +107,41 @@ public class UserDAOJDBC implements UserDAO {
 				e.printStackTrace();
 			}
 		}
-		return users;
+		return mergeAll(users);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
-	public void createUser(User user) throws IllegalArgumentException {
+	public User createUser(User user) throws IllegalArgumentException {
 		if (user.getUserId() != null)
 			throw new IllegalArgumentException("User already exists");
 		Object[] userObject = { user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserName(),
 				user.getPassword(), user.getPhoneNumber(), user.isEnabled() };
 		Connection connection = null;
 		PreparedStatement statement = null;
-		ResultSet keys = null;
+		ResultSet userKeys = null;
 		try {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
 			statement = prepareStatement(connection, SQL_INSERT_USER, true, userObject);
+			Long userID = null;
 			if (statement.executeUpdate() != 1)
 				throw new SQLException("New user failed to be inserted.");
 			else {
-				keys = statement.getGeneratedKeys();
-				if (keys.next())
-					user.setUserId(keys.getLong(1));
+				userKeys = statement.getGeneratedKeys();
+				if (userKeys.next()) {
+					userID = userKeys.getLong(1);
+					statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
+					for (Role userRole : user.getRoles()) {
+						statement.setLong(1, userID);
+						statement.setLong(2, userRole.getRoleId());
+						statement.addBatch();
+					}
+					if (statement.executeUpdate() == 0)
+						throw new SQLException("Could not insert roles into user_roles table.");
+				}
+				connection.commit();
+				user.setUserId(userID);
 			}
 		} catch (SQLException | IllegalArgumentException e) {
 			try {
@@ -132,18 +152,18 @@ public class UserDAOJDBC implements UserDAO {
 			e.printStackTrace();
 		} finally {
 			try {
-				keys.close();
+				userKeys.close();
 				statement.close();
 				connection.setAutoCommit(true);
-				if (connection != null) {
-					connection.close();
-				}
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
+		return user;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void updateUser(User user) {
 		if (user.getUserId() == null)
@@ -160,6 +180,17 @@ public class UserDAOJDBC implements UserDAO {
 			int updatedRows = statement.executeUpdate();
 			if (updatedRows == 0)
 				throw new SQLException("New user failed to be updated.");
+			if(!user.getRoles().isEmpty()) {
+				statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
+				for (Role userRole : user.getRoles()) {
+					statement.setLong(1, user.getUserId());
+					statement.setLong(2, userRole.getRoleId());
+					statement.addBatch();
+				}
+				if (statement.executeUpdate() == 0)
+					throw new SQLException("Could not insert roles into user_roles table.");
+			}
+			connection.commit();
 		} catch (SQLException | IllegalArgumentException e) {
 			try {
 				connection.rollback();
@@ -171,6 +202,7 @@ public class UserDAOJDBC implements UserDAO {
 			try {
 				statement.close();
 				connection.setAutoCommit(true);
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -306,7 +338,8 @@ public class UserDAOJDBC implements UserDAO {
 		}
 	}
 
-	private User processResult(ResultSet resultSet) throws SQLException {
+	//Processes the resultSet from the database and creates an User entity for each row returned
+	private User processUser(ResultSet resultSet) throws SQLException {
 		User user = new User();
 		user.setUserId(resultSet.getLong("user_id"));
 		user.setUserName(resultSet.getString("user_name"));
@@ -317,6 +350,37 @@ public class UserDAOJDBC implements UserDAO {
 		user.setPhoneNumber(resultSet.getString("phone_number"));
 		user.setCreatedAt(resultSet.getDate("created_at"));
 		user.setUpdatedAt(resultSet.getDate("updated_at"));
+		List<Role> roles = new ArrayList<>();
+		Long roleID = null;
+		if ((roleID = resultSet.getLong("role_id")) != 0) {
+			Role role = new Role();
+			role.setRoleId(roleID);
+			role.setName(resultSet.getString("rolename"));
+			role.setDescription(resultSet.getString("role_description"));
+			role.setEnabled(resultSet.getBoolean("role_enabled"));
+			roles.add(role);
+			user.setRoles(roles);
+		}
+		Set<ResetPassword> resetPasswordsSet = new HashSet<>();
+		Long resetpassID = null;
+		if ((resetpassID = resultSet.getLong("reset_password_id")) != 0) {
+			ResetPassword reset = new ResetPassword();
+			reset.setResetPasswordId(resetpassID);
+			reset.setSecuritycode(resultSet.getString("securitycode"));
+			reset.setExpirationTime(resultSet.getDate("expiration_time"));
+			reset.setUserId(user.getUserId());
+			resetPasswordsSet.add(reset);
+			user.setResetPasswords(resetPasswordsSet);
+		}
 		return user;
+	}
+
+	/*
+	 * Merges collected user entities from database 
+	 * (multiple rows with same userId can be returned from the stored procedure) 
+	 * who have the same userId - on roles and resetpasswords
+	 */
+	private List<User> mergeAll(Collection<User> input) {
+		return new ArrayList<>(input.stream().collect(Collectors.toMap(User::getUserId, e -> e, User::merge)).values());
 	}
 }

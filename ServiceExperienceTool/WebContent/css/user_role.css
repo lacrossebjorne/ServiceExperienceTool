@@ -1,0 +1,70 @@
+#userform button {
+	margin-bottom: 8px;
+}
+
+#userListmodal {
+	width: 1300px;
+	height: 520px;
+}
+
+#addUserModal {
+	width: 800px;
+}
+
+#manageRolesModal {
+	height: 520px;
+}
+
+#constrainer {
+	height: 600px;
+}
+
+table {
+	overflow-y: scroll;
+}
+tbody {
+	height: 580px;
+	overflow-y: scroll;
+}
+
+#checkDiv {
+	text-transform: capitalize;
+}
+
+#inputRolesDiv {
+	padding-bottom: 6px;
+	text-align: left;
+}
+
+.modal {
+	z-index: 3;
+	padding-top: 50px;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,0.4);
+}
+#sideNav {
+	z-index: 3; 
+	width: 250px;
+	max-height: 71.5%;
+	posistion: relative; 
+	clear: both"
+}
+
+#searchID {
+	width: 50px;
+}
+.w3-select {
+	width: 75%;
+}
+li {
+    list-style-type: none;
+}
+.has-error {
+	border: red;
+}

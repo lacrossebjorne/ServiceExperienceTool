@@ -12,7 +12,7 @@ angular.module('company')
   $scope.links = companyData.links;
   $scope.documents = companyData.docs;
   $scope.tabs = companyData.tabs;
-  $scope.currentTab = 'app/company/tabs/tab.history.html';
+  $scope.currentTab = 'app/company/tabs/tab.vision-affarside.html';
   $scope.imgA = imageSwitch();
 
   $scope.onClickTab = function(tab) {
@@ -39,7 +39,7 @@ angular.module('company')
       $scope.documents.push({title: title, icon:'fa-file-text-o', url: url});
       pushService.broadcast({path: $location.absUrl(), message: 'Document added: ' + title});
       $scope.newDocTitle = "";
-      $scope.newDocUrl = "";
+      $scope.upFile = "";
   }
 
   $scope.removeDocument = function(index){
@@ -49,7 +49,6 @@ angular.module('company')
   $scope.setFile = function(element) {
     $scope.$apply(function($scope) {
         $scope.upFile = element.files[0].name;
-        console.log('FileNAME');
         console.log(element.files[0].name);
     });
 };

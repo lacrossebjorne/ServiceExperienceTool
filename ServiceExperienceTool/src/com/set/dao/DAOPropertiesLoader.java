@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class DAOPropertiesLoader {
 
-	private static final String PROPERTIES_FILE = "dao.properties";
+	private static final String PROPERTIES_FILE = "dao_local.properties";
 	private static final Properties PROPERTIES = new Properties();
 	private String specificKey;
 

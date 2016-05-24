@@ -1,14 +1,14 @@
-<div class="w3-row-padding">
+<div class="w3-row-padding" ng-controller="MainViewController">
   <!-- Left Column -->
-  <div class="w3-col m2">
+  <div class="w3-col m2" ng-show="!hideCol">
     <div ng-include src="'app/main-view/left-column.html'"></div>
   </div>
   <!-- Middle Column -->
-  <div class="w3-col m7">
+  <div class="w3-col" ng-class="{'m7': !hideCol, 'm12': hideCol}">
     <div ng-view></div>
   </div>
   <!-- Right Column -->
-  <div class="w3-col m3">
+	  <div class="w3-col m3" ng-show="!hideCol">
     <div ng-include src="'app/main-view/right-column.html'"></div>
   </div>
 </div>

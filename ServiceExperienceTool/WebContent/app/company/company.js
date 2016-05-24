@@ -29,44 +29,41 @@ angular.module('company', [
     }],
 
     tabs: [{
-      title: 'History',
-      url: 'app/company/tabs/tab.history.html'
+      title: 'Vision & affärsidé',
+      url: 'app/company/tabs/tab.vision-affarside.html'
     }, {
-      title: 'Atmosphere',
-      url: 'app/company/tabs/tab.atmosphere.html'
+      title: 'Historia',
+      url: 'app/company/tabs/tab.historia.html'
     }, {
-      title: 'Values',
-      url: 'app/company/tabs/tab.values.html'
+      title: 'Miljö & socialt ansvar',
+      url: 'app/company/tabs/tab.miljo-socialt-ansvar.html'
     }, {
-      title: 'Links',
-      url: 'app/company/tabs/tab.links.html'
-    }, {
-      title: 'Documents',
-      url: 'app/company/tabs/tab.documents.html'
+      title: 'Innan din första arbetsdag!',
+      url: 'app/company/tabs/tab.forsta-arbetsdag.html'
     }],
 
     docs: [{
-      title: 'Suppliers',
+      title: 'Grossister',
       icon: 'fa-file-pdf-o',
       url: 'suppliers.pdf'
     }, {
-      title: 'Budget Analysis 2015-2016',
+      title: 'Budget Analys 2015-2016',
       icon: 'fa-file-excel-o',
       url: 'budget.svc'
     }, {
-      title: 'How to: Clean the Bathroom',
+      title: 'Städguide',
       icon: 'fa-file-pdf-o',
       url: 'cleaning-for-dummies.pdf'
     }, {
-      title: 'Recipe: Mac & Cheeze',
+      title: 'Recept: test',
       icon: 'fa-file-word-o',
       url: 'macRecipe.doc'
     }, {
-      title: 'Company Letter Template',
+      title: 'Mall: företagsbrev',
       icon: 'fa-file-word-o',
       url: 'letterTemplate.doc'
     }, {
-      title: 'Co-workers Manual',
+      title: 'Manual för medarbetare',
       icon: 'fa-file-text-o',
       url: 'manual.txt'
     }],
