@@ -5,7 +5,7 @@ angular.module('useradmin')
 .controller('AdminController', ['$scope', 'AdminFactory', function($scope, AdminFactory) {
     var self = this;
     //Hides left and right columns
-    hideLeftRightColumns();
+    //hideLeftRightColumns();
     
 //Variables 
     $scope.manageRolesShowHide = true;
@@ -211,7 +211,7 @@ angular.module('useradmin')
     };
     
 
-    function hideLeftRightColumns() {
+    /*function hideLeftRightColumns() {
     	var leftCol = angular.element(document.querySelector('#mainLeftColumn'));
     	var rightCol = angular.element(document.querySelector('#mainRightColumn'));
     	var midCol = angular.element(document.querySelector('#mainMiddleColumn'));
@@ -220,6 +220,6 @@ angular.module('useradmin')
     		rightCol.css('display', 'none');
     		midCol.removeClass('m7').addClass('m12');
     	}
-    };
+    };*/
 
 }]);
