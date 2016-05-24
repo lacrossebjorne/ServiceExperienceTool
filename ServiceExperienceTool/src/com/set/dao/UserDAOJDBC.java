@@ -28,12 +28,12 @@ public class UserDAOJDBC implements UserDAO {
 	private static final String SQL_FIND_BY_ID = "CALL setdb.listUserByID(?)";
 	private static final String SQL_FIND_BY_USERNAME_AND_PASSWORD = "CALL setdb.listUserByUsernameAndPassword(?, MD5(?))";
 	private static final String SQL_LIST_USERS = "CALL setdb.listUsers()";
+	private static final String SQL_EXIST_USERNAME = "CALL setdb.listUserByUsername(?)";
 	private static final String SQL_INSERT_USER = "INSERT INTO user (first_name, last_name, email, user_name, password, phone_number, enabled) VALUES (?, ?, ?, ?, MD5(?), ?, ?)";
 	private static final String SQL_UPDATE_USER = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_name = ?, phone_number = ?,  enabled = ? WHERE user_id = ?";
 	private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE user_id = ?";
 	private static final String SQL_ENABLE_USER = "UPDATE user SET enable = 1 WHERE user_id = ?";
 	private static final String SQL_DISABLE_USER = "UPDATE user SET enable = 0 WHERE user_id = ?";
-	private static final String SQL_EXIST_USERNAME = "CALL setdb.listUserByUsername(?)";
 	private static final String SQL_DELETE_USER = "DELETE FROM user WHERE user_id = ?";
 	private static final String SQL_INSERT_USER_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
 	private DAOFactory daoFactory;
@@ -163,6 +163,7 @@ public class UserDAOJDBC implements UserDAO {
 		return user;
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void updateUser(User user) {
 		if (user.getUserId() == null)
@@ -179,6 +180,16 @@ public class UserDAOJDBC implements UserDAO {
 			int updatedRows = statement.executeUpdate();
 			if (updatedRows == 0)
 				throw new SQLException("New user failed to be updated.");
+			if(!user.getRoles().isEmpty()) {
+				statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
+				for (Role userRole : user.getRoles()) {
+					statement.setLong(1, user.getUserId());
+					statement.setLong(2, userRole.getRoleId());
+					statement.addBatch();
+				}
+				if (statement.executeUpdate() == 0)
+					throw new SQLException("Could not insert roles into user_roles table.");
+			}
 			connection.commit();
 		} catch (SQLException | IllegalArgumentException e) {
 			try {

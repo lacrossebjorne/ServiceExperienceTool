@@ -220,19 +220,23 @@
 						<tr id="{{ user.username }}" ng-repeat-end ng-show="isExpanded">
 							<td colspan="8">
 								<div class="w3-row">
-									<div class="w3-col l3 m4 s12">
+									<div class="w3-col l3 m6 s12">
 											<li><b>Roles</b></li>
 											<li ng-repeat="role in user.roles">{{ role.name }}</li>
 									</div>
-									<div class="w3-col l3 m4 s12">
+									<div class="w3-col l3 m6 s12">
 										<span>Created:&#8195;</span><span>{{ user.createdAt | date:'yyyy-MM-dd' }}</span><br>
 										<span>Updated:&#8195;</span><span>{{ user.updatedAt | date:'yyyy-MM-dd' }}</span><br>
 									</div>
-									<div class="w3-col l3 m4 s12">
+									<div class="w3-col l3 m6 s12">
 										<span>Password reset:&#8195;</span>
 										<span ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</span>
 										<span ng-if="reset == null || reset.expirationTime !='' || reset.expirationTime < today">Deactivated</span><br>
 										<span ng-repeat-end>Valid until:&#8195;{{reset.expirationTime }}</span><br>
+									</div>
+									<div class="w3-col l3 m6 s12" style="vertical-align: middle;">
+										<span class="fa fa-pencil-square-o"></span>
+										<span class="fa fa-times" style="color: red;"></span>
 									</div>
 								</div>
 							</td>
