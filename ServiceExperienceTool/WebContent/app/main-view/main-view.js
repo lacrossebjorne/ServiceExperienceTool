@@ -29,16 +29,16 @@ angular.module('mainView',
 MainViewController.$inject = [ '$rootScope', '$scope', '$location', '$log' ];
 
 function MainViewController($rootScope, $scope, $location, $log) {
-	$scope.hideCol;
+	$scope.hideCol = false;
 	hideColumn();
 	$scope.$on("$locationChangeSuccess", function(event, next, current) {
 		hideColumn();
 	});
 
 	function hideColumn(url) {
-		if ($location.path() === '/menu')
-			$scope.hideCol = false;
-		else
+		if ($location.path() == '/useradmin')
 			$scope.hideCol = true;
+		else
+			$scope.hideCol = false;
 	}
 };
