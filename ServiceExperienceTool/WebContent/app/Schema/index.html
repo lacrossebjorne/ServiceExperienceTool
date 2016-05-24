@@ -1,0 +1,250 @@
+<html>
+<meta charset="utf-8">
+
+<head>
+    <!--JQuery  -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- fullcalendar style sheet -->
+    <link rel="stylesheet" href="css/fullcalendar.css" />
+    <link rel="stylesheet" href="css/scheduler.css" />
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script> -->
+
+    
+
+
+</head>
+
+<body ng-app="myApp" layout="column" ng-controller="myCtrl">
+    <script>
+        $(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+            weekNumbers: true,
+            defaultView: 'timelineDay',
+            firstDay: 1,
+            aspectRatio: 2,
+            resourceAreaWidth: "20%",
+            minTime: "06:00:00",
+            maxTime: "23:00:00",
+            events: getEvents(),
+            resources: getResources(),
+            schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
+            header:
+            {
+                left: 'title',
+                center: 'timelineDay, agendaWeek, month',
+                right: 'today prev,next'
+            },
+            views: {
+                agendaWeek: {
+                    eventLimit: 4,
+                    allDayText: 'Antal gäster',
+                },
+                month:{
+                    eventLimit: 5,
+                }
+            }
+        })
+
+    });
+    function getResources() {
+        // $.ajax({
+        //  url: 'http://www.w3schools.com/website/customers_mysql.php',
+        //  type: 'GET',
+        //  success: function(data){
+        //   console.log(JSON.parse(data));
+        //  }    
+        // });
+        return [
+            {
+                id: 1,
+                title: 'Kött',
+                type1: 10,
+                type2: 55,
+                children: [
+                    { id: '1a', title: 'Arne Anka' },
+                    { id: '1b', title: 'Erik Svensson' },
+                    { id: '1c', title: 'Berit Berg' },
+                ]
+            },
+            {
+                id: 2,
+                title: 'Varmkök',
+                type1: 10,
+                type2: 55,
+                children: [
+                    { id: '2a', title: 'Niklas Eriksson' },
+                    { id: '2b', title: 'Annika Dahl' },
+                    { id: '2c', title: 'Pernilla Eriksson' },
+                ]
+            },
+            {
+                id: 3,
+                title: 'Kallis',
+                type1: 10,
+                type2: 55,
+                children: [
+                    { id: '3a', title: 'Hannes Göransson' },
+                    { id: '3b', title: 'Erik Svensson' },
+                    { id: '3c', title: 'Angelica Näsman' },
+                ]
+            },
+            {
+                id: 4,
+                title: 'Servis',
+                type1: 10,
+                type2: 55,
+                children: [
+                    { id: '4a', title: 'Anna Hansson' },
+                    { id: '4b', title: 'Lisa Gullbrandsen' },
+                    { id: '4c', title: 'Erika Olofsdotter' },
+                ]
+            },
+        ];
+    }
+        function getEvents() {
+        return [
+            { id: 1, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1a' },
+            { id: 2, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1b' },
+            { id: 3, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1c' },
+
+            { id: 4, title: 'Tjena', start: '2016-05-13T09:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2a' },
+            { id: 5, title: 'Tjena', start: '2016-05-13T14:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2b' },
+            { id: 6, title: 'Tjena', start: '2016-05-13T14:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2c' },
+
+            { id: 7, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3a' },
+            { id: 8, title: 'Tjena', start: '2016-05-13T12:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3b' },
+            { id: 9, title: 'Tjena', start: '2016-05-13T12:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3c' },
+
+            { id: 10, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4a' },
+            { id: 11, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4b' },
+            { id: 12, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4c' },
+        ];
+    }
+    </script>
+
+    <!-- Våran toolbar -->
+    <md-toolbar layout="row" layout-padding>
+        <div class="dialog-demo-content" layout="row" layout-wrap="" layout-margin="" layout-align="center">
+            <md-input-container>
+                <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+                    Lägg till pass i Schemat
+                </md-button>
+            </md-input-container>
+        </div>
+
+        <div hide-gt-sm="" layout="row" layout-align="center center" flex="">
+            <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
+
+        </div>
+        <div ng-if="status">
+            <br>
+            <b layout="row" layout-align="center center" class="md-padding">
+                  {{status}}
+                 </b>
+        </div>
+
+        <script type="text/ng-template" id="dialog1.tmpl.html">
+            <md-dialog aria-label="Lägg till" ng-cloak>
+                <form>
+                    <!-- Toolbar visas högst upp med en header och en stängknapp -->
+                    <md-toolbar>
+                        <div class="md-toolbar-tools">
+                            <h2>Lägg till ett pass</h2>
+                            <span flex></span>
+                            <md-button class="md-icon-button" ng-click="cancel()">
+                                <md-icon aria-label="Close dialog"><i class="material-icons">close</i></md-icon>
+                            </md-button>
+                        </div>
+                    </md-toolbar>
+
+                    <md-dialog-content>
+                        <div class="md-dialog-content">
+                            <h2>Lägg till ett pass</h2>
+                            <!-- Använd en lista i mdDialog , md-list-->
+                            <div layout="column">
+                                <!-- Lista på medarbetare -->
+                                <md-input-container>
+                                    <md-select-header>
+                                        <span> Avdelning - </span>
+                                    </md-select-header>
+                                    <md-select ng-model="employeeSelected" placeholder="{{employeeSelected.name}}">
+                                        <md-option ng-value="x" ng-repeat="x in departments">{{ x.name }}</md-option>
+                                    </md-select>
+                                </md-input-container>
+
+                                <!-- Lista på medarbetare -->
+                                <md-input-container>
+                                    <md-select-header>
+                                        <span> Medarbetare - </span>
+                                    </md-select-header>
+                                    <md-select ng-model="departmentSelected" placeholder="{{departmentSelected.name}}">
+                                        <md-option ng-value="x" ng-repeat="x in employees">{{ x }}</md-option>
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+
+
+                            <md-datepicker ng-model="user.submissionDate" md-placeholder="Enter date" class="md-block">
+                            </md-datepicker>
+
+                            <div layout="rows">
+                                <!-- Lista på startTid -->
+                                <md-input-container>
+                                    <input type="time" id="startTime" aria-label="startTime" placeholder="Start tid">
+                                </md-input-container>
+
+                                <!-- Lista på slutTid -->
+                                <md-input-container>
+                                    <input type="time" id="endTime" width="10" aria-label="endTime" placeholder="Slut tid">
+                                </md-input-container>
+                            </div>
+                        </div>
+
+                    </md-dialog-content>
+
+                    <md-dialog-actions layout="row">
+                        <md-button href="http://en.wikipedia.org/wiki/Mango" target="_blank" md-autofocus>
+                            More on Wikipedia
+                        </md-button>
+                        <span flex></span>
+                        <md-button ng-click="answer('Lägg till')">
+                            Lägg till
+                        </md-button>
+                        <md-button ng-click="answer('Avbryt')" style="margin-right:20px;">
+                            Avbryt
+                        </md-button>
+                    </md-dialog-actions>
+
+                </form>
+            </md-dialog>
+        </script>
+    </md-toolbar>
+
+    <!-- Sen lägger vi dit en vanlig Divtagg där vi kommer ha sidenav och content liggandes i. -->
+
+    <div flex layout="row">
+        <!-- Våran content -->
+        <md-content flex id="content" layout-padding>
+
+            <div id='calendar'></div>
+
+        </md-content>
+    </div>
+
+</body>
+
+</html>
