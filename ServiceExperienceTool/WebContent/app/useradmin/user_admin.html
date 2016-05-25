@@ -169,9 +169,9 @@
 				<span ng-click="showHide('userListView')" class="w3-closebtn">&times;</span>
 				<h3>SET user list</h3>
 			</div>
-			<div id="constrainer" class="w3-responsive">
+			<!-- <div id="constrainer" class="w3-responsive"> -->
 				<table id="userTable"
-					class="w3-table w3-bordered w3-border w3-striped">
+					class="w3-table w3-bordered w3-border w3-striped table" fixed-header>
 					<thead>
 						<tr class="w3-light-grey">
 							<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">User ID  <i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i></th>
@@ -220,23 +220,30 @@
 						<tr id="{{ user.username }}" ng-repeat-end ng-show="isExpanded">
 							<td colspan="8">
 								<div class="w3-row">
-									<div class="w3-col l3 m6 s12">
+									<div class="w3-col l2 m6 s12">
 											<li><b>Roles</b></li>
 											<li ng-repeat="role in user.roles">{{ role.name }}</li>
 									</div>
-									<div class="w3-col l3 m6 s12">
-										<span>Created:&#8195;</span><span>{{ user.createdAt | date:'yyyy-MM-dd' }}</span><br>
-										<span>Updated:&#8195;</span><span>{{ user.updatedAt | date:'yyyy-MM-dd' }}</span><br>
+									<div class="w3-col l2 m6 s12">
+										<li><b>Dates</b>
+										<li>Created:&#8195;{{ user.createdAt | date:'yyyy-MM-dd' }}</li>
+										<li>Updated:&#8195;{{ user.updatedAt | date:'yyyy-MM-dd' }}</li>
 									</div>
-									<div class="w3-col l3 m6 s12">
-										<span>Password reset:&#8195;</span>
-										<span ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</span>
-										<span ng-if="reset == null || reset.expirationTime !='' || reset.expirationTime < today">Deactivated</span><br>
-										<span ng-repeat-end>Valid until:&#8195;{{reset.expirationTime }}</span><br>
+									<div class="w3-col l2 m6 s12">
+										<li><b>Description</b></li>
+										<li>{{ user.description }}</li>
 									</div>
-									<div class="w3-col l3 m6 s12" style="vertical-align: middle;">
+									<div class="w3-col l2 m6 s12">
+										<li><b>Password reset</b></li>
+										<li ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</li>
+										<li ng-if="reset == null || reset.expirationTime != '' || reset.expirationTime < today">Deactivated</li>
+										<li ng-repeat-end>Valid until:&#8195;{{reset.expirationTime | date:'yyyy-MM-dd HH:mm:ss' }}</li>
+									</div>
+									<div class="w3-col l2 m6 s12">
+									</div>
+									<div class="w3-col l2 m6 s12">
 										<span class="fa fa-pencil-square-o"></span>
-										<span class="fa fa-times" style="color: red;"></span>
+										<span class="fa fa-times"></span>
 									</div>
 								</div>
 							</td>
@@ -254,7 +261,7 @@
 					<li><a href="#">»</a></li>
 				</ul>
 				</div>
-			</div>
+			<!-- </div> -->
 		</div>
 	</div>
 	<div id="manageRolesView" class="modal"
@@ -270,56 +277,87 @@
 					class="w3-table w3-striped w3-bordered w3-border w3-hoverable">
 					<thead>
 						<tr class="w3-light-grey">
-							<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role ID  <i class="fa fa-caret-up" ng-show="sortType == 'roleId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleId' && !sortReverse"></i></th>
-							<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role name  <i class="fa fa-caret-up" ng-show="sortType == 'roleName' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleName' && !sortReverse"></i></th>
-							<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Description  <i class="fa fa-caret-up" ng-show="sortType == 'roleDesc' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleDesc' && !sortReverse"></i></th>
-							<th ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled  <i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i></th>
-							<th ng-click="expandRow('rolesSearchRow')">
-								<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
-								<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+							<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role
+								ID <i class="fa fa-caret-up"
+								ng-show="sortType == 'roleId' && sortReverse"></i><i
+								class="fa fa-caret-down"
+								ng-show="sortType == 'roleId' && !sortReverse"></i>
 							</th>
+							<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role
+								name <i class="fa fa-caret-up"
+								ng-show="sortType == 'roleName' && sortReverse"></i><i
+								class="fa fa-caret-down"
+								ng-show="sortType == 'roleName' && !sortReverse"></i>
+							</th>
+							<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Description
+								<i class="fa fa-caret-up"
+								ng-show="sortType == 'roleDesc' && sortReverse"></i><i
+								class="fa fa-caret-down"
+								ng-show="sortType == 'roleDesc' && !sortReverse"></i>
+							</th>
+							<th
+								ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled
+								<i class="fa fa-caret-up"
+								ng-show="sortType == 'roleEnabled' && sortReverse"></i><i
+								class="fa fa-caret-down"
+								ng-show="sortType == 'roleEnabled' && !sortReverse"></i>
+							</th>
+							<th ng-click="expandRow('rolesSearchRow')"><i
+								class="fa fa-search-plus" aria-hidden="true"
+								ng-if="!searchIsExpanded"></i> <i class="fa fa-search-minus"
+								aria-hidden="true" ng-if="searchIsExpanded"></i></th>
 						</tr>
 						<tr id="rolesSearchRow" ng-show="searchIsExpanded">
-							<td><input type="number" min="1" id="searchID" placeholder="ID"></td>
+							<td><input type="number" min="1" id="searchID"
+								placeholder="ID"></td>
 							<td><input type="text" placeholder="Role name"></td>
 							<td><input type="text" placeholder="Description"></td>
-							<td><select class="w3-select" name="activeRole"><option value="enabled">Enabled</option><option value="disabled">Disabled</option></select></td>
-							<td> </td>
+							<td><select class="w3-select" name="activeRole"><option
+										value="enabled">Enabled</option>
+									<option value="disabled">Disabled</option></select></td>
+							<td></td>
 						</tr>
 					</thead>
 					<tbody id="rolesTableBody">
-						<tr id="{{role.name}}" ng-repeat="role in roleList | orderBy:sortType:sortReverse">
+						<tr id="{{role.name}}"
+							ng-repeat="role in roleList | orderBy:sortType:sortReverse">
 							<td>{{ role.roleId }}</td>
 							<td>{{ role.name }}</td>
 							<td>{{ role.description }}</td>
 							<td>{{ role.enabled }}</td>
-							<td><i class="fa fa-pencil-square-o"  aria-hidden="true"  ng-click="expandRow(role.name)"></i></td>
+							<td><i class="fa fa-pencil-square-o" aria-hidden="true"
+								ng-click="expandRow(role.name)"></i></td>
 						</tr>
 					</tbody>
+					<tfoot>
+						<td colspan="5" id="inputRolesDiv" class="w3-display-bottommiddle">
+							<form name="newRoleForm" ng-submit="submitRole()">
+								<div class="w3-col s2 w3-padding-tiny">
+									<label><b>Role</b></label> <input id="roleName" type="text"
+										class="w3-input w3-border w3-hover-border-black"
+										placeholder="Enter role name" ng-model="roleForm.name"
+										required>
+								</div>
+								<div class="w3-col s7 w3-padding-tiny">
+									<label><b>Description</b></label> <input id="roleDescription"
+										type="text" class="w3-input w3-border w3-hover-border-black"
+										placeholder="Enter role description"
+										ng-model="roleForm.description" required>
+								</div>
+								<div class="w3-col s1 w3-padding-tiny">
+									<label><b>Enabled</b></label> <input id="roleEnable"
+										type="checkbox" class="w3-check w3-input w3-content"
+										ng-model="roleForm.enabled">
+								</div>
+								<div class="w3-col s2 w3-padding-tiny">
+									<label>&#8195;</label>
+									<button type="submit" class="w3-btn w3-btn-block w3-blue-grey"
+										ng-disabled="newRoleForm.$pristine || newRoleForm.name.$invalid || newRoleForm.description.$invalid">Save</button>
+								</div>
+							</form>
+						</td>
+					</tfoot>
 				</table>
-				<div id="inputRolesDiv" class="w3-display-bottommiddle">
-					<form name="newRoleForm" class="w3-row-padding" ng-submit="submitRole()">
-						<div class="w3-col s2">
-							<label><b>Role</b></label> <input id="roleName" type="text"
-								class="w3-input w3-border w3-hover-border-black"
-								placeholder="Enter role name" ng-model="roleForm.name" required>
-						</div>
-						<div class="w3-col s7">
-							<label><b>Description</b></label> <input id="roleDescription"
-								type="text" class="w3-input w3-border w3-hover-border-black"
-								placeholder="Enter role description" ng-model="roleForm.description" required>
-						</div>
-						<div class="w3-col s1">
-							<label><b>Enable</b></label> <input id="roleEnable"
-								type="checkbox" class="w3-check w3-input" ng-model="roleForm.enabled">
-						</div>
-						<div class="w3-col s2">
-							<label>.</label>
-							<button type="submit"
-								class="w3-btn w3-btn-block w3-blue-grey" ng-disabled="newRoleForm.$pristine || newRoleForm.name.$invalid || newRoleForm.description.$invalid">Save</button>
-						</div>
-					</form>
-				</div>
 			</div>
 		</div>
 	</div>

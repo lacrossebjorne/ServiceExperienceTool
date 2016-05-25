@@ -4,7 +4,7 @@
 
 #userListmodal {
 	width: 1300px;
-	height: 520px;
+	height: 600px;
 }
 
 #addUserModal {
@@ -15,17 +15,8 @@
 	height: 520px;
 }
 
-#constrainer {
-	height: 600px;
-}
 
-table {
-	overflow-y: scroll;
-}
-tbody {
-	height: 580px;
-	overflow-y: scroll;
-}
+
 
 #checkDiv {
 	text-transform: capitalize;
@@ -67,4 +58,8 @@ li {
 }
 .has-error {
 	border: red;
+}
+
+.fa-times {
+	color: red;
 }
