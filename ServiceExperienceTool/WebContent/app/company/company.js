@@ -30,16 +30,16 @@ angular.module('company', [
 
     tabs: [{
       title: 'Vision & affärsidé',
-      url: 'app/company/tabs/tab.vision-affarside.html'
+      url: 'app/company/templates/tabs/tab.vision-affarside.html'
     }, {
       title: 'Historia',
-      url: 'app/company/tabs/tab.historia.html'
+      url: 'app/company/templates/tabs/tab.historia.html'
     }, {
       title: 'Miljö & socialt ansvar',
-      url: 'app/company/tabs/tab.miljo-socialt-ansvar.html'
+      url: 'app/company/templates/tabs/tab.miljo-socialt-ansvar.html'
     }, {
       title: 'Innan din första arbetsdag!',
-      url: 'app/company/tabs/tab.forsta-arbetsdag.html'
+      url: 'app/company/templates/tabs/tab.forsta-arbetsdag.html'
     }],
 
     docs: [{

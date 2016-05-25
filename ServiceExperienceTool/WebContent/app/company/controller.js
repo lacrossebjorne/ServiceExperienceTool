@@ -12,7 +12,7 @@ angular.module('company')
   $scope.links = companyData.links;
   $scope.documents = companyData.docs;
   $scope.tabs = companyData.tabs;
-  $scope.currentTab = 'app/company/tabs/tab.vision-affarside.html';
+  $scope.currentTab = 'app/company/templates/tabs/tab.vision-affarside.html';
   $scope.imgA = imageSwitch();
 
   $scope.onClickTab = function(tab) {
