@@ -1,5 +1,5 @@
 
-angular.module('schema', ['ngRoute', 'ngResource'])
+angular.module('schedule', ['ngRoute', 'ngResource'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/schedule', {
@@ -9,7 +9,7 @@ angular.module('schema', ['ngRoute', 'ngResource'])
     }])
 
     .config(function ($provide) {
-        $provide.value('schema.data', [{
+        $provide.value('schedule.data', [{
             events: getEvents,
             resources: getResources,
             options: setSettings
