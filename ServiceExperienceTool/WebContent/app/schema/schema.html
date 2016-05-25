@@ -2,11 +2,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<!-- fullcalendar style sheet -->
-<link rel="stylesheet" href="css/fullcalendar.css" />
-<link rel="stylesheet" href="css/scheduler.css" />
-
-
 
 <div ng-app="myApp" layout="column" ng-controller="SchemaController">
     <div ng-include="dialog.tmpl.html"></div>
@@ -15,31 +10,7 @@
         $(document).ready(function() {
          $('#calendar').fullCalendar({
                 // Options
-                weekNumbers: true,
-                defaultView: 'timelineDay',
-                firstDay: 1,
-                aspectRatio: 2,
-                resourceAreaWidth: "20%",
-                minTime: "06:00:00",
-                maxTime: "23:00:00",
-                events: getEvents(),
-                resources: getResources(),
-                schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
-                header:
-                {
-                    left: 'title',
-                    center: 'timelineDay, agendaWeek, month',
-                    right: 'today prev,next'
-                },
-                ,views: {
-                    agendaWeek: {
-                        eventLimit: 4,
-                        allDayText: 'Antal gäster',
-                    },
-                    month:{
-                        eventLimit: 5,
-                    }
-                }
+                
         });
     </script>
 
