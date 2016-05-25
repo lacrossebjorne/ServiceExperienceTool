@@ -2,9 +2,9 @@
 angular.module('schema', ['ngRoute', 'ngResource'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/schema', {
+        $routeProvider.when('/schedule', {
             templateUrl: 'app/schema/schema.html',
-            controller: 'SchemaController'
+            controller: 'ScheduleController'
         });
     }])
 
