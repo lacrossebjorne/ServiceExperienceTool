@@ -1,4 +1,4 @@
-
+'use strict';
 angular.module('schedule', ['ngRoute', 'ngResource'])
 
     .config(['$routeProvider', function ($routeProvider) {
