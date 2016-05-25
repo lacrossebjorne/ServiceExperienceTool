@@ -1,6 +1,13 @@
-var app = angular.module('myApp', ['ngMaterial'])
+var app = angular.module('myApp', ['ngMaterial', 'ngRoute'])
 
-    .controller('myCtrl', function ($scope, $mdDialog, $mdMedia) {
+    .config(['$routeProvider', function ($routeProvider) {
+        $routeProvider.when('/schedule', {
+            templateUrl: 'app/schema/schema.html',
+            controller: 'SchemaController'
+        });
+    }])
+
+    .controller('SchemaController', function ($scope, $mdDialog, $mdMedia) {
 
         $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
         $scope.status = ' ';
@@ -33,7 +40,7 @@ var app = angular.module('myApp', ['ngMaterial'])
 
             $scope.departments = getDepartments();
             $scope.employees = getEmployees();
-            
+
             $scope.hide = function () {
                 $mdDialog.hide();
             };
