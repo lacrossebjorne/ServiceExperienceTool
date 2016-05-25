@@ -13,7 +13,8 @@ angular.module('mainView', [
   'program-pm',
   'team',
   'our-guests',
-  'security'
+  'security',
+  'contacts'
 ])
 
 /*
