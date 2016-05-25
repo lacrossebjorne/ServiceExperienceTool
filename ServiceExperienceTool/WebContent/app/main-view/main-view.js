@@ -8,7 +8,8 @@ angular.module('mainView', [
   'newspublish',
   'menu',
   'company',
-  'useradmin'
+  'useradmin',
+  'other-products'
 ])
 
 /*

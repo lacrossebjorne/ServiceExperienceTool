@@ -1,9 +1,10 @@
 'use strict';
 
-angular.module('company')
+angular.module('other-products')
 
 .controller('OtherProductsController', ['$scope', '$location', 'company.data', 'pushService', function($scope, $location, companyData, pushService) {
     var imgIndex = 0;
+    var imgUris = companyData.imgUris;
     var imageSwitch = function() {
         return companyData.imgUris[imgIndex++ % imgUris.length];
     }

@@ -29,17 +29,17 @@ angular.module('other-products', [
     }],
 
     tabs: [{
-      title: 'Vision & affärsidé',
-      url: 'app/company/templates/tabs/tab.vision-affarside.html'
+      title: 'Logi',
+      url: 'app/other-products/templates/tabs/tab.vision-affarside.html'
     }, {
-      title: 'Historia',
-      url: 'app/company/templates/tabs/tab.historia.html'
+      title: 'Paket',
+      url: 'app/other-products/templates/tabs/tab.historia.html'
     }, {
-      title: 'Miljö & socialt ansvar',
-      url: 'app/company/templates/tabs/tab.miljo-socialt-ansvar.html'
+      title: 'Aktiviteter',
+      url: 'app/other-products/templates/tabs/tab.miljo-socialt-ansvar.html'
     }, {
-      title: 'Innan din första arbetsdag!',
-      url: 'app/company/templates/tabs/tab.forsta-arbetsdag.html'
+      title: 'Special',
+      url: 'app/other-products/templates/tabs/tab.forsta-arbetsdag.html'
     }],
 
     docs: [{
@@ -69,8 +69,10 @@ angular.module('other-products', [
     }],
 
     imgUris: [
-      'img/company_main_01.jpg',
-      'img/company_main_02.jpg'
+      'img/set_mock-img_01.jpg',
+      'img/set_mock-img_02.jpg',
+      'img/set_mock-img_03.jpg',
+      'img/set_mock-img_04.jpg'
     ]
   });
 });
