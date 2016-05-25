@@ -1,14 +1,14 @@
 'use strict';
 
-angular.module('company', [
+angular.module('other-products', [
   'ngRoute',
   'ngResource'
 ])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/company', {
-    templateUrl: 'app/company/company.html',
-    controller: 'CompanyController'
+  $routeProvider.when('/other-products', {
+    templateUrl: 'app/other-products/other-products.html',
+    controller: 'OtherProductsController'
   });
 }])
 
