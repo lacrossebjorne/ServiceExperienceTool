@@ -12,7 +12,8 @@ angular.module('mainView', [
   'other-products',
   'program-pm',
   'team',
-  'our-guests'
+  'our-guests',
+  'security'
 ])
 
 /*
