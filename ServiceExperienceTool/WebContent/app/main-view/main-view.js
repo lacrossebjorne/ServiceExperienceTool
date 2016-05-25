@@ -14,7 +14,8 @@ angular.module('mainView', [
   'team',
   'our-guests',
   'security',
-  'contacts'
+  'contacts',
+  'salary'
 ])
 
 /*
