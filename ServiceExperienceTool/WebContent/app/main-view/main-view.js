@@ -10,7 +10,8 @@ angular.module('mainView', [
   'company',
   'useradmin',
   'other-products',
-  'program-pm'
+  'program-pm',
+  'team'
 ])
 
 /*
