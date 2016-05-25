@@ -64,12 +64,15 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		
 		IsoDateConverter isoDateConverter = new IsoDateConverter();
 		
-		
 		try {
 			connection = daoFactory.getConnection();
 			connection.setAutoCommit(false);
 			
-			Date importantUntil = isoDateConverter.parseToUTCDate(news.getImportantUntil());
+			Date importantUntil = null;
+			
+			if (news.getImportantUntil() != null) {
+				importantUntil = isoDateConverter.parseToUTCDate(news.getImportantUntil());
+			}
 			
 			if (news.getNewsId() == null) {
 				// INSERT INTO NEWS

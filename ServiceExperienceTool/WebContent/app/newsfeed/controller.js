@@ -19,40 +19,13 @@ function($scope, Newsfetch, newsfeedservice) {
   $scope.bundle = {};
   $scope.testScope = { file: null};
   $scope.buttonsTemplate = "app/partials/editbuttons.html";
-
-  var tagsData = [{
-    text: '#important'
-  }, {
-    text: '#kitchen'
-  }, {
-    text: '#service'
-  }, {
-    text: '#hotel'
-  }, {
-    text: '#cleaning'
-  }];
-
-  $scope.tags = [];
-  $scope.tagButtonData = [{
-    tagId: 2,
-    text: 'kitchen',
-    selected: false
-  }, {
-    tagId: 3,
-    text: 'service',
-    selected: false
-  }, {
-    tagId: 4,
-    text: 'hotel',
-    selected: false
-  }, {
-    tagId: 5,
-    text: 'cleaning',
-    selected: false
-  }];
+  
+  $scope.selectedTags = [];
+  $scope.availableTags = [];
 
   expand();
-
+  getActiveNewsTags();
+  
   function expand() {
     if ($scope.limit == 0) {
       $scope.isShowingImportantEntries = true;
@@ -64,6 +37,10 @@ function($scope, Newsfetch, newsfeedservice) {
     //      $scope.selectedPage++;
     fetchNews();
   }
+  
+  function getActiveNewsTags() {
+  	$scope.availableTags = newsfeedservice.getActiveNewsTags();
+  }
 
   function fetchNews() {
     Newsfetch.get({
@@ -73,7 +50,7 @@ function($scope, Newsfetch, newsfeedservice) {
       resultsPerPage: '5',
       showDisabled: $scope.isShowingDisabledEntries,
       selectImportant: $scope.isShowingImportantEntries,
-      tags: JSON.stringify($scope.tags)
+      tags: JSON.stringify($scope.selectedTags)
     }, function(newsobject) {
       for (var i = 0; i < newsobject.news.length; i++) {
         newsobject.news[i].isEditing = false;
@@ -91,30 +68,14 @@ function($scope, Newsfetch, newsfeedservice) {
     });
   }
 
-  function dummyTags(){
-    var temp = [];
-    var r = Math.floor((Math.random() * 4));
-
-    temp.push(tagsData[r].text);
-
-    if (Math.random() < .5){
-      temp.push(tagsData[r + 1].text);
-    }
-
-    $scope.limit = 0;
-    $scope.selectedPage = 0;
-
-    return temp;
-  }
-
   $scope.tagClicked = function(tag) {
     tag.selected = !tag.selected;
 
     if (tag.selected) {
-      $scope.tags.push(tag);
+      $scope.selectedTags.push(tag);
     } else {
-      var index = $scope.tags.indexOf(tag);
-      $scope.tags.splice(index, 1);
+      var index = $scope.selectedTags.indexOf(tag);
+      $scope.selectedTags.splice(index, 1);
     }
 
     //set variables to initial values and empty the $scope.news-array

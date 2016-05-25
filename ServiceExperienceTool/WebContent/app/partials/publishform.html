@@ -1,21 +1,21 @@
 <form name="publishForm">
 	<div class="w3-margin-bottom">
 		<label>Subject: </label> <input ng-model="data.newsHeader" type="text"
-			pattern=".{3,}" placeholder="write a subject(minimum 3 characters)"
-			required autofocus class="w3-input w3-border w3-hover-border-black" />
+		pattern=".{3,}" placeholder="write a subject(minimum 3 characters)"
+		required autofocus class="w3-input w3-border w3-hover-border-black" />
 		<br /> <label>Content:</label> <br />
-		<textarea pattern=".{12,}" ng-model="data.newsContent" rows="4" cols="50"
-			placeholder="write the news(minimum 12 characters)" required
-			class="w3-input w3-border w3-hover-border-black"></textarea>
+		<textarea pattern=".{12,}" ng-model="data.newsContent" rows="4"
+		cols="50" placeholder="write the news(minimum 12 characters)"
+		required class="w3-input w3-border w3-hover-border-black"></textarea>
 	</div>
 
 	<div class="w3-margin-bottom">
-		<label>V&auml;lj en bild att ladda upp</label> <input type="file"
-			name="file" file-model="data.file" accept=".jpg,.jpeg,.png,.gif" /> 
+		<label>Välj en bild att ladda upp</label> <input type="file"
+		name="file" file-model="data.file" accept=".jpg,.jpeg,.png,.gif" />
 	</div>
 
 	<div ng-if="data.urlList.length > 0" class="w3-rest w3-margin-bottom">
-		L&auml;nkar att l&auml;gga till:
+		Länkar att lägga till:
 		<div class="w3-row" ng-repeat="urlItem in data.urlList">
 			<div class="w3-quarter" style="word-wrap: break-word;">{{urlItem.title}}</div>
 			<div class="w3-half" style="word-wrap: break-word;">{{urlItem.path}}</div>
@@ -30,45 +30,41 @@
 	<div class="w3-margin-bottom w3-row">
 		<div class="w3-third">
 			<label class="w3-hide-small">Titel:</label> <input type="text"
-				ng-model="data.urlTitle" placeHolder="title of url"
-				class="w3-input w3-border w3-hover-border-black" />
+			ng-model="data.urlTitle" placeHolder="title of url"
+			class="w3-input w3-border w3-hover-border-black" />
 		</div>
 		<div class="w3-twothird">
-			<label class="w3-hide-small">L&auml;nk:</label> <input name="urlPath"
-				type="text" ng-pattern='/^https?://.+\..+\..+$/' ng-model="data.urlPath"
-				placeHolder="http://www.link.com"
-				class="w3-input w3-border w3-hover-border-black" />
+			<label class="w3-hide-small">Länk:</label> <input name="urlPath"
+			type="text" ng-pattern='/^https?://.+\..+\..+$/'
+			ng-model="data.urlPath" placeHolder="http://www.link.com"
+			class="w3-input w3-border w3-hover-border-black" />
 		</div>
 		<div class="w3-third">
 			<button type="button" ng-click="addUrl(data)"
-				class="w3-btn w3-btn-block w3-green">add url</button>
+			class="w3-btn w3-btn-block w3-green">add url</button>
 		</div>
 	</div>
-	
+
 	<div class="w3-margin-bottom">
 		<div ng-if="data.tags">
-		Tillagda taggar:
-			<div ng-repeat="tag in data.tags">
-				{{tag.text}}
-			</div> 
+			Tillagda taggar:
+			<div ng-repeat="tag in data.tags">{{tag.text}}</div>
 		</div>
 		<tags-input ng-model="data.tagData"></tags-input>
 	</div>
-	
-	<div class='w3-margin-bottom'>
-		Dagar som viktig nyhet:<br /> 
-		<input type="text" ng-model="data.daysImportant" /> 
-		<span ng-if="data.daysImportant && data.daysImportant > 0">
-			Nyhet viktig till: {{dateAsString(data.daysImportant)}}
-		</span>
-	</div>
-
-	<div class="w3-margin-bottom">
-		{{data.statusMessage != null ? data.statusMessage : "Skriv n&aring;gra nyheter"}}
-	</div>
 
 	<div class='w3-margin-bottom'>
-		<div ng-include="buttonsTemplate"></div>
+		Dagar som viktig nyhet:<br /> <input type="text"
+		ng-model="data.daysImportant" /> <span
+		ng-if="data.daysImportant && data.daysImportant > 0"> Nyhet
+		viktig till: {{dateAsString(data.daysImportant)}} </span>
 	</div>
-	
-</form>
+
+	<div class="w3-margin-bottom">{{data.statusMessage != null ?
+		data.statusMessage : "Skriv några nyheter"}}</div>
+
+		<div class='w3-margin-bottom'>
+			<div ng-include="buttonsTemplate"></div>
+		</div>
+
+	</form>

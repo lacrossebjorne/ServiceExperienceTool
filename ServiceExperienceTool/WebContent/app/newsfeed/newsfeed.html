@@ -1,12 +1,11 @@
 <div ng-if="news.length == 0" class="w3-container w3-center">
   <span>Loading results...</span>
 </div>
-<tags-input ng-model="tags"></tags-input>
 <!-- w3-container w3-card-2 w3-white w3-round w3-margin-bottom w3-row -->
-<div ng-if="tagButtonData && tagButtonData.length > 0" class=""
+<div ng-if="availableTags && availableTags.length > 0" class=""
 name="theName" id="theId" ng-model="theModel">
 	<br>
-	<span ng-repeat="tag in tagButtonData">
+	<span ng-repeat="tag in availableTags">
 		<!-- w3-btn w3-theme-d1 w3-margin-bottom -->
 		<button type="button" class="w3-btn w3-margin-bottom" ng-click="tagClicked(tag)"
 		ng-class="{ 'w3-theme-l4': tag.selected, 'w3-theme-d5': !tag.selected }">
@@ -15,12 +14,12 @@ name="theName" id="theId" ng-model="theModel">
 	</span>
 </div>
 
-<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news | filterByTags:tags | orderBy:sortImportant" >
+<div ng-if="news" class="dn-fade-down-big" ng-repeat="x in news | filterByTags:selectedTags | orderBy:sortImportant" >
   <div id="{{ 'news-object-' + $index }}" class="w3-container w3-card-2 w3-white w3-round w3-margin-bottom">
     <br>
     <img ng-src="{{ x.imgUri=='' ? 'http://placehold.it/477x318&text=noImage' : x.imgUri[0] }}" alt="No image avail." style="width:100%" class="w3-margin-bottom">
     <h4>{{ x.header }}</h4>
-    <span>Date: {{ formatISODate(x.createdAt) }}</span>
+    <span>Publicerat: {{ formatISODate(x.createdAt) }}</span>
     <!-- span class="w3-tiny w3-right">Taggar: {{ x.tagData }}</span>  -->
     <span class="w3-tiny w3-right">
     	<tag-display tags="x.tagData" title="Tags:" />
@@ -29,10 +28,10 @@ name="theName" id="theId" ng-model="theModel">
     </span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
     <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
-      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> L&auml;s mer
+      <i class="fa " ng-class="{'fa-plus-circle': iconChange(), 'fa-minus-circle': !iconChange()}"></i> Läs mer
     </button>
     <div ng-if="x.urlList.length > 0" class="w3-margin-bottom">
-      <strong>Tillagda l&auml;nkar:</strong>
+      <strong>Tillagda länkar:</strong>
       <div ng-repeat="url in x.urlList">
           <a href="{{url.path}}">{{url.title}}</a>
       </div>

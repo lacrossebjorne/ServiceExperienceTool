@@ -1,45 +1,74 @@
-angular.module('app')
-.factory('newsfeedservice', newsfeedservice);
+angular.module('app').factory('newsfeedservice', newsfeedservice);
 
-newsfeedservice.$inject = ['$http', '$log', '$resource', 'app.paths'];
+newsfeedservice.$inject = [ '$http', '$log', '$resource', 'app.paths' ];
 
 function newsfeedservice($http, $log, $resource, paths) {
 	var service = {
 		test : test,
 		getMovie : getMovie,
+		getActiveNewsTags : getActiveNewsTags,
 		getPublisher : getPublisher,
 		addUrl : addUrl,
 		removeUrl : removeUrl,
 		validateFormInput : validateFormInput,
 		dateAsString : dateAsString,
-		dateAsDate: dateAsDate,
-		dateAsMillis: dateAsMillis,
+		dateAsDate : dateAsDate,
+		dateAsMillis : dateAsMillis,
 		formatISODate : formatISODate
 	};
 
 	return service;
 
 	/*
-	* Service functions
-	*/
+	 * Service functions
+	 */
+
+	function getActiveNewsTags() {
+		var tagResource = $resource(paths.api + "newsServlet", {
+			action : "getTags"
+		});
+		
+		var tags = [];
+		tagResource.query().$promise.then(function(result) {
+			$log.info("Successfully fetched tags");
+			for (var i = 0; i < result.length; i++) {
+				result[i].selected = false;
+				tags.push(result[i]);
+			}
+	    return result;
+		}, function(error) {
+			$log.error("Couldn't fetch tags!");
+		});
+		return tags;
+	}
 
 	function getPublisher() {
-		var saveResource = $resource(paths.api + "newsServlet", { action : '' },
-			{
-				save: { method: 'POST',
-					params: { action : 'publishNews' },
-					transformRequest: formDataObject,
-					headers: {'Content-Type': undefined, enctype:'multipart/form-data' },
-					timeout: 2000 
+		var saveResource = $resource(paths.api + "newsServlet", {
+			action : ''
+		}, {
+			save : {
+				method : 'POST',
+				params : {
+					action : 'publishNews'
 				},
-				disable: {
-					method: 'POST',
-					params: { action: 'disableNews', newsId: '@newsId' },
-					timeout: 2000
-				}
+				transformRequest : formDataObject,
+				headers : {
+					'Content-Type' : undefined,
+					enctype : 'multipart/form-data'
+				},
+				timeout : 2000
+			},
+			disable : {
+				method : 'POST',
+				params : {
+					action : 'disableNews',
+					newsId : '@newsId'
+				},
+				timeout : 2000
+			}
 		});
 
-		function formDataObject (data) {
+		function formDataObject(data) {
 			var fd = new FormData();
 			angular.forEach(data, function(value, key) {
 				console.log("key: " + key);
@@ -50,18 +79,22 @@ function newsfeedservice($http, $log, $resource, paths) {
 			return fd;
 		}
 
-	return saveResource;
+		return saveResource;
 	}
 
 	function addUrl(data) {
 		var urlPattern = /https?:\/\/.+\..+\..+/;
 
-		if (data.urlPath != null && data.urlPath.length > 0 && urlPattern.test(data.urlPath)) {
+		if (data.urlPath != null && data.urlPath.length > 0
+				&& urlPattern.test(data.urlPath)) {
 			if (data.urlTitle == null || data.urlTitle.length == 0) {
 				data.urlTitle = data.urlPath;
 			}
 
-			var urlItem = { title: data.urlTitle, path: data.urlPath};
+			var urlItem = {
+				title : data.urlTitle,
+				path : data.urlPath
+			};
 			if (data.urlList == null) {
 				data.urlList = [];
 			}
@@ -86,65 +119,76 @@ function newsfeedservice($http, $log, $resource, paths) {
 	}
 
 	function validateFormInput(data, callbackMessage) {
-		if (data.newsHeader != null && data.newsContent != null &&
-			data.newsHeader.length >= 3 && data.newsContent.length >= 12) {
-				return true;
+		if (data.newsHeader != null && data.newsContent != null
+				&& data.newsHeader.length >= 3 && data.newsContent.length >= 12) {
+			return true;
 		} else {
 			callbackMessage("Either you typed to little or to much!");
 			return false;
 		}
 	}
-	
+
 	/**
-	 * accepts an ISO 8601-string and formats it to a date with the format: yyyy-MM-dd
+	 * accepts an ISO 8601-string and formats it to a date with the format:
+	 * yyyy-MM-dd
 	 */
 	function formatISODate(date) {
 		return formatDate(new Date(date));
 	}
-	
+
 	function formatDate(date) {
 		var fullYear = date.getFullYear();
 		var monthNum = date.getMonth() + 1;
 		var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
-		var month = date.getMonth() < 9 ? "0" + monthNum : monthNum; //month is zero based
+		var month = date.getMonth() < 9 ? "0" + monthNum : monthNum; // month is
+		// zero based
 		var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-		var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-		var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-		
+		var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date
+				.getMinutes();
+		var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date
+				.getSeconds();
+
 		var dateFormatted = fullYear + "-" + month + "-" + day;
-		var timeFormatted = " at " + hours + ":" + minutes + ":" + seconds // not including this part for now
-		return dateFormatted;
+		// not including this part for now
+		var timeFormatted = " kl. " + hours + ":" + minutes + ":" + seconds
+		return dateFormatted + timeFormatted;
 	}
-	
+
 	/**
 	 * return date as string with the format yyyy-MM-dd
-	 * @param days Difference from todays date
+	 * 
+	 * @param days
+	 *          Difference from todays date
 	 */
 	function dateAsString(days) {
 		var date = dateAsDate(days);
-		if (date == undefined) 
+		if (date == undefined)
 			return;
 
 		return formatDate(date);
 	}
-	
+
 	/**
 	 * return date as Date.
-	 * @param days Difference from todays date
+	 * 
+	 * @param days
+	 *          Difference from todays date
 	 */
 	function dateAsDate(days) {
 		var millis = dateAsMillis(days);
-		if (millis == undefined) 
+		if (millis == undefined)
 			return undefined;
 		return new Date(millis);
 	}
-	
+
 	/**
 	 * return date as milliseconds.
-	 * @param days Difference from todays date
+	 * 
+	 * @param days
+	 *          Difference from todays date
 	 */
 	function dateAsMillis(days) {
-		if (isNaN(days)) 
+		if (isNaN(days))
 			return undefined;
 		return Date.now() + 1000 * 60 * 60 * 24 * days;
 	}

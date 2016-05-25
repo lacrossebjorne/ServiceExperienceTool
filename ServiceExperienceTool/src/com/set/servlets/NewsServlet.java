@@ -25,6 +25,7 @@ import javax.servlet.http.Part;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.set.dao.DAOFactory;
 import com.set.dao.NewsPublisherDAO;
 import com.set.dao.NewsReaderDAO;
@@ -89,6 +90,9 @@ public class NewsServlet extends HttpServlet {
 			return;
 		} else {
 			switch (action) {
+			case "getTags": 
+				getTags(request, response);
+				break;
 			case "getNews":
 				getNews(request, response);
 				break;
@@ -102,7 +106,7 @@ public class NewsServlet extends HttpServlet {
 				uploadFile(request, response);
 				break;
 			default:
-				response.getWriter().println("An invalid value was set to the action-parameter!");
+				sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 				break;
 			}
 		}
@@ -111,6 +115,20 @@ public class NewsServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doGet(request, response);
+	}
+	
+	/**
+	 * Get active tags, only in json-format
+	 * @param request
+	 * @param response
+	 * @throws IOException 
+	 */
+	public void getTags(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+		NewsReaderDAO newsFetcher = daoFactory.getNewsReaderDAO();
+		List<Tag> tags = newsFetcher.getActiveTags();
+		response.setContentType("application/json");
+		response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(tags));
 	}
 
 	public void getNews(HttpServletRequest request, HttpServletResponse response) {
@@ -224,21 +242,13 @@ public class NewsServlet extends HttpServlet {
 		String newsHeader = request.getParameter("newsHeader");
 		String newsContent = request.getParameter("newsContent");
 		Long newsId = null;
-		Long importantUntilMillis = null;
-		Date importantUntil = null;
 		String importantUntilParameter = request.getParameter("importantUntil");
 
 		try {
 			String idParameter = request.getParameter("newsId");
-//			String importantUntilParameter = request.getParameter("importantUntil");
-
 			if (idParameter != null) {
 				newsId = Long.parseLong(idParameter);
 			}
-//			if (importantUntilParameter != null) {
-//				importantUntilMillis = Long.parseLong(importantUntilParameter);
-//			}
-			
 		} catch (NumberFormatException e) {
 			sendError(response, HttpServletResponse.SC_BAD_REQUEST);
 		}
@@ -248,11 +258,6 @@ public class NewsServlet extends HttpServlet {
 			return;
 		}
 		
-		if (importantUntilMillis != null) {
-			importantUntil = new Date(importantUntilMillis);
-		}
-		
-
 		String jsonUrlList = request.getParameter("urlList");
 		System.out.println("urlList: " + jsonUrlList);
 		String jsonTags = request.getParameter("tagData");

@@ -7,5 +7,6 @@ import com.set.entities.Tag;
 
 public interface NewsReaderDAO {
 	public List<News> getNews(Integer selectedPage, Integer resultsPerPage, Integer offset, boolean isDisabledEntriesIncluded, boolean isImportantSelected, List<Tag> tags);
+	public List<Tag> getActiveTags();
 	public void setImagePath(String path);
 }

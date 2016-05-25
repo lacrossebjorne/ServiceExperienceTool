@@ -60,10 +60,10 @@ angular.module('newspublish')
       if (data.tagData != null) {
         bundle.tagData = JSON.stringify(data.tagData);
       }
-
+      
       if (data.daysImportant != null && !isNaN(data.daysImportant)) {
-        var date = newsfeedservice.dateAsMillis(data.daysImportant);
-        bundle.importantUntil = date;
+        var date = newsfeedservice.dateAsDate(data.daysImportant);
+        bundle.importantUntil = date.toISOString();
       }
 
       console.log(bundle);

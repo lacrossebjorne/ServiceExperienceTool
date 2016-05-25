@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +22,49 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 	private final String SQL_IN_PLACEHOLDER_NEWS_SELECT_ENABLED_WITH_TAGS = "SELECT DISTINCT N.news_id, header, content, created_at, updated_at, important_until FROM news AS N JOIN news_tag AS NT ON N.news_id = NT.news_id JOIN tag AS T ON NT.tag_id = T.tag_id WHERE N.enabled = true AND important_until IS NULL AND T.text IN (#) ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";
 	private final String SQL_IMAGE_SELECT = "SELECT * FROM image AS i INNER JOIN news_image AS ni ON i.image_id = ni.image_id WHERE ni.news_id=?";
 	private final String SQL_NEWS_URL_SELECT = "SELECT news_url_id, news_id, title, path FROM news_url WHERE news_id=?";
-	private final String SQL_SELECT_TAGS = "SELECT t.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id WHERE news_id = ?";
-
+	private final String SQL_TAGS_SELECT = "SELECT t.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id WHERE news_id = ?";
+	private final String SQL_ACTIVE_TAGS_SELECT = "SELECT DISTINCT nt.tag_id, t.text FROM news_tag AS nt INNER JOIN tag AS t ON nt.tag_id = t.tag_id";
 	private DAOFactory daoFactory;
 	private String imagePath = "";
 
 	public NewsReaderDAOJDBC(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
+	}
+
+	@Override
+	public List<Tag> getActiveTags() {
+
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		List<Tag> activeTags = new ArrayList<Tag>();
+		try {
+			connection = daoFactory.getConnection();
+			statement = connection.createStatement();
+			result = statement.executeQuery(SQL_ACTIVE_TAGS_SELECT);
+			
+			while (result.next()) {
+				activeTags.add(new Tag(result.getLong("tag_id"), result.getString("text")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (result != null) {
+					result.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (connection != null) {
+					connection.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return activeTags;
 	}
 
 	@SuppressWarnings("resource")
@@ -42,24 +79,25 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 		ResultSet tagResult = null;
 		List<News> newsAndImages = null;
 		IsoDateConverter isoDateConverter = new IsoDateConverter();
-		
+
 		try {
 			connection = daoFactory.getConnection();
-			
+
 			if (isImportantSelected) {
-				//OFFSET AND LIMIT IGNORED
+				// OFFSET AND LIMIT IGNORED
 				statement = connection.prepareStatement(SQL_NEWS_SELECT_IMPORTANT);
 			} else if (tags == null || tags.size() == 0) {
-				//IF NO TAGS AT ALL
-				statement = connection.prepareStatement(
-						isDisabledEntriesIncluded ? SQL_NEWS_SELECT_ALL : SQL_NEWS_SELECT_ENABLED);
+				// IF NO TAGS AT ALL
+				statement = connection
+						.prepareStatement(isDisabledEntriesIncluded ? SQL_NEWS_SELECT_ALL : SQL_NEWS_SELECT_ENABLED);
 				statement.setInt(1, resultsPerPage);
 				statement.setInt(2, offset);
 			} else {
-				//IF TAGS ARE REQUESTED, CREATE A SQL-STRING DYNAMICALLY
-				String sqlNewsSelectAllEnabledWithTags = createSQLFromInPlaceholder(SQL_IN_PLACEHOLDER_NEWS_SELECT_ENABLED_WITH_TAGS, tags.size());
+				// IF TAGS ARE REQUESTED, CREATE A SQL-STRING DYNAMICALLY
+				String sqlNewsSelectAllEnabledWithTags = createSQLFromInPlaceholder(
+						SQL_IN_PLACEHOLDER_NEWS_SELECT_ENABLED_WITH_TAGS, tags.size());
 				statement = connection.prepareStatement(sqlNewsSelectAllEnabledWithTags);
-				
+
 				int statementIndex = 1;
 				for (Tag tag : tags) {
 					statement.setString(statementIndex++, tag.getText());
@@ -67,11 +105,11 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				statement.setInt(statementIndex++, resultsPerPage);
 				statement.setInt(statementIndex++, offset);
 			}
-			
+
 			System.out.println("offset: " + offset);
-			
+
 			newsResult = statement.executeQuery();
-			
+
 			System.out.println(isImportantSelected ? "Fetching important news..." : "Fetching news...");
 			newsAndImages = new ArrayList<>();
 			while (newsResult.next()) {
@@ -79,23 +117,23 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				newsEntry.setNewsId(newsResult.getLong("news_id"));
 				newsEntry.setHeader(newsResult.getString("header"));
 				newsEntry.setContent(newsResult.getString("content"));
-				
+
 				Timestamp timestampCreated = newsResult.getTimestamp("created_at");
 				if (timestampCreated != null) {
-					String createdAtUTC = isoDateConverter.parseToUTCString(timestampCreated.getTime());	
+					String createdAtUTC = isoDateConverter.parseToUTCString(timestampCreated.getTime());
 					System.out.print("newsID: " + newsEntry.getNewsId() + ", newsHeader: " + newsEntry.getHeader());
 					System.out.print(", createdAt: " + createdAtUTC);
 					newsEntry.setCreatedAt(createdAtUTC);
 				}
-				
+
 				Timestamp timestampUpdated = newsResult.getTimestamp("updated_at");
-				
+
 				if (timestampUpdated != null) {
 					String updatedAtUTC = isoDateConverter.parseToUTCString(timestampUpdated.getTime());
 					System.out.print(", updatedAt: " + updatedAtUTC);
 					newsEntry.setUpdatedAt(updatedAtUTC);
 				}
-		
+
 				if (isImportantSelected) {
 					Timestamp timestampImportant = newsResult.getTimestamp("important_until");
 					if (timestampImportant != null) {
@@ -107,7 +145,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				} else {
 					newsEntry.setIsImportant(false);
 				}
-				
+
 				// select images from table image
 				statement.clearParameters();
 				statement = connection.prepareStatement(SQL_IMAGE_SELECT);
@@ -139,7 +177,7 @@ public class NewsReaderDAOJDBC implements NewsReaderDAO {
 				}
 
 				// select tags by newsId
-				statement = connection.prepareStatement(SQL_SELECT_TAGS);
+				statement = connection.prepareStatement(SQL_TAGS_SELECT);
 				statement.setLong(1, newsEntry.getNewsId());
 				tagResult = statement.executeQuery();
 
