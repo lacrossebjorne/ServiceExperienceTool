@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('company', [
+angular.module('other-products', [
   'ngRoute',
   'ngResource'
 ])
