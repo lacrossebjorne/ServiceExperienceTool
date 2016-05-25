@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.set.dao.helpers.IsoDateConverter;
 import com.set.entities.ResetPassword;
 import com.set.entities.Role;
 import com.set.entities.User;
@@ -37,7 +38,8 @@ public class UserDAOJDBC implements UserDAO {
 	private static final String SQL_DELETE_USER = "DELETE FROM user WHERE user_id = ?";
 	private static final String SQL_INSERT_USER_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
 	private DAOFactory daoFactory;
-
+	private IsoDateConverter isoDateConverter;
+	
 	public UserDAOJDBC(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -341,6 +343,7 @@ public class UserDAOJDBC implements UserDAO {
 	//Processes the resultSet from the database and creates an User entity for each row returned
 	private User processUser(ResultSet resultSet) throws SQLException {
 		User user = new User();
+		isoDateConverter = new IsoDateConverter();
 		user.setUserId(resultSet.getLong("user_id"));
 		user.setUserName(resultSet.getString("user_name"));
 		user.setFirstName(resultSet.getString("first_name"));
@@ -348,8 +351,9 @@ public class UserDAOJDBC implements UserDAO {
 		user.setEmail(resultSet.getString("email"));
 		user.setEnabled(resultSet.getBoolean("enabled"));
 		user.setPhoneNumber(resultSet.getString("phone_number"));
-		user.setCreatedAt(resultSet.getDate("created_at"));
-		user.setUpdatedAt(resultSet.getDate("updated_at"));
+		user.setCreatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("created_at")));
+		if (resultSet.getDate("updated_at") != null)
+			user.setUpdatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("updated_at")));
 		List<Role> roles = new ArrayList<>();
 		Long roleID = null;
 		if ((roleID = resultSet.getLong("role_id")) != 0) {
@@ -367,7 +371,8 @@ public class UserDAOJDBC implements UserDAO {
 			ResetPassword reset = new ResetPassword();
 			reset.setResetPasswordId(resetpassID);
 			reset.setSecuritycode(resultSet.getString("securitycode"));
-			reset.setExpirationTime(resultSet.getDate("expiration_time"));
+			if (resultSet.getTimestamp("expiration_time") != null)
+				reset.setExpirationTime(isoDateConverter.parseToUTCString(resultSet.getTimestamp("expiration_time")));
 			reset.setUserId(user.getUserId());
 			resetPasswordsSet.add(reset);
 			user.setResetPasswords(resetPasswordsSet);

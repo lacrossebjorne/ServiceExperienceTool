@@ -16,7 +16,7 @@ import com.google.gson.GsonBuilder;
 import com.set.dao.DAOFactory;
 import com.set.entities.Role;
 import com.set.entities.User;
-import com.set.helpers.UserDeserializer;
+import com.set.servlets.helpers.UserDeserializer;
 
 
 @WebServlet("/userAdminServlet")
