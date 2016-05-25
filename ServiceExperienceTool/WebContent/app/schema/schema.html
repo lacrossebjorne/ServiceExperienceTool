@@ -1,28 +1,18 @@
-<html>
-<meta charset="utf-8">
+<!-- Angular Material style sheet -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<head>
-    <!--JQuery  -->
-    <script type="text/javascript" src="js/jquery.min.js"></script>
+<!-- fullcalendar style sheet -->
+<link rel="stylesheet" href="css/fullcalendar.css" />
+<link rel="stylesheet" href="css/scheduler.css" />
 
-    <!-- Angular Material style sheet -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <!-- fullcalendar style sheet -->
-    <link rel="stylesheet" href="css/fullcalendar.css" />
-    <link rel="stylesheet" href="css/scheduler.css" />
-
-    <!-- Angular Material requires Angular.js Libraries 
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script> -->
-</head>
 
 <div ng-app="myApp" layout="column" ng-controller="SchemaController">
+    <div ng-include="dialog.tmpl.html"></div>
+
     <script>
-    $(document).ready(function() {
+        $(document).ready(function() {
          $('#calendar').fullCalendar({
                 // Options
                 weekNumbers: true,
@@ -41,7 +31,7 @@
                     center: 'timelineDay, agendaWeek, month',
                     right: 'today prev,next'
                 },
-                views: {
+                ,views: {
                     agendaWeek: {
                         eventLimit: 4,
                         allDayText: 'Antal gäster',
@@ -51,85 +41,8 @@
                     }
                 }
         });
-    });
-    function getResources() {
-        // $.ajax({
-        //  url: 'http://www.w3schools.com/website/customers_mysql.php',
-        //  type: 'GET',
-        //  success: function(data){
-        //   console.log(JSON.parse(data));
-        //  }    
-        // });
-        return [
-            {
-                id: 1,
-                title: 'Kött',
-                type1: 10,
-                type2: 55,
-                children: [
-                    { id: '1a', title: 'Arne Anka' },
-                    { id: '1b', title: 'Erik Svensson' },
-                    { id: '1c', title: 'Berit Berg' },
-                ]
-            },
-            {
-                id: 2,
-                title: 'Varmkök',
-                type1: 10,
-                type2: 55,
-                children: [
-                    { id: '2a', title: 'Niklas Eriksson' },
-                    { id: '2b', title: 'Annika Dahl' },
-                    { id: '2c', title: 'Pernilla Eriksson' },
-                ]
-            },
-            {
-                id: 3,
-                title: 'Kallis',
-                type1: 10,
-                type2: 55,
-                children: [
-                    { id: '3a', title: 'Hannes Göransson' },
-                    { id: '3b', title: 'Erik Svensson' },
-                    { id: '3c', title: 'Angelica Näsman' },
-                ]
-            },
-            {
-                id: 4,
-                title: 'Servis',
-                type1: 10,
-                type2: 55,
-                children: [
-                    { id: '4a', title: 'Anna Hansson' },
-                    { id: '4b', title: 'Lisa Gullbrandsen' },
-                    { id: '4c', title: 'Erika Olofsdotter' },
-                ]
-            },
-        ];
-    }
-        function getEvents() {
-        return [
-            { id: 1, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1a' },
-            { id: 2, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1b' },
-            { id: 3, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1c' },
-
-            { id: 4, title: 'Tjena', start: '2016-05-13T09:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2a' },
-            { id: 5, title: 'Tjena', start: '2016-05-13T14:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2b' },
-            { id: 6, title: 'Tjena', start: '2016-05-13T14:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '2c' },
-
-            { id: 7, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3a' },
-            { id: 8, title: 'Tjena', start: '2016-05-13T12:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3b' },
-            { id: 9, title: 'Tjena', start: '2016-05-13T12:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '3c' },
-
-            { id: 10, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4a' },
-            { id: 11, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4b' },
-            { id: 12, title: 'Tjena', start: '2016-05-13T13:00:00Z', end: '2016-05-13T23:00:00Z', resourceId: '4c' },
-        ];
-    }
     </script>
 
-    
+
 
 </div>
-
-</html>
