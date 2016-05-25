@@ -2,32 +2,61 @@
 <html lang="en" ng-app="app">
 
 <head>
-<meta charset="utf-8">
-<title>Service Experience Tool</title>
-<link rel="stylesheet" href="css/w3.css">
-<link rel="stylesheet" href="css/animation.css">
-<link rel="stylesheet" href="css/w3-theme-blue-grey.css">
-<link rel="stylesheet" href="css/ng-tags-input.css"/>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="css/user_role.css">
+
+	<meta charset="utf-8">
+	<title>Sevice Experience Tool</title>
+	<link rel="stylesheet" href="css/w3.css">
+	<link rel="stylesheet" href="css/animation.css">
+	<link rel="stylesheet" href="css/w3-theme-blue-grey.css">
+	<link rel="stylesheet" href="css/ng-tags-input.css" />
+
+	<!-- Angular Material style sheet -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!--  Schema fullcalendar -->
+	<link rel="stylesheet" href="app/Schema/css/fullcalendar.css" />
+	<link rel="stylesheet" href="app/Schema/css/scheduler.css" />
+
+	<!-- Angular Material style sheet // Mats -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/user_role.css">
+
+	<meta charset="utf-8">
+	<title>Service Experience Tool</title>
+	<link rel="stylesheet" href="css/w3.css">
+	<link rel="stylesheet" href="css/animation.css">
+	<link rel="stylesheet" href="css/w3-theme-blue-grey.css">
+	<link rel="stylesheet" href="css/ng-tags-input.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/user_role.css">
+
 </head>
 
 <body class="w3-theme-l5">
 	<div ng-include src="'static/navbar.html'"></div>
-	<div class="w3-container w3-content"
-		style="max-width: 1200px; margin-top: 64px; padding: 0;">
+	<div class="w3-container w3-content" style="max-width: 1200px; margin-top: 64px; padding: 0;">
 		<div ng-include src="'app/main-view/main-view.html'"></div>
 	</div>
 	<div ng-include src="'static/footer.html'"></div>
-	
+
 	<!-- Angular Scripts -->
 	<script src="angular/angular.js"></script>
 	<script src="angular/angular-animate.js"></script>
 	<script src="angular/angular-route.js"></script>
 	<script src="angular/angular-resource.js"></script>
 	<script src="angular/animate.js"></script>
-	
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+
+	<!-- Angular Material style sheet -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.css" />
+	<!-- Iconer ifrån google materials - Mats -->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<!-- Angular-Materials Library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.0.8/angular-material.js"></script>
+
 	<!-- External Scripts -->
 	<script src="angular/ng-tags-input.js"></script>
 	<script src="angular/angular-messages.js"></script>
@@ -51,19 +80,30 @@
 	<script src="app/newspublish/controller.js"></script>
 
 	<script src="app/menu/menu.js"></script>
-    <script src="app/menu/controller.js"></script>
-    <script src="app/menu/service.js"></script>
-    
-    <script src="app/useradmin/useradmin.js"></script>
-    <script src="app/useradmin/controller.js"></script>
-    <script src="app/useradmin/service.js"></script>
-    
-    <script src="app/authentication/authentication.js"></script>
+	<script src="app/menu/controller.js"></script>
+	<script src="app/menu/service.js"></script>
+
+	<script src="app/useradmin/useradmin.js"></script>
+	<script src="app/useradmin/controller.js"></script>
+	<script src="app/useradmin/service.js"></script>
+
+	<script src="app/authentication/authentication.js"></script>
 	<script src="app/authentication/controller.js"></script>
 	<script src="app/authentication/service.js"></script>
 
 	<script src="app/company/company.js"></script>
 	<script src="app/company/controller.js"></script>
+
+	<!--Moment - Används för datum och tid. Till schema appen. -->
+	<script type="text/javascript" src="app/Schema/js/moment.min.js"></script>
+
+	<!--FullCalendar till Schema appen. -->
+	<script type="text/javascript" src="app/Schema/js/fullcalendar.js"></script>
+	<script type="text/javascript" src="app/Schema/js/gcal.js"></script>
+	<script type="text/javascript" src="app/Schema/js/sv.js"></script>
+	<script type="text/javascript" src="app/Schema/js/scheduler.js"></script>
+	<script type="text/javascript" src="app/Schema/js/calendar.init.js"></script>
+	<script src="app/Schema/js/controller.js"></script>
 
 	<script>
 		function showDiv(divIdName) {
