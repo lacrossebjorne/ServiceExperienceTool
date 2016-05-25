@@ -11,7 +11,8 @@ angular.module('mainView', [
   'useradmin',
   'other-products',
   'program-pm',
-  'team'
+  'team',
+  'our-guests'
 ])
 
 /*
