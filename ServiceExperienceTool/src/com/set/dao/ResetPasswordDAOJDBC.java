@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.set.dao.helpers.IsoDateConverter;
 import com.set.entities.ResetPassword;
 
 /**
@@ -21,6 +22,7 @@ public class ResetPasswordDAOJDBC implements ResetPasswordDAO {
 	private static final String SQL_FIND_RESET_PASSWORD_BY_USERNAME = "SELECT * FROM setdb.reset_password as rp join setdb.user as u on rp.user_id = u.user_id Where u.user_name = ? order by rp.user_id;";
 	private static final String SQL_INSERT_RESET_PASSWORD = "INSERT INTO setdb.reset_password (securitycode, user_id) VALUES (?, ?)";
 	private DAOFactory daoFactory;
+	private IsoDateConverter isoDateConverter;
 
 	public ResetPasswordDAOJDBC(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
@@ -92,12 +94,13 @@ public class ResetPasswordDAOJDBC implements ResetPasswordDAO {
 		}
 	}
 
+	// Create the ForgottenPassword object and store the userId within it
 	private ResetPassword processQuery(ResultSet resultSet) throws SQLException {
-		// Create the ForgottenPassword object and store the userId within it
 		ResetPassword reset = new ResetPassword();
+		isoDateConverter = new IsoDateConverter();
 		reset.setResetPasswordId(resultSet.getLong("forgot_password_id"));
 		reset.setSecuritycode(resultSet.getString("securitycode"));
-		reset.setExpirationTime(resultSet.getDate("created_at"));
+		reset.setExpirationTime(isoDateConverter.parseToUTCString(resultSet.getTimestamp("created_at")));
 		reset.setUserId(resultSet.getLong("user_id"));
 		return reset;
 	}
