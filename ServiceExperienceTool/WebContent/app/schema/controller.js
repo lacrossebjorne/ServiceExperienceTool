@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('company')
+angular.module('schedule')
 
-.controller('CompanyController', ['$scope', '$location', 'schedule.data', function($scope, $location, scheduleData) {
+.controller('ScheduleController', ['$scope', '$location', 'schedule.data', function($scope, $location, scheduleData) {
 
   $scope.resources = scheduleData.resources;
   $scope.events = scheduleData.events;
