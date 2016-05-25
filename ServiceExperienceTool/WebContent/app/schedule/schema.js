@@ -1,9 +1,10 @@
 'use strict';
+
 angular.module('schedule', ['ngRoute', 'ngResource'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/schedule', {
-            templateUrl: 'app/schema/schema.html',
+            templateUrl: 'app/schedule/schema.html',
             controller: 'ScheduleController'
         });
     }])
@@ -15,8 +16,6 @@ angular.module('schedule', ['ngRoute', 'ngResource'])
             options: setSettings
         }])
     });
-
-
 function getResources() {
     return [
         {
