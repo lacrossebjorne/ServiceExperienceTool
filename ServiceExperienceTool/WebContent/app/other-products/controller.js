@@ -2,7 +2,7 @@
 
 angular.module('company')
 
-.controller('CompanyController', ['$scope', '$location', 'company.data', 'pushService', function($scope, $location, companyData, pushService) {
+.controller('OtherProductsController', ['$scope', '$location', 'company.data', 'pushService', function($scope, $location, companyData, pushService) {
     var imgIndex = 0;
     var imageSwitch = function() {
         return companyData.imgUris[imgIndex++ % imgUris.length];
