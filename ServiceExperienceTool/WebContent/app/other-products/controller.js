@@ -2,16 +2,16 @@
 
 angular.module('other-products')
 
-.controller('OtherProductsController', ['$scope', '$location', 'company.data', 'pushService', function($scope, $location, companyData, pushService) {
+.controller('OtherProductsController', ['$scope', '$location', 'products.data', 'pushService', function($scope, $location, productsData, pushService) {
     var imgIndex = 0;
-    var imgUris = companyData.imgUris;
+    var imgUris = productsData.imgUris;
     var imageSwitch = function() {
-        return companyData.imgUris[imgIndex++ % imgUris.length];
+        return productsData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.links = companyData.links;
-    $scope.documents = companyData.docs;
-    $scope.tabs = companyData.tabs;
+    $scope.links = productsData.links;
+    $scope.documents = productsData.docs;
+    $scope.tabs = productsData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
 

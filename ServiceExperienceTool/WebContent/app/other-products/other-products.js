@@ -13,59 +13,19 @@ angular.module('other-products', [
 }])
 
 .config(function($provide) {
-  $provide.value('company.data', {
-    links: [{
-      title: 'Google',
-      url: 'https://www.google.com'
-    }, {
-      title: 'Yahoo',
-      url: 'https://www.yahoo.com'
-    }, {
-      title: 'Aftonbladet',
-      url: 'https://www.aftonbladet.com'
-    }, {
-      title: 'Expressen',
-      url: 'https://www.expressen.com'
-    }],
-
+  $provide.value('products.data', {
     tabs: [{
       title: 'Logi',
-      url: 'app/other-products/templates/tabs/tab.vision-affarside.html'
+      url: 'app/other-products/templates/tabs/tab.logi.html'
     }, {
       title: 'Paket',
-      url: 'app/other-products/templates/tabs/tab.historia.html'
+      url: 'app/other-products/templates/tabs/tab.paket.html'
     }, {
       title: 'Aktiviteter',
-      url: 'app/other-products/templates/tabs/tab.miljo-socialt-ansvar.html'
+      url: 'app/other-products/templates/tabs/tab.aktiviteter.html'
     }, {
       title: 'Special',
-      url: 'app/other-products/templates/tabs/tab.forsta-arbetsdag.html'
-    }],
-
-    docs: [{
-      title: 'Grossister',
-      icon: 'fa-file-pdf-o',
-      url: 'suppliers.pdf'
-    }, {
-      title: 'Budget Analys 2015-2016',
-      icon: 'fa-file-excel-o',
-      url: 'budget.svc'
-    }, {
-      title: 'Städguide',
-      icon: 'fa-file-pdf-o',
-      url: 'cleaning-for-dummies.pdf'
-    }, {
-      title: 'Recept: test',
-      icon: 'fa-file-word-o',
-      url: 'macRecipe.doc'
-    }, {
-      title: 'Mall: företagsbrev',
-      icon: 'fa-file-word-o',
-      url: 'letterTemplate.doc'
-    }, {
-      title: 'Manual för medarbetare',
-      icon: 'fa-file-text-o',
-      url: 'manual.txt'
+      url: 'app/other-products/templates/tabs/tab.special.html'
     }],
 
     imgUris: [
