@@ -83,6 +83,24 @@ angular.module('menu')
 	  }
   };
   
+  $scope.allergenHighlighter = function(){
+	  return function(item){
+		  if($scope.selectedAllergens.length == 0){
+			  item.highlighted = false;
+			  return true;
+		  }
+		  var hit = false;
+		  angular.forEach(item.allergens, function(allergen){
+			  if($scope.selectedAllergens.indexOf(allergen.id) != -1){
+				  hit = true;
+				  return;
+			  }
+		  });
+		  item.highlighted = hit;
+		  return true;
+	  }
+  };
+  
   function groupBy(array, fn){
 	  var groups = {};
 	  angular.forEach(array, function(item){

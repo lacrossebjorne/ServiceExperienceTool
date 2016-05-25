@@ -1,4 +1,4 @@
-package com.set.helpers;
+package com.set.servlets.helpers;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

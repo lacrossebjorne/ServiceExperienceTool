@@ -13,7 +13,8 @@ function newsfeedservice($http, $log, $resource, paths) {
 		validateFormInput : validateFormInput,
 		dateAsString : dateAsString,
 		dateAsDate: dateAsDate,
-		dateAsMillis: dateAsMillis
+		dateAsMillis: dateAsMillis,
+		formatISODate : formatISODate
 	};
 
 	return service;
@@ -95,14 +96,13 @@ function newsfeedservice($http, $log, $resource, paths) {
 	}
 	
 	/**
-	 * return date as string with the format yyyy-MM-dd
-	 * @param days Difference from todays date
+	 * accepts an ISO 8601-string and formats it to a date with the format: yyyy-MM-dd
 	 */
-	function dateAsString(days) {
-		var date = dateAsDate(days);
-		if (date == undefined) 
-			return;
-
+	function formatISODate(date) {
+		return formatDate(new Date(date));
+	}
+	
+	function formatDate(date) {
 		var fullYear = date.getFullYear();
 		var monthNum = date.getMonth() + 1;
 		var day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -114,6 +114,18 @@ function newsfeedservice($http, $log, $resource, paths) {
 		var dateFormatted = fullYear + "-" + month + "-" + day;
 		var timeFormatted = " at " + hours + ":" + minutes + ":" + seconds // not including this part for now
 		return dateFormatted;
+	}
+	
+	/**
+	 * return date as string with the format yyyy-MM-dd
+	 * @param days Difference from todays date
+	 */
+	function dateAsString(days) {
+		var date = dateAsDate(days);
+		if (date == undefined) 
+			return;
+
+		return formatDate(date);
 	}
 	
 	/**

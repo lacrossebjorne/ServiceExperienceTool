@@ -1,7 +1,5 @@
 package com.set.entities;
 
-import java.util.Date;
-
 
 public class ResetPassword implements java.io.Serializable {
 
@@ -9,12 +7,12 @@ public class ResetPassword implements java.io.Serializable {
 	private Long resetPasswordId;
 	private Long userId;
 	private String securitycode;
-	private Date expirationTime;
+	private String expirationTime;
 
 	public ResetPassword() {
 	}
 
-	public ResetPassword(Long userId, String securitycode, Date experationTime) {
+	public ResetPassword(Long userId, String securitycode, String experationTime) {
 		this.userId = userId;
 		this.securitycode = securitycode;
 		this.expirationTime = experationTime;
@@ -44,11 +42,11 @@ public class ResetPassword implements java.io.Serializable {
 		this.securitycode = securitycode;
 	}
 
-	public Date getExpirationTime() {
+	public String getExpirationTime() {
 		return this.expirationTime;
 	}
 
-	public void setExpirationTime(Date experationTime) {
+	public void setExpirationTime(String experationTime) {
 		this.expirationTime = experationTime;
 	}
 	

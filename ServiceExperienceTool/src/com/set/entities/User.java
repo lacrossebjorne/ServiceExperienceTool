@@ -1,7 +1,6 @@
 package com.set.entities;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,8 +16,8 @@ public class User implements java.io.Serializable {
 	private String username;
 	private String password;
 	private String phoneNumber;
-	private Date createdAt;
-	private Date updatedAt;
+	private String createdAt;
+	private String updatedAt;
 	private boolean enabled;
 	private List<Role> roles = new ArrayList<>();
 	private Set<ResetPassword> resetPasswords = new HashSet<ResetPassword>(0);
@@ -26,7 +25,7 @@ public class User implements java.io.Serializable {
 	public User() {
 	}
 
-	public User(String firstName, String lastName, String email, String username, String password, Date createdAt,
+	public User(String firstName, String lastName, String email, String username, String password, String createdAt,
 			boolean enabled) {
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -38,7 +37,7 @@ public class User implements java.io.Serializable {
 	}
 
 	public User(Role role, String firstName, String lastName, String email, String username, String password,
-			String phoneNumber, Date createdAt, Date updatedAt, boolean enabled, Set<ResetPassword> resetPasswords) {
+			String phoneNumber, String createdAt, String updatedAt, boolean enabled, Set<ResetPassword> resetPasswords) {
 		this.role = role;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -117,19 +116,19 @@ public class User implements java.io.Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public Date getCreatedAt() {
+	public String getCreatedAt() {
 		return this.createdAt;
 	}
 
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public Date getUpdatedAt() {
+	public String getUpdatedAt() {
 		return this.updatedAt;
 	}
 
-	public void setUpdatedAt(Date updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

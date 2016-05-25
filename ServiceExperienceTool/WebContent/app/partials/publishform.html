@@ -10,12 +10,12 @@
 	</div>
 
 	<div class="w3-margin-bottom">
-		<label>Choose an image to upload</label> <input type="file"
+		<label>V&auml;lj en bild att ladda upp</label> <input type="file"
 			name="file" file-model="data.file" accept=".jpg,.jpeg,.png,.gif" /> 
 	</div>
 
 	<div ng-if="data.urlList.length > 0" class="w3-rest w3-margin-bottom">
-		URLs to add:
+		L&auml;nkar att l&auml;gga till:
 		<div class="w3-row" ng-repeat="urlItem in data.urlList">
 			<div class="w3-quarter" style="word-wrap: break-word;">{{urlItem.title}}</div>
 			<div class="w3-half" style="word-wrap: break-word;">{{urlItem.path}}</div>
@@ -29,12 +29,12 @@
 
 	<div class="w3-margin-bottom w3-row">
 		<div class="w3-third">
-			<label class="w3-hide-small">Title:</label> <input type="text"
+			<label class="w3-hide-small">Titel:</label> <input type="text"
 				ng-model="data.urlTitle" placeHolder="title of url"
 				class="w3-input w3-border w3-hover-border-black" />
 		</div>
 		<div class="w3-twothird">
-			<label class="w3-hide-small">URL:</label> <input name="urlPath"
+			<label class="w3-hide-small">L&auml;nk:</label> <input name="urlPath"
 				type="text" ng-pattern='/^https?://.+\..+\..+$/' ng-model="data.urlPath"
 				placeHolder="http://www.link.com"
 				class="w3-input w3-border w3-hover-border-black" />
@@ -47,7 +47,7 @@
 	
 	<div class="w3-margin-bottom">
 		<div ng-if="data.tags">
-		Added tags:
+		Tillagda taggar:
 			<div ng-repeat="tag in data.tags">
 				{{tag.text}}
 			</div> 
@@ -56,15 +56,15 @@
 	</div>
 	
 	<div class='w3-margin-bottom'>
-		Days as important:<br /> 
+		Dagar som viktig nyhet:<br /> 
 		<input type="text" ng-model="data.daysImportant" /> 
 		<span ng-if="data.daysImportant && data.daysImportant > 0">
-			Important until: {{dateAsString(data.daysImportant)}}
+			Nyhet viktig till: {{dateAsString(data.daysImportant)}}
 		</span>
 	</div>
 
 	<div class="w3-margin-bottom">
-		{{data.statusMessage != null ? data.statusMessage : "Please enter some news"}}
+		{{data.statusMessage != null ? data.statusMessage : "Skriv n&aring;gra nyheter"}}
 	</div>
 
 	<div class='w3-margin-bottom'>
