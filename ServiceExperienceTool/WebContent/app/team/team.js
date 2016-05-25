@@ -15,18 +15,24 @@ angular.module('team', [
 .config(function($provide) {
   $provide.value('team.data', {
     tabs: [{
-      title: 'Logi',
-      url: 'app/team/templates/tabs/tab.logi.html'
+      title: 'Målsättningar',
+      url: 'app/team/templates/tabs/tab.malsattningar.html'
     }, {
-      title: 'Paket',
-      url: 'app/team/templates/tabs/tab.paket.html'
+      title: 'Kontaktlista',
+      url: 'app/team/templates/tabs/tab.kontaktlista.html'
     }, {
-      title: 'Aktiviteter',
-      url: 'app/team/templates/tabs/tab.aktiviteter.html'
+      title: 'Ansvarsområden',
+      url: 'app/team/templates/tabs/tab.ansvarsomraden.html'
     }, {
-      title: 'Special',
-      url: 'app/team/templates/tabs/tab.special.html'
-    }],
+      title: 'Rutiner & Körscheman',
+      url: 'app/team/templates/tabs/tab.rutiner-korscheman.html'
+    }, {
+        title: 'Utbildningar',
+        url: 'app/team/templates/tabs/tab.utbildningar.html'
+      }, {
+          title: 'Ordbok',
+          url: 'app/team/templates/tabs/tab.ordbok.html'
+        }],
 
     imgUris: [
       'img/set_mock-img_01.jpg',
