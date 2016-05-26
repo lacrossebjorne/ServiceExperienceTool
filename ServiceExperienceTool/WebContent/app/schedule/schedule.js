@@ -6,6 +6,8 @@ angular.module('schedule', ['ngRoute', 'ngResource'])
         $routeProvider.when('/schedule', {
             templateUrl: 'app/schedule/schema.html',
             controller: 'ScheduleController'
+            	// kan ladda in data också som objekt till controllern.
+            	//resolve innan routingen.
         });
     }])
 

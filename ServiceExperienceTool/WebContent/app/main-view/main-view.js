@@ -35,7 +35,7 @@ function MainViewController($rootScope, $scope, $location, $log) {
 	});
 
 	function hideColumn(url) {
-		if ($location.path() == '/useradmin')
+		if ($location.path() == '/useradmin' || $location.path() == '/schedule' )
 			$scope.hideCol = true;
 		else
 			$scope.hideCol = false;
