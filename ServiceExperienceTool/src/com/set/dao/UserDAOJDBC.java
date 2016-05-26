@@ -60,6 +60,7 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	private User find(String sql, Object... values) {
+		//Store user in list if more than one row get returned from db
 		List<User> userAsList = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -82,7 +83,8 @@ public class UserDAOJDBC implements UserDAO {
 				e.printStackTrace();
 			}
 		}
-		return mergeAll(userAsList).get(0);
+		userAsList = mergeAll(userAsList);
+		return userAsList.get(0);
 	}
 
 	@Override
@@ -212,16 +214,19 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	@Override
-	public void deleteUser(User user) {
+	public boolean deleteUser(User user) {
 		Object[] userObject = { user.getUserId() };
+		boolean isDeleted = false;
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
 			connection = daoFactory.getConnection();
 			statement = prepareStatement(connection, SQL_DELETE_USER, false, userObject);
 			int deletedRows = statement.executeUpdate();
-			if (deletedRows == 1)
+			if (deletedRows == 1) {
 				user.setUserId(null);
+				isDeleted = true;
+			}
 			else
 				throw new SQLException("User could not be deleted");
 		} catch (SQLException e) {
@@ -234,6 +239,7 @@ public class UserDAOJDBC implements UserDAO {
 				e.printStackTrace();
 			}
 		}
+		return isDeleted;
 	}
 
 	@Override

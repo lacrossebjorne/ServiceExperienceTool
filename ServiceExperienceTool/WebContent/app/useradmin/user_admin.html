@@ -163,15 +163,13 @@
 	</div>
 	<div id="userListView" class="modal"
 		ng-hide="userListShowHide">
-		<div id="userListmodal"
+		<div id="userListModal"
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
 				<span ng-click="showHide('userListView')" class="w3-closebtn">&times;</span>
-				<h3>SET user list</h3>
+				<h3 class="w3-margin-0">SET user list</h3>
 			</div>
-			<!-- <div id="constrainer" class="w3-responsive"> -->
-				<table id="userTable"
-					class="w3-table w3-bordered w3-border w3-striped table">
+				<table id="userListThead" class="w3-table w3-bordered w3-border w3-striped">
 					<thead>
 						<tr class="w3-light-grey">
 							<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">User ID  <i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i></th>
@@ -189,24 +187,24 @@
 							</th>
 						</tr>
 						<tr id="userSearchRow" ng-show="searchIsExpanded">
-							<td><input type="number" id="searchID" value=""
-								placeholder="ID"  ng-model="search.userId"></td>
-							<td><input type="text" placeholder="First Name" ng-model="search.firstName"></td>
-							<td><input type="text" placeholder="Last Name"  ng-model="search.lastName"></td>
-							<td><input type="text" placeholder="Username"  ng-model="search.username"></td>
-							<td><input type="text" placeholder="Email"  ng-model="search.email"></td>
-							<td><input type="text" placeholder="Phone number"  ng-model="search.phoneNumber"></td>
-							<td><select class="w3-select" name="activeUser"  ng-model="search.enabled"><option
+							<th><input type="number" id="searchID" value=""
+								placeholder="ID"  ng-model="search.userId"></th>
+							<th><input type="text" placeholder="First Name" ng-model="search.firstName"></th>
+							<th><input type="text" placeholder="Last Name"  ng-model="search.lastName"></th>
+							<th><input type="text" placeholder="Username"  ng-model="search.username"></th>
+							<th><input type="text" placeholder="Email"  ng-model="search.email"></th>
+							<th><input type="text" placeholder="Phone number"  ng-model="search.phoneNumber"></th>
+							<th><select class="w3-select" name="activeUser"  ng-model="search.enabled"><option
 										value=""></option><option
 										value="true">Enabled</option>
-									<option value="false">Disabled</option></select></td>
-							<td></td>
+									<option value="false">Disabled</option></select></th>
+							<th></th>
 						</tr>
 					</thead>
 				</table>
 				<div class="tableScroll">
-					<table class="w3-table-all">
-					<tbody id="usersTableBody">
+					<table id="userListTbody" class="w3-table-all">
+					<tbody>
 						<tr ng-repeat-start="user in users | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
 							<td>{{ user.userId }}</td>
 							<td>{{ user.firstName }}</td>
@@ -224,6 +222,9 @@
 							<td colspan="8">
 								<div class="w3-row">
 									<div class="w3-col l2 m6 s12">
+										<b>Picture</b>
+									</div>
+									<div class="w3-col l2 m6 s12">
 											<li><b>Roles</b></li>
 											<li ng-repeat="role in user.roles">{{ role.name }}</li>
 									</div>
@@ -239,14 +240,16 @@
 									<div class="w3-col l2 m6 s12">
 										<li><b>Password reset</b></li>
 										<li ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Active</li>
-										<li ng-if="reset == null || reset.expirationTime != '' || reset.expirationTime < today">Deactivated</li>
-										<li ng-repeat-end>Valid until:&#8195;{{reset.expirationTime | date:'yyyy-MM-dd HH:mm:ss' }}</li>
+										<li ng-if="reset == null || reset.expirationTime != '' || reset.expirationTime < today">Inactive</li>
+										<li>Valid until:</li>
+										<li ng-repeat-end>{{reset.expirationTime | date:'yyyy-MM-dd HH:mm:ss' }}</li>
 									</div>
-									<div class="w3-col l2 m6 s12">
-									</div>
-									<div class="w3-col l2 m6 s12">
-										<span class="fa fa-pencil-square-o"></span>
-										<span class="fa fa-times"></span>
+									<div class="w3-col l2 m6 s12 wrapper">
+										<li><b>Settings</b></li>
+										<li>
+											<span class="fa fa-pencil-square-o w3-xlarge" ng-click="editUser()"></span>
+											<span class="fa fa-times w3-xlarge" ng-click="deleteUser()"></span>
+										</li>
 									</div>
 								</div>
 							</td>
@@ -265,7 +268,6 @@
 					<li><a href="#">»</a></li>
 				</ul>
 				</div>
-			<!-- </div> -->
 		</div>
 	</div>
 	<div id="manageRolesView" class="modal"
@@ -274,11 +276,10 @@
 			class="w3-modal-content w3-card-8 w3-animate-zoom">
 			<div class="w3-blue-grey w3-padding-ver-16">
 				<span ng-click="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
-				<h3>SET manage roles</h3>
+				<h3 class="w3-margin-0">SET manage roles</h3>
 			</div>
-			<div id="constrainer" class="w3-responsive">
-				<table id="rolesTable"
-					class="w3-table w3-striped w3-bordered w3-border w3-hoverable">
+				<table id="rolesThead"
+					class="w3-table w3-striped w3-bordered w3-border">
 					<thead>
 						<tr class="w3-light-grey">
 							<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role
@@ -322,6 +323,9 @@
 							<td></td>
 						</tr>
 					</thead>
+				</table>
+				<div class="tableScroll">
+				<table id="rolesTbody" class="w3-table-all w3-hoverable">
 					<tbody id="rolesTableBody">
 						<tr id="{{role.name}}"
 							ng-repeat="role in roleList | orderBy:sortType:sortReverse">
@@ -362,6 +366,7 @@
 						</td>
 					</tfoot>
 				</table>
+				</div>
 			</div>
 		</div>
 	</div>

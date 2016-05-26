@@ -2,22 +2,18 @@
 	margin-bottom: 8px;
 }
 
-#userListmodal {
+#userListModal {
 	width: 1300px;
 	height: 550px;
 }
 
 #addUserModal {
-	width: 800px;
+	 width: 800px;
 }
 
-#manageRolesModal {
-	height: 550px;
-}
+#manageRolesModal {	height: 550px; }
 
-#checkDiv {
-	text-transform: capitalize;
-}
+#checkDiv {	text-transform: capitalize; }
 
 #inputRolesDiv {
 	padding-bottom: 6px;
@@ -27,6 +23,31 @@
 .tableScroll {
 	height: 450px;
 	overflow: auto;
+}
+
+#userListThead th:first-child, th:nth-last-child(2), #userListTbody td:first-child, td:nth-last-child(2) { width: 115px; }
+#userListThead th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(6), #userListTbody td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(6) {
+		width: 200px;
+	}
+#userListThead th:nth-child(5), #userListTbody td:nth-child(5) { width: 250px; }
+
+#rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) { width: 115px; }
+
+#rolesThead th:nth-child(2), #rolesTbody td:nth-child(2) { width: 200px;}
+
+#rolesThead th:nth-child(3), #rolesTbody td:nth-child(3) { width: 550px; }
+
+#rolesThead th:nth-child(4), #rolesTbody td:nth-child(4) { width: 100px; }
+
+#rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; }
+
+.wrapper {
+	text-align: end;
+	padding-right: 1em;
+}
+
+.wrapper li:nth-child(2) {
+	padding: .5em;
 }
 
 .modal {
@@ -49,19 +70,12 @@
 	clear: both"
 }
 
-#searchID {
-	width: 50px;
-}
-.w3-select {
-	width: 75%;
-}
-li {
-    list-style-type: none;
-}
-.has-error {
-	border: red;
-}
+#searchID {	width: 50px; }
 
-.fa-times {
-	color: red;
-}
+.w3-select { width: 75%; }
+
+li { list-style-type: none; }
+
+.has-error { border: red; }
+
+.fa-times {	color: red; }

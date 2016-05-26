@@ -24,7 +24,7 @@ public interface UserDAO {
 	
 	public void updateUser(User user);
 	
-	public void deleteUser(User user);
+	public boolean deleteUser(User user);
 	
 	public boolean existUserName(String username);
 	

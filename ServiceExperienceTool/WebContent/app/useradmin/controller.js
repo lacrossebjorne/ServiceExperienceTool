@@ -37,7 +37,7 @@ angular.module('useradmin')
 	$scope.sortType = 'userId';
 	$scope.sortReverse = false;
 	
-//Functions
+	//User Functions
 	$scope.submitUser = function() {
     	if ($scope.userForm.password === $scope.userForm.verifypassword) {
     		if ($scope.newUserForm.$valid) {
@@ -92,16 +92,26 @@ angular.module('useradmin')
     	}
     };
 
-    self.deleteUser = function() {
-        AdminFactory.deleteUser(id)
-            .then(
-                self.listAllUsers(),
-                function(errResponse) {
-                    console.error('Error deleting user');
+    self.deleteUser = function(user) {
+        AdminFactory.deleteUser({user : user.userId})
+            .$promise.then(function(data) {
+            	if(data.isValid) {
+            		self.listAllUsers();
+            		alert('User ' + user.username + ' have been deleted');
+            	}
+            	else {
+                    alert('Error deleting user');
                 }
-            );
+            });
     };
     
+    $scope.deleteUser = function() {
+    	var answer = confirm('Are you sure you want to delete user:\nUserID: ' + this.user.userId + ' Username: ' + this.user.username + '\nThis can not be undone.');
+    	if(answer)
+    		self.deleteUser(this.user);
+    };
+    
+    //Role functions
     $scope.submitRole = function() {
     	if ($scope.newRoleForm.$valid) {
     		if($scope.roleForm.roleId == null)
@@ -129,7 +139,9 @@ angular.module('useradmin')
     		}
     	});
     };
-
+    
+    
+    //Clean up the lists and tables when you close them
     self.close = function(view) {
     	$scope.userRoles = [];
     	$scope.user = {
@@ -160,6 +172,7 @@ angular.module('useradmin')
     	$scope.search = {};
     };
     
+    //Opens the selected modal window
     $scope.showHide = function(id) {
     	switch (id) {
     	case 'addUserView':
@@ -194,6 +207,7 @@ angular.module('useradmin')
     	}		
     };
     
+    //Exands the selected row
     $scope.expandRow = function(id) {
     	if(id == 'userSearchRow' | id == 'rolesSearchRow')
     		this.searchIsExpanded = !this.searchIsExpanded;
@@ -201,6 +215,7 @@ angular.module('useradmin')
     		this.isExpanded = !this.isExpanded;
     };
     
+    //Side nav open close on small screens
     $scope.w3_open = function() {
     	document.getElementsByClassName("w3-sidenav")[0].style.display = "block";
 		document.getElementsByClassName("w3-overlay")[0].style.display = "block";
@@ -209,17 +224,4 @@ angular.module('useradmin')
     	document.getElementsByClassName("w3-sidenav")[0].style.display = "none";
 		document.getElementsByClassName("w3-overlay")[0].style.display = "none";
     };
-    
-
-    /*function hideLeftRightColumns() {
-    	var leftCol = angular.element(document.querySelector('#mainLeftColumn'));
-    	var rightCol = angular.element(document.querySelector('#mainRightColumn'));
-    	var midCol = angular.element(document.querySelector('#mainMiddleColumn'));
-    	if (leftCol.prop('display') != 'none' && rightCol.prop('display') != 'none') {
-    		leftCol.css('display', 'none');
-    		rightCol.css('display', 'none');
-    		midCol.removeClass('m7').addClass('m12');
-    	}
-    };*/
-
 }]);

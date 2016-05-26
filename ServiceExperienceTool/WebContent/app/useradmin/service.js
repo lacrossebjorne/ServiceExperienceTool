@@ -35,7 +35,7 @@ angular.module('useradmin')
     	
     	deleteUser: {
             method: 'POST',
-            params: { 'deleteUser' : '@id'}
+            params: { 'deleteUser' : '@user'}
     	},
     	
     	createRole: {
@@ -50,7 +50,7 @@ angular.module('useradmin')
     	
     	deleteRole: {
             method: 'POST',
-            params: { 'deleteRole' : '@id'}
+            params: { 'deleteRole' : '@roleId'}
     	}
     });
 }]);
