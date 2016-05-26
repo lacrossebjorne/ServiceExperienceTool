@@ -22,7 +22,7 @@ public interface UserDAO {
 	
 	public User createUser(User user);
 	
-	public void updateUser(User user);
+	public boolean updateUser(User user);
 	
 	public boolean deleteUser(User user);
 	

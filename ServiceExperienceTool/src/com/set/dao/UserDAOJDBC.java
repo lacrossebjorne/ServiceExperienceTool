@@ -39,7 +39,7 @@ public class UserDAOJDBC implements UserDAO {
 	private static final String SQL_INSERT_USER_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
 	private DAOFactory daoFactory;
 	private IsoDateConverter isoDateConverter;
-	
+
 	public UserDAOJDBC(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
@@ -60,7 +60,7 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	private User find(String sql, Object... values) {
-		//Store user in list if more than one row get returned from db
+		// Store user in list if more than one row get returned from db
 		List<User> userAsList = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -169,10 +169,10 @@ public class UserDAOJDBC implements UserDAO {
 
 	@SuppressWarnings("resource")
 	@Override
-	public void updateUser(User user) {
+	public boolean updateUser(User user) {
 		if (user.getUserId() == null)
 			throw new IllegalArgumentException("User does not exists");
-
+		boolean isUpdated = false;
 		Object[] userObject = { user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserName(),
 				user.getPhoneNumber(), user.isEnabled(), user.getUserId() };
 		Connection connection = null;
@@ -182,18 +182,20 @@ public class UserDAOJDBC implements UserDAO {
 			connection.setAutoCommit(false);
 			statement = prepareStatement(connection, SQL_UPDATE_USER, false, userObject);
 			int updatedRows = statement.executeUpdate();
-			if (updatedRows == 0)
-				throw new SQLException("New user failed to be updated.");
-			if(!user.getRoles().isEmpty()) {
-				statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
-				for (Role userRole : user.getRoles()) {
-					statement.setLong(1, user.getUserId());
-					statement.setLong(2, userRole.getRoleId());
-					statement.addBatch();
+			if (updatedRows == 1) {
+				if (!user.getRoles().isEmpty()) {
+					statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
+					for (Role userRole : user.getRoles()) {
+						statement.setLong(1, user.getUserId());
+						statement.setLong(2, userRole.getRoleId());
+						statement.addBatch();
+					}
+					if (statement.executeUpdate() == 0)
+						throw new SQLException("Could not insert roles into user_roles table.");
 				}
-				if (statement.executeUpdate() == 0)
-					throw new SQLException("Could not insert roles into user_roles table.");
-			}
+				isUpdated = true;
+			} else
+				throw new SQLException("New user failed to be updated.");
 			connection.commit();
 		} catch (SQLException | IllegalArgumentException e) {
 			try {
@@ -211,10 +213,13 @@ public class UserDAOJDBC implements UserDAO {
 				e.printStackTrace();
 			}
 		}
+		return isUpdated;
 	}
 
 	@Override
 	public boolean deleteUser(User user) {
+		if (user.getUserId() == null)
+			throw new IllegalArgumentException("Invalid user, can not delete.");
 		Object[] userObject = { user.getUserId() };
 		boolean isDeleted = false;
 		Connection connection = null;
@@ -226,8 +231,7 @@ public class UserDAOJDBC implements UserDAO {
 			if (deletedRows == 1) {
 				user.setUserId(null);
 				isDeleted = true;
-			}
-			else
+			} else
 				throw new SQLException("User could not be deleted");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -346,7 +350,8 @@ public class UserDAOJDBC implements UserDAO {
 		}
 	}
 
-	//Processes the resultSet from the database and creates an User entity for each row returned
+	// Processes the resultSet from the database and creates an User entity for
+	// each row returned
 	private User processUser(ResultSet resultSet) throws SQLException {
 		User user = new User();
 		isoDateConverter = new IsoDateConverter();
@@ -387,9 +392,9 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	/*
-	 * Merges collected user entities from database 
-	 * (multiple rows with same userId can be returned from the stored procedure) 
-	 * who have the same userId - on roles and resetpasswords
+	 * Merges collected user entities from database (multiple rows with same
+	 * userId can be returned from the stored procedure) who have the same
+	 * userId - on roles and resetpasswords
 	 */
 	private List<User> mergeAll(Collection<User> input) {
 		return new ArrayList<>(input.stream().collect(Collectors.toMap(User::getUserId, e -> e, User::merge)).values());

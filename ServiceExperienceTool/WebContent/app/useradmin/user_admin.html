@@ -54,13 +54,13 @@
 			</div>
 			<div class="w3-container">
 				<form name="newUserForm" ng-submit="submitUser()" novalidate>
-					<input type="hidden" ng-model="userForm.userId" />
+					<input type="hidden" name="userId" ng-model="userForm.userId" />
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label> <b>First name</b></label>
 							<input class="w3-input w3-border w3-hover-border-black"
 								ng-class="{'w3-validate': newUserForm.firstname.$touched && newUserForm.firstname.$invalid}"
-								ng-minlength="5" ng-maxlength="45"
+								ng-minlength="2" ng-maxlength="45"
 								type="text"	name="firstname" placeholder="Enter first name" required
 								ng-model="userForm.firstName">
 							<span ng-messages="newUserForm.firstname.$error">
@@ -89,8 +89,8 @@
 								placeholder="Username as in firstname.lastname" required
 								ng-model="userForm.username">
 							<div ng-messages="newUserForm.username.$error">
-								<div ng-message="pattern">Username must have the form firstname.lastname</div>
-								<div ng-messages-include="static/messages.html"></div>
+								<span ng-message="pattern">Username must have the form firstname.lastname</span>
+								<span ng-messages-include="static/messages.html"></span>
 							</div>
 						</div>
 						<div class="w3-col s6">
@@ -100,7 +100,7 @@
 								type="email" placeholder="Enter email address"
 								ng-model="userForm.email">
 								<div ng-messages="newUserForm.email.$error">
-									<div ng-messages-include="static/messages.html"></div>
+									<span ng-message="email">Enter a valid email address</span>
 								</div>
 						</div>
 					</div>
@@ -112,7 +112,7 @@
 								type="text" ng-pattern="regexNumber"
 								placeholder="Enter phone number - 0701234567" ng-model="userForm.phoneNumber">
 							<div ng-messages="newUserForm.phoneNumber.$error">
-								<div ng-messages-include="static/messages.html"></div>
+								<span ng-message="pattern">Can only contain digits no - or space</span>
 							</div>
 						</div>
 						<div class="w3-col s6">
@@ -126,22 +126,24 @@
 							</label> <input name="password"
 								class="w3-input w3-border w3-hover-border-black"
 								ng-class="{'w3-validate': newUserForm.password.$touched && newUserForm.password.$invalid }"
-								type="password" placeholder="Enter Password" ng-minlength="6" ng-maxlength="45" required
-								ng-model="userForm.password">
+								type="password" placeholder="Enter Password" ng-minlength="6" ng-maxlength="45" 
+								ng-required="!userForm.userId" ng-model="userForm.password">
 							<div ng-messages="newUserForm.password.$error">
 								<div ng-messages-include="static/messages.html"></div>
 							</div>
+							<div>required error set? = <code>{{newUserForm.password.$error.required}}</code></div>
 						</div>
 						<div class="w3-col s6">
 							<label> <b>Verify password</b>
 							</label> <input name="verifypass"
 								class="w3-input w3-border w3-hover-border-black"
 								ng-class="{'has-error': newUserForm.verifypass.$touched && newUserForm.password != newUserForm.verifypass}"
-								type="password" placeholder="Verify Password" required
+								type="password" placeholder="Verify Password" ng-required="!userForm.userId"
 								ng-model="userForm.verifypassword">
-							<div ng-messages="newUserForm.verifypassword.$error">
-								<div ng-messages-include="static/messages.html"></div>
+							<div ng-messages="newUserForm.verifypass.$error.required">
+								<span ng-message="verifypassword">The passwords doesn't match</span>
 							</div>
+							<div>required error set? = <code>{{newUserForm.verifypass.$error.required}}</code></div>
 						</div>
 					</div>
 					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">

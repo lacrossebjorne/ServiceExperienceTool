@@ -73,14 +73,16 @@ angular.module('useradmin')
             });
     };
 
-    self.updateUser = function() {
-        AdminFactory.updateUser(user, id)
-            .then(
-                self.listAllUsers(),
-                function(errResponse) {
-                    console.error('Error creating user');
+    self.updateUser = function(userForm) {
+        var data = AdminFactory.updateUser({user : userForm})
+            .$promise.then(function(data) {
+            	if(data.isUpdated)
+            		alert('User (' + userForm.username + ') have been updated');
+            	else {
+            		alert('Error creating user');
                 }
-            );
+                self.listAllUsers();
+            });
     };
     
     self.editUser = function(id) {
@@ -90,6 +92,11 @@ angular.module('useradmin')
     			break;
     		}
     	}
+    };
+    
+    $scope.editUser = function() {
+    	$scope.userForm = angular.copy(this.user);
+    	self.showHide('addUserView');
     };
 
     self.deleteUser = function(user) {
@@ -174,6 +181,10 @@ angular.module('useradmin')
     
     //Opens the selected modal window
     $scope.showHide = function(id) {
+    	self.showHide(id);
+    };
+    
+    self.showHide = function(id) {
     	switch (id) {
     	case 'addUserView':
     		if ($scope.addUserShowHide) {

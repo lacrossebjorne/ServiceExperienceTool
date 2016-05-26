@@ -61,7 +61,6 @@ public class NewsServlet extends HttpServlet {
 			response.getWriter().println("Database error!");
 			e.printStackTrace();
 		}
-
 	}
 
 	/**

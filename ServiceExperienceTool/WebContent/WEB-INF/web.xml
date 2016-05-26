@@ -43,6 +43,14 @@
   	<servlet-name>ImageServlet</servlet-name>
   	<url-pattern>/images/*</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>SMSServlet</servlet-name>
+  	<servlet-class>com.set.servlets.SMSServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>SMSServlet</servlet-name>
+  	<url-pattern>/smsServlet</url-pattern>
+  </servlet-mapping>
   <filter>
   	<filter-name>CORSFilter</filter-name>
   	<filter-class>com.set.filters.CORSFilter</filter-class>
