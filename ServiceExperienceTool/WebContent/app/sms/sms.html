@@ -1,13 +1,64 @@
-Template for SMS.html
-<br />
-{{testData}}
+<!-- w3-container w3-card-2 w3-white w3-round w3-margin-bottom -->
 
-<form name="sendmsgform" action="smsServlet" method="GET" accept-charset="UTF-8"> 	      
-		<br> Phone number: <input type="text" name="numba" value="" id="dmsg"/> 
-		Example: +46703123456<br/> 
-		Text Message:
-		<textarea rows="4" cols="50" name="msg"> </textarea>
+<div class="w3-container w3-card w3-margin-bottom w3-round w3-white">
+	<p>Select which people to send SMS to</p>
 
-		<input type="submit" value="Send SMS">
-	</form>
-</body>
+	<table ng-if="contacts && contacts.length > 0"
+		class="w3-table w3-striped w3-bordered w3-border w3-margin-bottom">
+		<thead>
+			<tr class="w3-light-grey">
+				<th>FirstName</th>
+				<th>LastName</th>
+				<th>Role</th>
+				<th>PhoneNumber</th>
+				<th>Selected</th>
+				<td></td>
+			</tr>
+		</thead>
+
+		<tr ng-repeat="contact in contacts" class="">
+			<td ng-bind="contact.firstName"></td>
+			<td ng-bind="contact.lastName"></td>
+			<td ng-bind="contact.roles[0].name"></td>
+			<td ng-bind="contact.phoneNumber"></td>
+			<td><span ng-if="contact.isSelected"><i
+					class="fa fa-check"></span></i></td>
+			<td><button type="button" class="w3-btn w3-theme-d1"
+					ng-click="toggleSelected(contact)">Select</button></td>
+		</tr>
+
+	</table>
+
+</div>
+
+<div class="w3-container w3-card w3-round w3-white">
+	<p>
+		Mottagare:<br> <span
+			ng-repeat="contact in contacts | filter: isSelected">
+			{{contact.firstName + " " + contact.lastName + "(" +
+			contact.phoneNumber +")" + ($last ? '' : ', ')}} </span>
+	</p>
+
+	<div class="w3-margin-bottom">
+
+		<form name="sendmsgform" accept-charset="UTF-8">
+			<!-- <br> Phone number: <input type="text" name="numba" value=""
+		id="dmsg" /> Example: +46703123456<br /> Text Message: -->
+
+			<textarea ng-model="smsMessage" rows="2" name="msg"
+				class="w3-input w3-border w3-hover-border-black"> </textarea>
+
+			<button type="button" ng-click="sendSMS()" class="w3-btn w3-theme-d1">Send
+				SMS</button>
+
+			<span class="w3-small w3-right"> {{smsMessage.length}} av
+				maximalt 160 tecken </span>
+
+			<p>
+				{{statusMessage}}
+			</p>
+		</form>
+		<br>
+	</div>
+	<br>
+</div>

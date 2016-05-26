@@ -43,6 +43,7 @@ public class SendSMS {
 		 */
 		public static void sendDummyMessage(String url, String destNumber, String message) throws SMSException, SMSTeknikSenderException {
 			System.out.println("Inside sendDummyMessage");
+			System.out.format("Number: %s, Message: %s, Url: %s", destNumber, message, url);
 		}
 		
 		public static void send(String url, String destNumber, String message) throws SMSException, SMSTeknikSenderException {

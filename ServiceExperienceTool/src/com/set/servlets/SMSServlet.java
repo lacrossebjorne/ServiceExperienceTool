@@ -31,7 +31,8 @@ public class SMSServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		String action = request.getParameter("action");
-
+		System.out.println("action: " + action);
+		
 		if (action == null) {
 			response.setContentType("text/html");
 			response.getWriter().println("No action-parameter was set!");
@@ -41,9 +42,6 @@ public class SMSServlet extends HttpServlet {
 			case "sendSMS":
 				sendSMS(request, response);
 				break;
-			case "listUsers":
-				listUsers(request, response);
-				break;
 			default:
 				response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				return;
@@ -52,30 +50,16 @@ public class SMSServlet extends HttpServlet {
 	}
 
 	private void sendSMS(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		String number1 = request.getParameter("numba");
-		String message = request.getParameter("msg");
+		String number1 = request.getParameter("recipient");
+		String message = request.getParameter("message");
 
 		try {
+			//sending dummy-sms to avoid credit loss
 			SendSMS.sendDummyMessage(URL, number1, message);
 		} catch (SMSException | SMSTeknikSenderException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
-	}
-	
-	private void listUsers(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException  {
-		
-		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		
-		UserDAO userDAO = daoFactory.getUserDAO();
-		
-		List<User> users = userDAO.listUsers();
-		HashMap<String, List<User>> userMap = new HashMap<>();
-//		userMap.put("userMap", users);
-		
-		response.setContentType("application/json");
-		response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(users));
-		
 	}
 }
