@@ -171,7 +171,7 @@
 			</div>
 			<!-- <div id="constrainer" class="w3-responsive"> -->
 				<table id="userTable"
-					class="w3-table w3-bordered w3-border w3-striped table" fixed-header>
+					class="w3-table w3-bordered w3-border w3-striped table">
 					<thead>
 						<tr class="w3-light-grey">
 							<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">User ID  <i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i><i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i></th>
@@ -203,6 +203,9 @@
 							<td></td>
 						</tr>
 					</thead>
+				</table>
+				<div class="tableScroll">
+					<table class="w3-table-all">
 					<tbody id="usersTableBody">
 						<tr ng-repeat-start="user in users | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
 							<td>{{ user.userId }}</td>
@@ -250,6 +253,7 @@
 						</tr>
 					</tbody>
 				</table>
+				</div>
 				<div class="w3-center">
 				<ul class="w3-pagination w3-border" ng-if="users.length > 10">
 					<li><a href="#">«</a></li>

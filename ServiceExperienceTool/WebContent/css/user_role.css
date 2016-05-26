@@ -4,7 +4,7 @@
 
 #userListmodal {
 	width: 1300px;
-	height: 600px;
+	height: 550px;
 }
 
 #addUserModal {
@@ -12,11 +12,8 @@
 }
 
 #manageRolesModal {
-	height: 520px;
+	height: 550px;
 }
-
-
-
 
 #checkDiv {
 	text-transform: capitalize;
@@ -25,6 +22,11 @@
 #inputRolesDiv {
 	padding-bottom: 6px;
 	text-align: left;
+}
+
+.tableScroll {
+	height: 450px;
+	overflow: auto;
 }
 
 .modal {
