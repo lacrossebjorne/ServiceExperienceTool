@@ -1,17 +1,15 @@
 'use strict';
 
-angular.module('other-products')
+angular.module('salary')
 
-.controller('OtherProductsController', ['$scope', '$location', 'products.data', 'pushService', function($scope, $location, productsData, pushService) {
+.controller('SalaryController', ['$scope', '$location', 'salary.data', 'pushService', function($scope, $location, salaryData, pushService) {
     var imgIndex = 0;
-    var imgUris = productsData.imgUris;
+    var imgUris = salaryData.imgUris;
     var imageSwitch = function() {
-        return productsData.imgUris[imgIndex++ % imgUris.length];
+        return salaryData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.links = productsData.links;
-    $scope.documents = productsData.docs;
-    $scope.tabs = productsData.tabs;
+    $scope.tabs = salaryData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
 

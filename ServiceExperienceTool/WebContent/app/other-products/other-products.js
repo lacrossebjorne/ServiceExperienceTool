@@ -13,64 +13,26 @@ angular.module('other-products', [
 }])
 
 .config(function($provide) {
-  $provide.value('company.data', {
-    links: [{
-      title: 'Google',
-      url: 'https://www.google.com'
-    }, {
-      title: 'Yahoo',
-      url: 'https://www.yahoo.com'
-    }, {
-      title: 'Aftonbladet',
-      url: 'https://www.aftonbladet.com'
-    }, {
-      title: 'Expressen',
-      url: 'https://www.expressen.com'
-    }],
-
+  $provide.value('products.data', {
     tabs: [{
-      title: 'Vision & affärsidé',
-      url: 'app/company/templates/tabs/tab.vision-affarside.html'
+      title: 'Logi',
+      url: 'app/other-products/templates/tabs/tab.logi.html'
     }, {
-      title: 'Historia',
-      url: 'app/company/templates/tabs/tab.historia.html'
+      title: 'Paket',
+      url: 'app/other-products/templates/tabs/tab.paket.html'
     }, {
-      title: 'Miljö & socialt ansvar',
-      url: 'app/company/templates/tabs/tab.miljo-socialt-ansvar.html'
+      title: 'Aktiviteter',
+      url: 'app/other-products/templates/tabs/tab.aktiviteter.html'
     }, {
-      title: 'Innan din första arbetsdag!',
-      url: 'app/company/templates/tabs/tab.forsta-arbetsdag.html'
-    }],
-
-    docs: [{
-      title: 'Grossister',
-      icon: 'fa-file-pdf-o',
-      url: 'suppliers.pdf'
-    }, {
-      title: 'Budget Analys 2015-2016',
-      icon: 'fa-file-excel-o',
-      url: 'budget.svc'
-    }, {
-      title: 'Städguide',
-      icon: 'fa-file-pdf-o',
-      url: 'cleaning-for-dummies.pdf'
-    }, {
-      title: 'Recept: test',
-      icon: 'fa-file-word-o',
-      url: 'macRecipe.doc'
-    }, {
-      title: 'Mall: företagsbrev',
-      icon: 'fa-file-word-o',
-      url: 'letterTemplate.doc'
-    }, {
-      title: 'Manual för medarbetare',
-      icon: 'fa-file-text-o',
-      url: 'manual.txt'
+      title: 'Special',
+      url: 'app/other-products/templates/tabs/tab.special.html'
     }],
 
     imgUris: [
-      'img/company_main_01.jpg',
-      'img/company_main_02.jpg'
+      'img/set_mock-img_01.jpg',
+      'img/set_mock-img_02.jpg',
+      'img/set_mock-img_03.jpg',
+      'img/set_mock-img_04.jpg'
     ]
   });
 });

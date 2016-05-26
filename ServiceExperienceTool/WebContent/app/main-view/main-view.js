@@ -9,7 +9,14 @@ angular.module('mainView', [
   'menu',
   'company',
   'useradmin',
-  'schedule'
+  'schedule',
+  'other-products',
+  'program-pm',
+  'team',
+  'our-guests',
+  'security',
+  'contacts',
+  'salary'
 ])
 
 /*

@@ -1,17 +1,15 @@
 'use strict';
 
-angular.module('other-products')
+angular.module('security')
 
-.controller('OtherProductsController', ['$scope', '$location', 'products.data', 'pushService', function($scope, $location, productsData, pushService) {
+.controller('SecurityController', ['$scope', '$location', 'security.data', 'pushService', function($scope, $location, securityData, pushService) {
     var imgIndex = 0;
-    var imgUris = productsData.imgUris;
+    var imgUris = securityData.imgUris;
     var imageSwitch = function() {
-        return productsData.imgUris[imgIndex++ % imgUris.length];
+        return securityData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.links = productsData.links;
-    $scope.documents = productsData.docs;
-    $scope.tabs = productsData.tabs;
+    $scope.tabs = securityData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
 
