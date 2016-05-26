@@ -9,8 +9,6 @@ angular.module('other-products')
         return productsData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.links = productsData.links;
-    $scope.documents = productsData.docs;
     $scope.tabs = productsData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
