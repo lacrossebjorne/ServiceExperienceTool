@@ -1,20 +1,22 @@
-<div class="dialog-demo-content" layout="row" layout-wrap="" layout-margin="" layout-align="center">
-    <md-input-container>
-        <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
-            Lägg till pass i Schemat
-        </md-button>
-    </md-input-container>
-</div>
+<div class="md-padding" id="popupContainer" ng-cloak>
+    <div class="dialog-demo-content" layout="row" layout-wrap="" layout-margin="" layout-align="center">
+        <md-input-container>
+            <md-button class="md-primary md-raised" ng-click="showAdvanced($event)">
+                Lägg till pass i Schemat
+            </md-button>
+        </md-input-container>
+    </div>
 
-<div hide-gt-sm="" layout="row" layout-align="center center" flex="">
-    <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
+    <div hide-gt-sm="" layout="row" layout-align="center center" flex="">
+        <md-checkbox ng-model="customFullscreen" aria-label="Fullscreen Custom Dialog">Custom Dialog Fullscreen</md-checkbox>
 
-</div>
-<div ng-if="status">
-    <br>
-    <b layout="row" layout-align="center center" class="md-padding">
+    </div>
+    <div ng-if="status">
+        <br>
+        <b layout="row" layout-align="center center" class="md-padding">
                   {{status}}
                  </b>
+    </div>
 </div>
 
 <script type="text/ng-template" id="dialog1.tmpl.html">

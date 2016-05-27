@@ -1,4 +1,26 @@
-<div layout="column" >
-    <div ng-include="dialog.tmpl.html"></div>
+<style>
+	body { margin: 40px 10px; padding: 0; font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif; font-size: 14px; }
+	#calendar { max-width: 900px; margin: 0 auto;}
 
-</div>
+</style>
+<script type="text/javascript">
+    angular.element(calendar).fullCalendar({
+        	weekNumbers : true,
+        	fixedWeekCount: true,
+    		defaultView : 'month',
+    		firstDay : 1,
+    		defaultDate: '2016-05-12',
+			editable: true,
+			eventLimit: true, // allow "more" link when too many events
+    		events : getEvents(),
+    		resources : getResources(),
+    		//schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
+    		header : {
+    			left : 'title',
+    			center : 'agendaWeek, month',
+    			right : 'today prev,next'
+    		},
+        });
+       // var test = scheduleData.options;
+</script>
+<div width="600"><div id="calendar"></div></div>

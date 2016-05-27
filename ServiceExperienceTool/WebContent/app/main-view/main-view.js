@@ -10,7 +10,8 @@ angular.module('mainView', [
   'company',
   'useradmin',
   'schedule',
-  'sms'
+  'sms',
+  'ngMaterial'
 ])
 
 /*
