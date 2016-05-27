@@ -31,11 +31,6 @@
 	margin-bottom: 8px;
 }
 
-#inputRolesDiv {
-	padding-bottom: 6px;
-	text-align: left;
-}
-
 .tableScroll {
 	height: 450px;
 	overflow: auto;
@@ -56,6 +51,12 @@
 #rolesThead th:nth-child(4), #rolesTbody td:nth-child(4) { width: 100px; }
 
 #rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; }
+
+#rolesTbody #inputRolesDiv {
+	width: 100%;
+	padding-bottom: 6px;
+	text-align: left;
+}
 
 .wrapper {
 	text-align: end;

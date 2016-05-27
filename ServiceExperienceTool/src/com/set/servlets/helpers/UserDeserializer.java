@@ -14,7 +14,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.set.dao.DAOFactory;
-import com.set.dao.RoleDAO;
 import com.set.entities.Role;
 import com.set.entities.User;
 
@@ -35,13 +34,11 @@ public class UserDeserializer implements JsonDeserializer<User> {
 				rolesMap.putAll(new Gson().fromJson(jsonElement, mapType));
 		}
 		
-		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		RoleDAO roleDAO = daoFactory.getRoleDAO();
-		List<Role> roles = roleDAO.listRoles();
-		
+		List<Role> roles = DAOFactory.getInstance("setdb.jndi").getRoleDAO().listRoles();
+
 		List<Role> userRoles = new ArrayList<>();
 		for (Role role : roles) {
-			if (rolesMap.containsKey((role.getName()))) {
+			if (rolesMap.containsKey(role.getName()) && rolesMap.get(role.getName()) != false) {
 				userRoles.add(role);
 			}
 		}

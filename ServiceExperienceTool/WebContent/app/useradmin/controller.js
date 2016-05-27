@@ -7,13 +7,11 @@ angular.module('useradmin')
     //Hides left and right columns
     //hideLeftRightColumns();
     
-//Variables 
+//Scope variables 
     $scope.manageRolesShowHide = true;
 	$scope.userListShowHide = true;
 	$scope.addUserShowHide = true;
 	$scope.userRoles = [];
-	self.users = [];
-	self.resetPassword = "";
 	$scope.user = {
         id: null,
         firstname: '',
@@ -27,8 +25,8 @@ angular.module('useradmin')
         userRoles: null
     };
 	$scope.userForm = {};
-	$scope.roleForm = {};
 	$scope.userForm.roles = [];
+	$scope.roleForm = {};
 	$scope.today = new Date();
 	$scope.isExpanded = false
 	$scope.searchIsExpanded = false
@@ -36,6 +34,15 @@ angular.module('useradmin')
 	$scope.regexNumber = '\\d+';
 	$scope.sortType = 'userId';
 	$scope.sortReverse = false;
+	
+	//Local variables
+	self.users = [];
+	self.resetPassword = "";
+	self.userForm = {};
+	self.userForm.roles = [];
+	self.roleList = [];
+	self.userRoles = [];
+	
 	
 	//User Functions
 	$scope.submitUser = function() {
@@ -51,19 +58,16 @@ angular.module('useradmin')
     };
 	
 	self.listAllUsers = function() {
-    	var data = AdminFactory.listAllUsers()
+    	AdminFactory.listAllUsers()
     	.$promise.then(function(data){
     		if (data.isValid) {
     			$scope.users = data.userList;
-    			angular.forEach($scope.users, function(user){
-    			});
-    			
     		}
     	});
     };
 
     self.createUser = function(userForm) {
-        var data = AdminFactory.createUser({user : userForm})
+        AdminFactory.createUser({user : userForm})
             .$promise.then(function(data) {
             	if(data.isValid)
             		alert("New user (" + userForm.username + ") created with UserID: " + data.userId);
@@ -74,35 +78,45 @@ angular.module('useradmin')
     };
 
     self.updateUser = function(userForm) {
-        var data = AdminFactory.updateUser({user : userForm})
+        AdminFactory.updateUser({user : userForm})
             .$promise.then(function(data) {
             	if(data.isUpdated)
             		alert('User (' + userForm.username + ') have been updated');
             	else {
-            		alert('Error creating user');
+            		alert('Error updating user');
                 }
+                self.showHide('addUserView');
                 self.listAllUsers();
             });
     };
     
-    self.editUser = function(id) {
-    	for(var i = 0; i < self.users.length; i++) {
-    		if(self.users[i].id === id) {
-    			self.user = angular.copy(user);
-    			break;
-    		}
-    	}
-    };
-    
     $scope.editUser = function() {
-    	$scope.userForm = angular.copy(this.user);
-    	self.showHide('addUserView');
+    	var user = this.user;
+    	self.userForm = angular.copy(user);
+    	self.listAllRoles().then(function(roleList) {
+    		var roleObj = {};
+    		for (var i = 0; i < roleList.length; i++) {
+    			roleObj[roleList[i].name] = false;
+    		}
+    		angular.forEach(user.roles, function(role){
+    				roleObj[role.name] = true;
+    		});
+    		var j = 0;
+    		for (var item in roleObj) {
+    			var obj = {};
+    			obj[item] = roleObj[item];
+    			self.userForm.roles[j] = obj;
+    			j++;
+    		}
+    		self.showHide('addUserView');
+    		$scope.userForm = self.userForm;
+    	});
     };
 
     self.deleteUser = function(user) {
         AdminFactory.deleteUser({user : user.userId})
             .$promise.then(function(data) {
-            	if(data.isValid) {
+            	if(data.isDeleted) {
             		self.listAllUsers();
             		alert('User ' + user.username + ' have been deleted');
             	}
@@ -139,10 +153,11 @@ angular.module('useradmin')
     };
     
     self.listAllRoles = function() {
-    	var data = AdminFactory.listAllRoles()
+    	return AdminFactory.listAllRoles()
     	.$promise.then(function(data) {
     		if(data.isValid) {
     			$scope.roleList = data.roleList;
+    			return data.roleList;
     		}
     	});
     };
@@ -151,6 +166,7 @@ angular.module('useradmin')
     //Clean up the lists and tables when you close them
     self.close = function(view) {
     	$scope.userRoles = [];
+    	self.userRoles = [];
     	$scope.user = {
             userId: null,
             firstName: '',
@@ -166,6 +182,8 @@ angular.module('useradmin')
     	if (view == 'addUserView') {
     		$scope.userForm = {};
     		$scope.userForm.roles = [];
+    		self.userForm = {};
+    		self.userForm.roles = [];
     		$scope.newUserForm.$setPristine();
     	} else if (view == 'manageRolesView') {
     		$scope.manageRolesShowHide = true;

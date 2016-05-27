@@ -56,6 +56,7 @@ public class RoleDAOJDBC implements RoleDAO {
 			try {
 				resultSet.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException | NullPointerException e1) {
 				e1.printStackTrace();
 			}
@@ -82,6 +83,7 @@ public class RoleDAOJDBC implements RoleDAO {
 			try {
 				resultSet.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException | NullPointerException e1) {
 				e1.printStackTrace();
 			}
@@ -122,6 +124,7 @@ public class RoleDAOJDBC implements RoleDAO {
 				if (keys != null)
 					keys.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -157,6 +160,7 @@ public class RoleDAOJDBC implements RoleDAO {
 				if (keys != null)
 					keys.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -193,6 +197,7 @@ public class RoleDAOJDBC implements RoleDAO {
 				if (keys != null)
 					keys.close();
 				statement.close();
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}

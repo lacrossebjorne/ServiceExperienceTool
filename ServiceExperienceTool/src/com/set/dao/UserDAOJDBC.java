@@ -37,6 +37,7 @@ public class UserDAOJDBC implements UserDAO {
 	private static final String SQL_DISABLE_USER = "UPDATE user SET enable = 0 WHERE user_id = ?";
 	private static final String SQL_DELETE_USER = "DELETE FROM user WHERE user_id = ?";
 	private static final String SQL_INSERT_USER_ROLE = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+	private static final String SQL_DELETE_USER_ROLE = "DELETE FROM user_role WHERE user_id = ?";
 	private DAOFactory daoFactory;
 	private IsoDateConverter isoDateConverter;
 
@@ -182,8 +183,11 @@ public class UserDAOJDBC implements UserDAO {
 			connection.setAutoCommit(false);
 			statement = prepareStatement(connection, SQL_UPDATE_USER, false, userObject);
 			int updatedRows = statement.executeUpdate();
-			if (updatedRows == 1) {
-				if (!user.getRoles().isEmpty()) {
+			System.out.println(updatedRows);
+			if (updatedRows != 0) {
+				statement = prepareStatement(connection, SQL_DELETE_USER_ROLE, false, user.getUserId());
+				statement.executeUpdate();
+				if (user.getRoles().size() > 0) {
 					statement = connection.prepareStatement(SQL_INSERT_USER_ROLE);
 					for (Role userRole : user.getRoles()) {
 						statement.setLong(1, user.getUserId());

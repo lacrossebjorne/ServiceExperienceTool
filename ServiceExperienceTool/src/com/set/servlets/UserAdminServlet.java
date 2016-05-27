@@ -102,7 +102,6 @@ public class UserAdminServlet extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		try {
-			System.out.println(new Gson().toJson(map));
 			response.getWriter().write(new Gson().toJson(map));
 		} catch (IOException e) {
 			e.printStackTrace();
