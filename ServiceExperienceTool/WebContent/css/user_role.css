@@ -21,6 +21,7 @@
 	 width: 800px;
 }
 
+/* Makes the addUserView overlay the userListView */
 #addUserView { z-index: 4; }
 
 #manageRolesModal {	height: 550px; }
@@ -31,26 +32,43 @@
 	margin-bottom: 8px;
 }
 
+/* Scrollable table list */
 .tableScroll {
 	height: 450px;
 	overflow: auto;
 }
 
-#userListThead th:first-child, th:nth-last-child(2), #userListTbody td:first-child, td:nth-last-child(2) { width: 115px; }
-#userListThead th:nth-child(2), th:nth-child(3), th:nth-child(4), th:nth-child(6), #userListTbody td:nth-child(2), td:nth-child(3), td:nth-child(4), td:nth-child(6) {
-		width: 200px;
-	}
+/* User list table styling */
+#userListThead th:first-child  { width: 115px; }
+
+#userListThead th:nth-last-child(2), #userListTbody td:first-child, td:nth-last-child(2) {text-align: center; width: 115px;}
+
+#userListThead th:nth-child(3), th:nth-child(4), #userListTbody td:nth-child(3), td:nth-child(4) { width: 200px; }
+
+#userListThead th:nth-child(2), th:nth-child(6), #userListTbody td:nth-child(2), td:nth-child(6) { width: 170px; }
+
 #userListThead th:nth-child(5), #userListTbody td:nth-child(5) { width: 250px; }
 
+#userListThead input { width: 80%; }
+
+#userListThead select { width: 90%; }
+
+#userListThead th:last-child, #userListTbody td:last-child { text-align: center; }
+
+/* Role list table styling */
 #rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) { width: 115px; }
 
 #rolesThead th:nth-child(2), #rolesTbody td:nth-child(2) { width: 200px;}
 
-#rolesThead th:nth-child(3), #rolesTbody td:nth-child(3) { width: 550px; }
+#rolesThead th:nth-child(3), #rolesTbody td:nth-child(3) { width: 450px; }
 
 #rolesThead th:nth-child(4), #rolesTbody td:nth-child(4) { width: 100px; }
 
 #rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; }
+
+#rolesThead select { width: 90%; }
+
+#rolesThead input { width: 80%; }
 
 #rolesTbody #inputRolesDiv {
 	width: 100%;
@@ -74,10 +92,6 @@
 	posistion: relative; 
 	clear: both"
 }
-
-#searchID {	width: 50px; }
-
-.w3-select { width: 75%; }
 
 li { list-style-type: none; }
 

@@ -311,59 +311,48 @@
 				class="w3-table w3-striped w3-bordered w3-border">
 				<thead>
 					<tr class="w3-light-grey">
-						<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Role
-							ID <i class="fa fa-caret-up"
-							ng-show="sortType == 'roleId' && sortReverse"></i><i
-							class="fa fa-caret-down"
-							ng-show="sortType == 'roleId' && !sortReverse"></i>
+						<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">RoleID 
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleId' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleId' && !sortReverse"></i>
 						</th>
-						<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role
-							name <i class="fa fa-caret-up"
-							ng-show="sortType == 'roleName' && sortReverse"></i><i
-							class="fa fa-caret-down"
-							ng-show="sortType == 'roleName' && !sortReverse"></i>
+						<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Role name
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleName' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleName' && !sortReverse"></i>
 						</th>
 						<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Description
-							<i class="fa fa-caret-up"
-							ng-show="sortType == 'roleDesc' && sortReverse"></i><i
-							class="fa fa-caret-down"
-							ng-show="sortType == 'roleDesc' && !sortReverse"></i>
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleDesc' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleDesc' && !sortReverse"></i>
 						</th>
-						<th
-							ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled
-							<i class="fa fa-caret-up"
-							ng-show="sortType == 'roleEnabled' && sortReverse"></i><i
-							class="fa fa-caret-down"
-							ng-show="sortType == 'roleEnabled' && !sortReverse"></i>
+						<th ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Enabled
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i>
 						</th>
-						<th ng-click="expandRow('rolesSearchRow')"><i
-							class="fa fa-search-plus" aria-hidden="true"
-							ng-if="!searchIsExpanded"></i> <i class="fa fa-search-minus"
-							aria-hidden="true" ng-if="searchIsExpanded"></i></th>
+						<th ng-click="expandRow('rolesSearchRow')">
+							<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
+							<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+						</th>
 					</tr>
 					<tr id="rolesSearchRow" ng-show="searchIsExpanded">
-						<td><input type="number" min="1" id="searchID"
-							placeholder="ID"></td>
-						<td><input type="text" placeholder="Role name"></td>
-						<td><input type="text" placeholder="Description"></td>
-						<td><select class="w3-select" name="activeRole"><option
+						<th><input type="number" min="1" id="searchID"
+							placeholder="ID"></th>
+						<th><input type="text" placeholder="Role name"></th>
+						<th><input type="text" placeholder="Description"></th>
+						<th><select class="w3-select" name="activeRole"><option
 									value="enabled">Enabled</option>
-								<option value="disabled">Disabled</option></select></td>
-						<td></td>
+								<option value="disabled">Disabled</option></select></th>
+						<th></th>
 					</tr>
 				</thead>
 			</table>
 			<div class="tableScroll">
 				<table id="rolesTbody" class="w3-table-all w3-hoverable">
 					<tbody id="rolesTableBody">
-						<tr id="{{role.name}}"
-							ng-repeat="role in roleList | orderBy:sortType:sortReverse">
+						<tr id="{{role.name}}" ng-repeat="role in roleList | orderBy:sortType:sortReverse">
 							<td>{{ role.roleId }}</td>
 							<td>{{ role.name }}</td>
 							<td>{{ role.description }}</td>
 							<td>{{ role.enabled }}</td>
-							<td><i class="fa fa-pencil-square-o" aria-hidden="true"
-								ng-click="expandRow(role.name)"></i></td>
+							<td><i class="fa fa-pencil-square-o" aria-hidden="true" ng-click="expandRow(role.name)"></i></td>
 						</tr>
 					</tbody>
 					<tfoot>
