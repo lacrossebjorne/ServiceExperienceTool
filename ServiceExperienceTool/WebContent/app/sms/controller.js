@@ -4,6 +4,8 @@ angular.module('sms')
 
 .controller('SMSController', ['$scope', 'SMSService', function($scope, SMSService) {
 	console.log("inside sms-controller");
+	var smsWrapper = {}; // Holds all data needed for sms-service
+	
 	$scope.testData = "this is some testdata";
 	$scope.contacts = [];
 	$scope.statusMessage = "välj mottagare och skicka ett meddelande";
@@ -34,8 +36,11 @@ angular.module('sms')
 		});
 		
 		console.log("number of recipients selected: " + recipients.length);
+		smsWrapper.recipients = recipients;
+		smsWrapper.message = $scope.smsMessage;
+		console.log(smsWrapper);
 		
-    SMSService.sendSMS(recipients, $scope.smsMessage, function(statusMessage) {
+		SMSService.sendSMS(smsWrapper, function(statusMessage) {
     	$scope.statusMessage = statusMessage;;
     });
 	}

@@ -5,15 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.set.dao.DAOFactory;
 import com.set.dao.UserDAO;
 import com.set.entities.News;
 import com.set.entities.User;
+import com.set.entities.SmsWrapper;
+import com.set.entities.Tag;
 import com.set.sms.SMSException;
 import com.set.sms.SMSTeknikSenderException;
 import com.set.sms.SendSMS;
@@ -50,12 +54,19 @@ public class SMSServlet extends HttpServlet {
 	}
 
 	private void sendSMS(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		String number1 = request.getParameter("recipient");
-		String message = request.getParameter("message");
-
+		Gson gson = new Gson();
+		SmsWrapper smsWrapper = gson.fromJson(request.getParameter("smsWrapper"), SmsWrapper.class);
+		String[] numbers = smsWrapper.getRecipients();
+		String message = smsWrapper.getMessage();
+		
+		// TODO
+		// Check for available credits before sending SMS
+		// int requiredCredits = numbers.length();
+		
 		try {
 			//sending dummy-sms to avoid credit loss
-			SendSMS.sendDummyMessage(URL, number1, message);
+			for (String number : numbers)
+			SendSMS.sendDummyMessage(URL, number, message);
 		} catch (SMSException | SMSTeknikSenderException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);

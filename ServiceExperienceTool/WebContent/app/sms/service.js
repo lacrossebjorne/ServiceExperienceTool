@@ -20,36 +20,42 @@ function($resource, paths, AdminFactory) {
         });
       });
       return arr;
-    }, sendSMS : function(recipients, message, callback) {
-    	var resource = $resource(paths.api + "smsServlet", {}, {
+    }, sendSMS : function(smsWrapper, callback) {
+    	var resource = $resource(paths.local + "smsServlet", {}, {
     	  sendSMS: {
     	  	method: 'POST',
     	  	params: {
     	  		action: 'sendSMS',
-    	  		recipient: '@recipient',
-    	  		message: '@message'
+    	  		smsWrapper: '@smsWrapper'
     	  	}
     	  }
     	});
     	
     	//check if there are any recipients
     	//and if the message is of the right length
-    	if (recipients.length == 0) {
+    	// Staffan: added return statements in else-if
+    	//to block obsolete call to server
+    	if (smsWrapper.recipients.length == 0) {
     		callback("Inga mottagare valda!");
     		return;
-    	} else if (message.length > 160) {
+    	} else if (smsWrapper.message.length > 160) {
     		callback("För många tecken!")
-    	} else if (message.length == 0) {
+    		return;
+    	} else if (smsWrapper.message.length == 0) {
     		callback("För få tecken!");
+    		return;
     	}
     	
   		//if sending an array with all recipients instead, then backend can handle
   		//all recipients at once. Right now it's only 1 recipient at a time
     	//also need to implement a check to see how many credits are left
-  		for (var i = 0; i < recipients.length; i++) {
-  			var recipient = recipients[i];
-  			resource.sendSMS({ 'recipient': recipient, 'message': message});
-  		}
+    	
+    	resource.sendSMS({ 'smsWrapper': smsWrapper });
+    	
+//  		for (var i = 0; i < recipients.length; i++) {
+//  			var recipient = recipients[i];
+//  			resource.sendSMS({ 'recipient': recipient, 'message': message});
+//  		}
     }
   }
   
