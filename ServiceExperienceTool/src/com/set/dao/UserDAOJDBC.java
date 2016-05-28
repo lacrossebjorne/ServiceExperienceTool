@@ -142,7 +142,7 @@ public class UserDAOJDBC implements UserDAO {
 						statement.setLong(2, userRole.getRoleId());
 						statement.addBatch();
 					}
-					if (statement.executeUpdate() == 0)
+					if (statement.executeBatch().length == 0)
 						throw new SQLException("Could not insert roles into user_roles table.");
 				}
 				connection.commit();
@@ -183,7 +183,6 @@ public class UserDAOJDBC implements UserDAO {
 			connection.setAutoCommit(false);
 			statement = prepareStatement(connection, SQL_UPDATE_USER, false, userObject);
 			int updatedRows = statement.executeUpdate();
-			System.out.println(updatedRows);
 			if (updatedRows != 0) {
 				statement = prepareStatement(connection, SQL_DELETE_USER_ROLE, false, user.getUserId());
 				statement.executeUpdate();
@@ -194,7 +193,7 @@ public class UserDAOJDBC implements UserDAO {
 						statement.setLong(2, userRole.getRoleId());
 						statement.addBatch();
 					}
-					if (statement.executeUpdate() == 0)
+					if (statement.executeBatch().length == 0)
 						throw new SQLException("Could not insert roles into user_roles table.");
 				}
 				isUpdated = true;

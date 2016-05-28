@@ -4,10 +4,8 @@ angular.module('useradmin')
 
 .controller('AdminController', ['$scope', 'AdminFactory', function($scope, AdminFactory) {
     var self = this;
-    //Hides left and right columns
-    //hideLeftRightColumns();
     
-//Scope variables 
+    //Scope variables 
     $scope.manageRolesShowHide = true;
 	$scope.userListShowHide = true;
 	$scope.addUserShowHide = true;
@@ -42,7 +40,6 @@ angular.module('useradmin')
 	self.userForm.roles = [];
 	self.roleList = [];
 	self.userRoles = [];
-	
 	
 	//User Functions
 	$scope.submitUser = function() {
@@ -80,12 +77,13 @@ angular.module('useradmin')
     self.updateUser = function(userForm) {
         AdminFactory.updateUser({user : userForm})
             .$promise.then(function(data) {
+            	self.showHide('addUserView');
             	if(data.isUpdated)
             		alert('User (' + userForm.username + ') have been updated');
             	else {
             		alert('Error updating user');
                 }
-                self.showHide('addUserView');
+                
                 self.listAllUsers();
             });
     };
@@ -162,11 +160,38 @@ angular.module('useradmin')
     	});
     };
     
+    self.updateRole = function(roleForm) {
+    	AdminFactory.updateRole({role : roleForm})
+    	.$promise.then(function(data) {
+    		if(data.isUpdated)
+    			self.listAllRoles();
+    		else
+    			alert('Error updating role');
+    	});
+    };
+    
+    self.deleteRole = function(role) {
+    	AdminFactory.deleteRole({role : role.roleId})
+    	.$promise.then(function(data) {
+    		if(data.isDeleted)
+    			alert('The role ' + role.name + ' have been deleted');
+    		else
+    			alert('Error deleting role ' + role.name);
+    	});
+    };
+    
+    $scope.deleteRole = function() {
+    	var answer = confirm('Are you sure you want to delete role:\nRoleID: ' + this.role.roleId + ' Role name: ' + this.role.name + '\nThis can not be undone.');
+    	if(answer)
+    		self.deleteRole(this.role);
+    };
+    
     
     //Clean up the lists and tables when you close them
     self.close = function(view) {
     	$scope.userRoles = [];
     	self.userRoles = [];
+    	$scope.roleForm = {};
     	$scope.user = {
             userId: null,
             firstName: '',
@@ -199,7 +224,7 @@ angular.module('useradmin')
     
     //Opens the selected modal window
     $scope.showHide = function(id) {
-    	self.showHide(id);
+    	self.showHide(id)
     };
     
     self.showHide = function(id) {
