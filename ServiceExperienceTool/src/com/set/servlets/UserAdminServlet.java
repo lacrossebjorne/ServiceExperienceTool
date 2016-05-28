@@ -67,12 +67,10 @@ public class UserAdminServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("updateUser") != null) {
-			System.out.println(request.getParameter("updateUser"));
 			boolean isUpdated = getDAOFactory().getUserDAO().updateUser(gson.fromJson(request.getParameter("updateUser"), User.class));
 			Map<String, Object> map = new HashMap<>();
 			if(isUpdated)
 				map.put("isUpdated", isUpdated);
-			System.out.println(isUpdated);
 			writeJson(response, map);
 		}
 		

@@ -18,14 +18,12 @@ import com.set.entities.Role;
 import com.set.entities.User;
 
 public class UserDeserializer implements JsonDeserializer<User> {
-	{
-
-	}
 
 	@Override
 	public User deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 			throws JsonParseException {
 		
+		//Get the submitted roles and create a map with the rolename and status
 		JsonArray jsonRolesArray = json.getAsJsonObject().get("roles").getAsJsonArray();
 		Type mapType = new TypeToken<Map<String, Boolean>>() {}.getType();
 		Map<String, Boolean> rolesMap = new HashMap<>();
@@ -34,6 +32,7 @@ public class UserDeserializer implements JsonDeserializer<User> {
 				rolesMap.putAll(new Gson().fromJson(jsonElement, mapType));
 		}
 		
+		//Retreive all roles and compare them to the map. Add the roles with status true to the user
 		List<Role> roles = DAOFactory.getInstance("setdb.jndi").getRoleDAO().listRoles();
 
 		List<Role> userRoles = new ArrayList<>();

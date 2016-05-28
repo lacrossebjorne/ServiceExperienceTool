@@ -77,12 +77,13 @@ angular.module('useradmin')
     self.updateUser = function(userForm) {
         AdminFactory.updateUser({user : userForm})
             .$promise.then(function(data) {
+            	self.showHide('addUserView');
             	if(data.isUpdated)
             		alert('User (' + userForm.username + ') have been updated');
             	else {
             		alert('Error updating user');
                 }
-                self.showHide('addUserView');
+                
                 self.listAllUsers();
             });
     };
@@ -223,7 +224,7 @@ angular.module('useradmin')
     
     //Opens the selected modal window
     $scope.showHide = function(id) {
-    	self.showHide(id);
+    	self.showHide(id)
     };
     
     self.showHide = function(id) {
