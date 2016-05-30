@@ -15,7 +15,7 @@
 		<!-- Add doc -->
 		<li class="w3-padding-hor-16" style="min-height: 100px">
 			<span
-				ng-click="addDocument(newDocTitle,upFile)"
+				ng-click="addDocument(newDocTitle,upFileName)"
 				class="w3-closebtn w3-padding"> <i class="fa fa-plus"></i>
 			</span>
 			<span
@@ -25,7 +25,7 @@
 			<input id="title" class="w3-small" type="text" placeholder="Title"
 				ng-model="newDocTitle" style="width: 50%">
 			<input id="url"
-				class="w3-small w3-margin-top" type="file" ng-model="upFile"
+				class="w3-small w3-margin-top" type="file" ng-model="upFileName"
 				onchange="angular.element(this).scope().setFile(this)"
 				style="width: 50%">
 		</li>

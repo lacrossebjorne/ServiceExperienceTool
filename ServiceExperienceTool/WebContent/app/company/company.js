@@ -12,6 +12,12 @@ angular.module('company', [
   });
 }])
 
+/**
+ * Stores local resources on startup 
+ * instead of gathering data from server.
+ * 
+ * These could in a later build be collected from server.
+ */
 .config(function($provide) {
   $provide.value('company.data', {
     links: [{
