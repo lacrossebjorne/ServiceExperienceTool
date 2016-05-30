@@ -196,6 +196,9 @@ angular.module('useradmin')
     
     //Clean up the lists and tables when you close them
     self.close = function(view) {
+    	$scope.searchIsExpanded = false;
+    	$scope.search = {};
+    	$scope.isExpanded = false;
     	$scope.userRoles = [];
     	self.userRoles = [];
     	$scope.roleForm = {};
@@ -216,18 +219,11 @@ angular.module('useradmin')
     		$scope.userForm.roles = [];
     		self.userForm = {};
     		self.userForm.roles = [];
-    		$scope.newUserForm.$setPristine();
     	} else if (view == 'manageRolesView') {
-    		$scope.manageRolesShowHide = true;
     		$scope.roleList = [];
-    		$scope.roleForm = {};
-            $scope.newRoleForm.$setPristine();
     	} else if (view == 'userListView') {
     		$scope.users = [];
     	}
-    	$scope.searchIsExpanded = false;
-    	$scope.search = {};
-    	$scope.isExpanded = false;
     };
     
     //Opens the selected modal window
@@ -265,6 +261,8 @@ angular.module('useradmin')
     			self.listAllRoles();
     		}
     		else {
+    			$scope.manageRolesShowHide = true;
+    			
     			self.close('manageRolesView');
     		}
     	    break;
@@ -272,11 +270,12 @@ angular.module('useradmin')
     };
     
     //Exands the selected row
-    $scope.expandRow = function(id) {
-    	if(id == 'userSearchRow' | id == 'rolesSearchRow')
-    		this.searchIsExpanded = !this.searchIsExpanded;
-    	else 
-    		this.isExpanded = !this.isExpanded;
+    $scope.expandRow = function() {
+    	this.isExpanded = !this.isExpanded;
+    };
+    
+    $scope.expandSearch= function() {
+    	this.searchIsExpanded = !this.searchIsExpanded;
     };
     
     //Side nav open close on small screens
