@@ -1,0 +1,116 @@
+<div class="w3-blue-grey w3-padding-ver-16">
+				<span ng-click="showHide('manageRolesView')" class="w3-closebtn">&times;</span>
+				<h3 class="w3-margin-0">SET: administrera roller</h3>
+			</div>
+			<table id="rolesThead"
+				class="w3-table w3-striped w3-bordered w3-border">
+				<thead>
+					<tr class="w3-light-grey">
+						<th ng-click="sortType = 'roleId'; sortReverse = !sortReverse">Roll-ID&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleId' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleId' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'roleName'; sortReverse = !sortReverse">Rollnamn&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleName' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleName' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'roleDesc'; sortReverse = !sortReverse">Beskrivning&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleDesc' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleDesc' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'roleEnabled'; sortReverse = !sortReverse">Aktiv&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i>
+						</th>
+						<th ng-click="expandRow('rolesSearchRow')">
+							<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
+							<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+						</th>
+					</tr>
+					<tr id="rolesSearchRow" ng-show="searchIsExpanded">
+						<th>
+							<input type="number" min="1" id="searchID"	placeholder="ID">
+						</th>
+						<th>
+							<input type="text" placeholder="Rollnamn">
+						</th>
+						<th>
+							<input type="text" placeholder="Beskrivning">
+						</th>
+						<th>
+							<select class="w3-select" name="activeRole">
+								<option value=""></option>
+								<option	value="enabled">Aktiv</option>
+								<option value="disabled">Inaktiv</option>
+							</select>
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+			</table>
+			<div class="tableScroll">
+				<table id="rolesTbody" class="w3-table-all w3-hoverable">
+					<tbody id="rolesTableBody">
+						<tr id="{{role.roleId}}" ng-repeat-start="role in roleList | orderBy:sortType:sortReverse" ng-click="expandRow()">
+							<td>{{ role.roleId }}</td>
+							<td>{{ role.name }}</td>
+							<td>{{ role.description }}</td>
+							<td>
+								<i class="fa fa-check w3-large w3-text-green" ng-if="role.enabled"></i>
+								<i class="fa fa-times w3-large w3-text-red" ng-if="!role.enabled"></i>
+							</td>
+							<td>
+								<i class="fa fa-plus-square" aria-hidden="true" ng-show="!isExpanded"></i>
+								<i class="fa fa-minus-square" aria-hidden="true" ng-show="isExpanded">
+							</td>
+						</tr>
+						<tr id="{{role.roleId}}" ng-repeat-end ng-show="isExpanded">
+							<td colspan="5">
+								<div class="hiddenRow w3-row">
+									<div class="w3-col l11 m11 s12">
+										<p>Användare</p>
+										<ul>
+											<li ng-repeat="user in role.userList">{{ user.username }}</li>
+										</ul>
+									</div>
+									<div class="w3-col l1 m1 s12 wrapper">
+											<span class="fa fa-pencil-square-o w3-xlarge" ng-click="editRole()"></span>
+											<span class="fa fa-times w3-xlarge w3-text-red" ng-click="deleteRole()"></span>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<div colspan="5" id="inputRolesDiv" class="w3-display-bottommiddle">
+					<form name="newRoleForm" ng-submit="submitRole()">
+						<input type="hidden" name="roleId" ng-model="roleForm.roleId" />
+							<div class="w3-col s2 w3-padding-tiny">
+								<label class="labelLeft">Roll</label>
+								<input id="roleName" type="text"
+										class="w3-input w3-border w3-hover-border-black"
+										placeholder="Enter role name" ng-model="roleForm.name"
+										required>
+							</div>
+							<div class="w3-col s7 w3-padding-tiny">
+								<label class="labelLeft">Beskrivning</label>
+								<input id="roleDescription" type="text"
+									class="w3-input w3-border w3-hover-border-black"
+									placeholder="Enter role description"
+									ng-model="roleForm.description" required>
+							</div>
+							<div class="w3-col s1 w3-padding-tiny">
+								<label>Aktiv</label>
+								<input id="roleEnable" type="checkbox" class="w3-check w3-input w3-content"
+										ng-model="roleForm.enabled">
+							</div>
+							<div class="w3-col s2 w3-padding-tiny">
+								<label>&nbsp;</label>
+									<button type="submit" class="w3-btn w3-btn-block w3-blue-grey"
+										ng-disabled="newRoleForm.$invalid">Spara</button>
+							</div>
+					</form>
+				</div>
+			</div>

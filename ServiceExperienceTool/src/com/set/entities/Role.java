@@ -1,5 +1,8 @@
 package com.set.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Role implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -7,6 +10,7 @@ public class Role implements java.io.Serializable {
 	private String name;
 	private String description;
 	private Boolean enabled = false;
+	private List<User> userList = new ArrayList<>();
 
 	public Role() {
 	}
@@ -54,7 +58,44 @@ public class Role implements java.io.Serializable {
 		this.enabled = enabled;
 	}
 	
+	public List<User> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	
+	public Role merge(Role other) {
+		this.userList.addAll(other.userList);
+		return this;
+	}
+
+	 // Object overrides ---------------------------------------------------------------------------
+
+    /**
+     * The role ID is unique for each Role. So this should compare Role by ID only.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Role) && (roleId != null)
+             ? roleId.equals(((Role) other).roleId)
+             : (other == this);
+    }
+
+    /**
+     * The role ID is unique for each Role. So Role with same ID should return same hashcode.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return (roleId != null) 
+             ? (this.getClass().hashCode() + roleId.hashCode()) 
+             : super.hashCode();
+    }
+    
 	public String toString() {
-		return "ID: " + roleId + " Rolename: " + name + " Description: " + description + " Enabled: " + enabled;
+		return "ID: " + roleId + " Rolename: " + name + " Description: " + description + " Enabled: " + enabled + " Users: " + userList;
 	}
 }

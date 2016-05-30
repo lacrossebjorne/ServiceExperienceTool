@@ -1,0 +1,137 @@
+<div class="w3-blue-grey w3-padding-ver-16">
+				<span ng-click="showHide('userListView')" class="w3-closebtn">&times;</span>
+				<h3 class="w3-margin-0">SET: användarlista</h3>
+			</div>
+			<table id="userListThead"
+				class="w3-table w3-bordered w3-border w3-striped">
+				<thead>
+					<tr class="w3-light-grey">
+						<th ng-click="sortType = 'userId'; sortReverse = !sortReverse">Anv.ID&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'userId' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'userId' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'firstname'; sortReverse = !sortReverse">Förnamn&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'firstname' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'firstname' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'lastname'; sortReverse = !sortReverse">Efternamn&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'lastname' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'lastname' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'username'; sortReverse = !sortReverse">Användarnamn&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'username' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'username' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'email'; sortReverse = !sortReverse">Epostadress&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'email' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'email' && !sortReverse"></i>
+						</th>
+						<th
+							ng-click="sortType = 'phonenumber'; sortReverse = !sortReverse">Telefonnummer&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'phonenumber' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'phonenumber' && !sortReverse"></i>
+						</th>
+						<th ng-click="sortType = 'enabled'; sortReverse = !sortReverse">Aktiv&nbsp;
+							<i class="fa fa-caret-up" ng-show="sortType == 'enabled' && sortReverse"></i>
+							<i class="fa fa-caret-down" ng-show="sortType == 'enabled' && !sortReverse"></i>
+						</th>
+						<th ng-click="expandRow('userSearchRow')">
+							<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
+							<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
+						</th>
+					</tr>
+					<tr id="userSearchRow" ng-show="searchIsExpanded">
+						<th>
+							<input type="number" id="searchID" value=""	placeholder="ID" ng-model="search.userId">
+						</th>
+						<th>
+							<input type="text" placeholder="Förnamn" ng-model="search.firstName">
+						</th>
+						<th>
+							<input type="text" placeholder="Efternamn" ng-model="search.lastName">
+						</th>
+						<th>
+							<input type="text" placeholder="Användarnamn" ng-model="search.username">
+						</th>
+						<th>
+							<input type="text" placeholder="Email" ng-model="search.email">
+						</th>
+						<th>
+							<input type="text" placeholder="Telefonnummer" ng-model="search.phoneNumber"></th>
+						<th>
+							<select class="w3-select" name="activeUser"	ng-model="search.enabled">
+								<option value=""></option>
+								<option value="true">Aktiv</option>
+								<option value="false">Inaktiv</option>
+							</select>
+						</th>
+						<th></th>
+					</tr>
+				</thead>
+			</table>
+			<div class="tableScroll">
+				<table id="userListTbody" class="w3-table-all">
+					<tbody>
+						<tr ng-repeat-start="user in users | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
+							<td>{{ user.userId }}</td>
+							<td>{{ user.firstName }}</td>
+							<td>{{ user.lastName }}</td>
+							<td>{{ user.username }}</td>
+							<td>{{ user.email }}</td>
+							<td>{{ user.phoneNumber }}</td>
+							<td>
+								<i class="fa fa-check w3-large w3-text-green" ng-if="user.enabled"></i>
+								<i class="fa fa-times w3-large w3-text-red" ng-if="!user.enabled"></i>
+							</td>
+							<td>
+								<i class="fa fa-plus-square " aria-hidden="true" ng-show="!isExpanded"></i>
+								<i class="fa fa-minus-square" aria-hidden="true" ng-show="isExpanded">
+							</td>
+						</tr>
+						<tr id="{{ user.username }}" ng-repeat-end ng-show="isExpanded">
+							<td colspan="8">
+								<div class="w3-row hiddenRow">
+									<div class="w3-col l1 m4 s12">
+										<b>Bild</b>
+									</div>
+									<div class="w3-col l2 m8 s12">
+											<p>Roller</p>
+											<li ng-repeat="role in user.roles">{{ role.name }}</li>
+									</div>
+									<div class="w3-col l2 m6 s12">
+										<p>Datum</p>
+										<li>Skapad:&#8195;{{ user.createdAt | date:'yyyy-MM-dd' }}</li>
+										<li>Uppdaterad:&#8195;{{ user.updatedAt | date:'yyyy-MM-dd' }}</li>
+									</div>
+									<div class="w3-col l4 m6 s12">
+										<p>Beskrivning</p>
+										<li>{{ user.description }}</li>
+									</div>
+									<div class="w3-col l2 m8 s12">
+										<p>Lösenordsåterställning</p>
+										<li ng-repeat-start="reset in user.resetPasswords" ng-if="reset.expirationTime != null && reset.expirationTime > today">Aktiv</li>
+										<li ng-if="reset == null || reset.expirationTime != '' || reset.expirationTime < today">Inaktiv</li>
+										<li>Giltig till:</li>
+										<li ng-repeat-end>{{reset.expirationTime | date:'yyyy-MM-dd HH:mm:ss' }}</li>
+									</div>
+									<div class="w3-col l1 m4 s12 wrapper">
+										<span class="fa fa-pencil-square-o w3-xlarge" ng-click="editUser()"></span>
+										<span class="fa fa-times w3-xlarge w3-text-red" ng-click="deleteUser()"></span>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="w3-center">
+				<ul class="w3-pagination w3-border" ng-if="users.length > 10">
+					<li><a href="#">«</a></li>
+					<li><a class="w3-green" href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+					<li><a href="#">»</a></li>
+				</ul>
+			</div>

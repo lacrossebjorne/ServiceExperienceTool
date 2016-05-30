@@ -69,8 +69,7 @@ public class UserAdminServlet extends HttpServlet {
 		if (request.getParameter("updateUser") != null) {
 			boolean isUpdated = getDAOFactory().getUserDAO().updateUser(gson.fromJson(request.getParameter("updateUser"), User.class));
 			Map<String, Object> map = new HashMap<>();
-			if(isUpdated)
-				map.put("isUpdated", isUpdated);
+			map.put("isUpdated", isUpdated);
 			writeJson(response, map);
 		}
 		
@@ -92,6 +91,22 @@ public class UserAdminServlet extends HttpServlet {
 				map.put("role", role);
 			}
 			map.put("isValid", isValid);
+			writeJson(response, map);
+		}
+		
+		if (request.getParameter("updateRole") != null) {
+			boolean isUpdated = getDAOFactory().getRoleDAO().updateRole(gson.fromJson(request.getParameter("updateRole"), Role.class));
+			Map<String, Object> map = new HashMap<>();
+			map.put("isUpdated", isUpdated);
+			writeJson(response, map);
+		}
+		
+		if (request.getParameter("deleteRole") != null) {
+			Long roleId = Long.parseLong(request.getParameter("deleteRole"));
+			Role role = getDAOFactory().getRoleDAO().find(roleId);
+			boolean isDeleted = getDAOFactory().getRoleDAO().deleteRole(role);
+			Map<String, Object> map = new HashMap<>();
+			map.put("isDeleted", isDeleted);
 			writeJson(response, map);
 		}
 	}
