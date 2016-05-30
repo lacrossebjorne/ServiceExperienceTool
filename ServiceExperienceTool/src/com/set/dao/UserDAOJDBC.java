@@ -62,6 +62,7 @@ public class UserDAOJDBC implements UserDAO {
 
 	private User find(String sql, Object... values) {
 		// Store user in list if more than one row get returned from db
+		//Merge all returned rows into one user
 		List<User> userAsList = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -352,9 +353,13 @@ public class UserDAOJDBC implements UserDAO {
 			}
 		}
 	}
-
-	// Processes the resultSet from the database and creates an User entity for
-	// each row returned
+	
+	/**
+	 * Processes the resultSet from the database and creates an User entity for
+	 * each row returned
+	 * @param ResultSet
+	 * @return User
+	 */
 	private User processUser(ResultSet resultSet) throws SQLException {
 		User user = new User();
 		isoDateConverter = new IsoDateConverter();

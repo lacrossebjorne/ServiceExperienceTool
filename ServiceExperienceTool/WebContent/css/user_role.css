@@ -1,3 +1,10 @@
+#sideNav {
+	z-index: 3; 
+	width: 250px;
+	max-height: 75%;
+	posistion: relative; 
+	clear: both;
+}
 
 .modal {
 	z-index: 3;
@@ -34,9 +41,33 @@
 
 /* Scrollable table list */
 .tableScroll {
-	height: 450px;
+	height: 410px;
 	overflow: auto;
 }
+
+/* Expandable row styling */
+.hiddenRow {
+	display: flex;
+	text-align: start;
+	max-height: 150px;
+	overflow: auto;
+}
+
+.hiddenRow p {
+	margin-top: 0px;
+	margin-bottom: 2px;
+	font-weight: bold;
+}
+
+.wrapper { 
+	text-align: center;
+	align-self: center;	
+}
+
+.wrapper li:nth-child(2) { padding: .5em; }
+
+li { list-style-type: none; }
+
 
 /* User list table styling */
 #userListThead th:first-child  { width: 115px; }
@@ -53,10 +84,10 @@
 
 #userListThead select { width: 90%; }
 
-#userListThead th:last-child, #userListTbody td:last-child { text-align: center; }
+#userListThead th:last-child, #userListTbody td:last-child { width: 50px; text-align: center; }
 
 /* Role list table styling */
-#rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) { width: 115px; }
+#rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) { width: 115px; text-align: center;}
 
 #rolesThead th:nth-child(2), #rolesTbody td:nth-child(2) { width: 200px;}
 
@@ -64,37 +95,33 @@
 
 #rolesThead th:nth-child(4), #rolesTbody td:nth-child(4) { width: 100px; }
 
-#rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; }
+#rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; text-align: center; }
 
 #rolesThead select { width: 90%; }
 
 #rolesThead input { width: 80%; }
 
-#rolesTbody #inputRolesDiv {
+#inputRolesDiv {
 	width: 100%;
-	padding-bottom: 6px;
-	text-align: left;
+	padding: 6px;
 }
 
-.wrapper {
-	text-align: end;
-	padding-right: 1em;
+#inputRolesDiv form div label { font-weight: bold; }
+
+#inputRolesDiv .labelLeft {
+	float: left;
+	margin-left: 3px;
 }
 
-.wrapper li:nth-child(2) {
-	padding: .5em;
+#rolesTbody .hiddenRow ul {
+	margin-top: 0px;
+	-webkit-padding-start: 0px;
+	text-align: start;
 }
 
-#sideNav {
-	z-index: 3; 
-	width: 250px;
-	max-height: 71.5%;
-	posistion: relative; 
-	clear: both"
+#rolesTbody li {
+	width: 20%;
+	float:left;
 }
-
-li { list-style-type: none; }
 
 .has-error { border: red; }
-
-.fa-times {	color: red; }

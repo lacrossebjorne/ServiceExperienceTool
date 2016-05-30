@@ -5,9 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.set.entities.Role;
+import com.set.entities.User;
+
 import static com.set.dao.DAOUtil.*;
 
 /**
@@ -39,7 +43,7 @@ public class RoleDAOJDBC implements RoleDAO {
 	}
 
 	private Role find(String sql, Object... values) {
-		Role role = null;
+		List<Role> roleAsList = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet resultSet = null;
@@ -48,7 +52,7 @@ public class RoleDAOJDBC implements RoleDAO {
 			statement = prepareStatement(connection, sql, false, values);
 			resultSet = statement.executeQuery();
 			if(resultSet.next()) {
-				role = processResult(resultSet);
+				roleAsList.add(processResult(resultSet));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -61,7 +65,8 @@ public class RoleDAOJDBC implements RoleDAO {
 				e1.printStackTrace();
 			}
 		}
-		return role;
+		roleAsList = mergeAll(roleAsList);
+		return roleAsList.get(0);
 	}
 
 	@Override
@@ -88,7 +93,7 @@ public class RoleDAOJDBC implements RoleDAO {
 				e1.printStackTrace();
 			}
 		}
-		return roles;
+		return mergeAll(roles);
 	}
 
 	@Override
@@ -133,10 +138,11 @@ public class RoleDAOJDBC implements RoleDAO {
 	}
 
 	@Override
-	public void updateRole(Role role) {
+	public boolean updateRole(Role role) {
+		boolean isUpdated = false;
 		if (role.getRoleId() == null)
 			throw new IllegalArgumentException("Role does not exist");
-		Object[] roleObj = { role.getName(), role.getDescription(), role.isEnabled() };
+		Object[] roleObj = { role.getName(), role.getDescription(), role.isEnabled(), role.getRoleId() };
 		Connection connection = null;
 		PreparedStatement statement = null;
 		ResultSet keys = null;
@@ -147,6 +153,7 @@ public class RoleDAOJDBC implements RoleDAO {
 			if (statement.executeUpdate() == 0)
 				throw new SQLException("New role failed to be inserted");
 			connection.commit();
+			isUpdated = true;
 		} catch (SQLException | IllegalArgumentException e) {
 			try {
 				connection.rollback();
@@ -165,10 +172,12 @@ public class RoleDAOJDBC implements RoleDAO {
 				e1.printStackTrace();
 			}
 		}
+		return isUpdated;
 	}
 
 	@Override
-	public void deleteRole(Role role) {
+	public boolean deleteRole(Role role) {
+		boolean isDeleted = false;
 		if (role.getRoleId() == null)
 			throw new IllegalArgumentException("Role does not exist");
 		Object[] roleObj = { role.getRoleId() };
@@ -184,6 +193,7 @@ public class RoleDAOJDBC implements RoleDAO {
 			else
 				role.setRoleId(null);
 			connection.commit();
+			isDeleted = true;
 		} catch (SQLException | IllegalArgumentException e) {
 			try {
 				connection.rollback();
@@ -202,21 +212,9 @@ public class RoleDAOJDBC implements RoleDAO {
 				e1.printStackTrace();
 			}
 		}
+		return isDeleted;
 	}
 	
-	/**
-	 * @param resultSet
-	 * @return
-	 */
-	private Role processResult(ResultSet resultSet) throws SQLException {
-		Role role = new Role();
-		role.setRoleId(resultSet.getLong(1));
-		role.setName(resultSet.getString(2));
-		role.setDescription(resultSet.getString(3));
-		role.setEnabled(resultSet.getBoolean(4));
-		return role;
-	}
-
 	@Override
 	public void enableRole(Role role) {
 		// TODO Auto-generated method stub
@@ -228,5 +226,35 @@ public class RoleDAOJDBC implements RoleDAO {
 		// TODO Auto-generated method stub
 
 	}
-
+	
+	/*
+	 * Merges collected user entities from database (multiple rows with same
+	 * userId can be returned from the stored procedure) who have the same
+	 * userId - on roles and resetpasswords
+	 */
+	private List<Role> mergeAll(Collection<Role> input) {
+		return new ArrayList<>(input.stream().collect(Collectors.toMap(Role::getRoleId, e -> e, Role::merge)).values());
+	}
+	
+	/**
+	 * @param resultSet
+	 * @return Role
+	 */
+	private Role processResult(ResultSet resultSet) throws SQLException {
+		Role role = new Role();
+		role.setRoleId(resultSet.getLong("role_id"));
+		role.setName(resultSet.getString("name"));
+		role.setDescription(resultSet.getString("description"));
+		role.setEnabled(resultSet.getBoolean("enabled"));
+		List<User> userList = new ArrayList<>();
+		Long userID = null;
+		if((userID = resultSet.getLong("user_id")) != 0) {
+			User user = new User();
+			user.setUserId(userID);
+			user.setUserName(resultSet.getString("user_name"));
+			userList.add(user);
+			role.setUserList(userList);
+		}	
+		return role;
+	}
 }

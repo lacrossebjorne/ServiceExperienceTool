@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.set.dao;
 
 import java.util.List;
@@ -21,9 +18,9 @@ public interface RoleDAO {
 	
 	public Role createRole(Role role);
 	
-	public void updateRole(Role role);
+	public boolean updateRole(Role role);
 	
-	public void deleteRole(Role role);
+	public boolean deleteRole(Role role);
 	
 	public void enableRole(Role role);
 	

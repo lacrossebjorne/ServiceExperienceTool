@@ -26,11 +26,10 @@ angular.module('useradmin')
 	$scope.userForm.roles = [];
 	$scope.roleForm = {};
 	$scope.today = new Date();
-	$scope.isExpanded = false
-	$scope.searchIsExpanded = false
+	$scope.isExpanded = false;
+	$scope.searchIsExpanded = false;
 	$scope.regexUserName = '([a-z])\\w+\\.([a-z])\\w+';
 	$scope.regexNumber = '\\d+';
-	$scope.sortType = 'userId';
 	$scope.sortReverse = false;
 	
 	//Local variables
@@ -67,9 +66,9 @@ angular.module('useradmin')
         AdminFactory.createUser({user : userForm})
             .$promise.then(function(data) {
             	if(data.isValid)
-            		alert("New user (" + userForm.username + ") created with UserID: " + data.userId);
+            		alert("Ny användare (" + userForm.username + ") skapad med AnvändarID: " + data.userId);
             	else {
-            		alert('Error creating user');
+            		alert('Ett fel upstod när användaren skulle skapas');
                 }
             });
     };
@@ -78,13 +77,13 @@ angular.module('useradmin')
         AdminFactory.updateUser({user : userForm})
             .$promise.then(function(data) {
             	self.showHide('addUserView');
-            	if(data.isUpdated)
-            		alert('User (' + userForm.username + ') have been updated');
+            	if(data.isUpdated) {
+            		self.listAllUsers();
+            		alert('Användare (' + userForm.username + ') har uppdaterats');
+            	}
             	else {
-            		alert('Error updating user');
+            		alert('Ett fel uppstod när användaren skulle uppdateras');
                 }
-                
-                self.listAllUsers();
             });
     };
     
@@ -116,16 +115,16 @@ angular.module('useradmin')
             .$promise.then(function(data) {
             	if(data.isDeleted) {
             		self.listAllUsers();
-            		alert('User ' + user.username + ' have been deleted');
+            		alert('Användare ' + user.username + ' har raderats');
             	}
             	else {
-                    alert('Error deleting user');
+                    alert('Ett fel upstod när användaren skulle raderas');
                 }
             });
     };
     
     $scope.deleteUser = function() {
-    	var answer = confirm('Are you sure you want to delete user:\nUserID: ' + this.user.userId + ' Username: ' + this.user.username + '\nThis can not be undone.');
+    	var answer = confirm('Är du säker på att radera användaren:\nAnvändarID: ' + this.user.userId + ' Användarnamn: ' + this.user.username + '\nDetta går inte att ångra.');
     	if(answer)
     		self.deleteUser(this.user);
     };
@@ -161,27 +160,35 @@ angular.module('useradmin')
     };
     
     self.updateRole = function(roleForm) {
+    	console.log(roleForm);
     	AdminFactory.updateRole({role : roleForm})
     	.$promise.then(function(data) {
-    		if(data.isUpdated)
+    		if(data.isUpdated) {
     			self.listAllRoles();
+    			alert('Rollen ' + roleForm.name + ' har uppdaterats');
+    		}
     		else
-    			alert('Error updating role');
+    			alert('Ett fel uppstod när rollen uppdaterades.');
     	});
+    };
+    
+    $scope.editRole = function() {
+    	var role = this.role;
+    	$scope.roleForm = angular.copy(role);
     };
     
     self.deleteRole = function(role) {
     	AdminFactory.deleteRole({role : role.roleId})
     	.$promise.then(function(data) {
     		if(data.isDeleted)
-    			alert('The role ' + role.name + ' have been deleted');
+    			alert('Rollen ' + role.name + '  har raderats');
     		else
-    			alert('Error deleting role ' + role.name);
+    			alert('Ett fel uppstod när rollen ' + role.name + ' skulle raderas');
     	});
     };
     
     $scope.deleteRole = function() {
-    	var answer = confirm('Are you sure you want to delete role:\nRoleID: ' + this.role.roleId + ' Role name: ' + this.role.name + '\nThis can not be undone.');
+    	var answer = confirm('Är du säker på att du vill radera rollen:\nRoleID: ' + this.role.roleId + ' : ' + this.role.name + '\nDetta går inte att ångra.');
     	if(answer)
     		self.deleteRole(this.role);
     };
@@ -220,6 +227,7 @@ angular.module('useradmin')
     	}
     	$scope.searchIsExpanded = false;
     	$scope.search = {};
+    	$scope.isExpanded = false;
     };
     
     //Opens the selected modal window
@@ -242,6 +250,7 @@ angular.module('useradmin')
     	case 'userListView':
     		if ($scope.userListShowHide) {
     			$scope.userListShowHide = false;
+    			$scope.sortType = 'userId';
     			self.listAllUsers();
     		}
     		else{
@@ -252,6 +261,7 @@ angular.module('useradmin')
     	case 'manageRolesView':
     		if ($scope.manageRolesShowHide) {
     			$scope.manageRolesShowHide = false;
+    			$scope.sortType = 'roleId';
     			self.listAllRoles();
     		}
     		else {
