@@ -22,26 +22,26 @@
 							<i class="fa fa-caret-up" ng-show="sortType == 'roleEnabled' && sortReverse"></i>
 							<i class="fa fa-caret-down" ng-show="sortType == 'roleEnabled' && !sortReverse"></i>
 						</th>
-						<th ng-click="expandRow('rolesSearchRow')">
+						<th ng-click="expandSearch()">
 							<i class="fa fa-search-plus" aria-hidden="true" ng-if="!searchIsExpanded"></i>
 							<i class="fa fa-search-minus" aria-hidden="true" ng-if="searchIsExpanded"></i>
 						</th>
 					</tr>
 					<tr id="rolesSearchRow" ng-show="searchIsExpanded">
 						<th>
-							<input type="number" min="1" id="searchID"	placeholder="ID">
+							<input type="number" min="1" id="searchID"	placeholder="ID" ng-model="search.roleId">
 						</th>
 						<th>
-							<input type="text" placeholder="Rollnamn">
+							<input type="text" placeholder="Rollnamn" ng-model="search.name">
 						</th>
 						<th>
-							<input type="text" placeholder="Beskrivning">
+							<input type="text" placeholder="Beskrivning" ng-model="search.description">
 						</th>
 						<th>
-							<select class="w3-select" name="activeRole">
+							<select class="w3-select" name="activeRole" ng-model="search.enabled">
 								<option value=""></option>
-								<option	value="enabled">Aktiv</option>
-								<option value="disabled">Inaktiv</option>
+								<option	value="true">Aktiv</option>
+								<option value="false">Inaktiv</option>
 							</select>
 						</th>
 						<th></th>
@@ -51,7 +51,7 @@
 			<div class="tableScroll">
 				<table id="rolesTbody" class="w3-table-all w3-hoverable">
 					<tbody id="rolesTableBody">
-						<tr id="{{role.roleId}}" ng-repeat-start="role in roleList | orderBy:sortType:sortReverse" ng-click="expandRow()">
+						<tr id="{{role.roleId}}" ng-repeat-start="role in roleList | orderBy:sortType:sortReverse | filter:search" ng-click="expandRow()">
 							<td>{{ role.roleId }}</td>
 							<td>{{ role.name }}</td>
 							<td>{{ role.description }}</td>

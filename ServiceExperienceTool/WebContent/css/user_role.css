@@ -80,9 +80,9 @@ li { list-style-type: none; }
 
 #userListThead th:nth-child(5), #userListTbody td:nth-child(5) { width: 250px; }
 
-#userListThead input { width: 80%; }
+#userListThead input { width: 80%; font-weight: normal;}
 
-#userListThead select { width: 90%; }
+#userListThead select { width: 90%; font-weight: normal; }
 
 #userListThead th:last-child, #userListTbody td:last-child { width: 50px; text-align: center; }
 
@@ -97,9 +97,9 @@ li { list-style-type: none; }
 
 #rolesThead th:last-child, #rolesTbody td:last-child { width: 50px; text-align: center; }
 
-#rolesThead select { width: 90%; }
+#rolesThead select { width: 90%; font-weight: normal; }
 
-#rolesThead input { width: 80%; }
+#rolesThead input { width: 80%; font-weight: normal; }
 
 #inputRolesDiv {
 	width: 100%;
