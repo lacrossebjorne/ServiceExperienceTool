@@ -1,15 +1,17 @@
 'use strict';
 
-angular.module('other-products')
+angular.module('team')
 
-.controller('OtherProductsController', ['$scope', '$location', 'products.data', 'pushService', function($scope, $location, productsData, pushService) {
+.controller('TeamController', ['$scope', '$location', 'team.data', 'pushService', function($scope, $location, teamData, pushService) {
     var imgIndex = 0;
-    var imgUris = productsData.imgUris;
+    var imgUris = teamData.imgUris;
     var imageSwitch = function() {
-        return productsData.imgUris[imgIndex++ % imgUris.length];
+        return teamData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.tabs = productsData.tabs;
+    $scope.links = teamData.links;
+    $scope.documents = teamData.docs;
+    $scope.tabs = teamData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
 

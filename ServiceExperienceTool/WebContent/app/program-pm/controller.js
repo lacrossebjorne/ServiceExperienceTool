@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('other-products')
+angular.module('program-pm')
 
-.controller('OtherProductsController', ['$scope', '$location', 'products.data', 'pushService', function($scope, $location, productsData, pushService) {
+.controller('ProgramPmController', ['$scope', '$location', 'program-pm.data', 'pushService', function($scope, $location, programData, pushService) {
     var imgIndex = 0;
-    var imgUris = productsData.imgUris;
+    var imgUris = programData.imgUris;
     var imageSwitch = function() {
-        return productsData.imgUris[imgIndex++ % imgUris.length];
+        return programData.imgUris[imgIndex++ % imgUris.length];
     }
 
-    $scope.tabs = productsData.tabs;
+    $scope.tabs = programData.tabs;
     $scope.currentTab = $scope.tabs[0].url;
     $scope.imgA = imageSwitch();
 
