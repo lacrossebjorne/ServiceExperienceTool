@@ -1,6 +1,14 @@
 <style>
-	body { margin: 40px 10px; padding: 0; font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif; font-size: 14px; }
-	#calendar { max-width: 900px; margin: 0 auto;}
+
+#userListThead th:nth-child(3), th:nth-child(4), #userListTbody td:nth-child(3), td:nth-child(4) {
+    width: auto;
+}
+#rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) {
+    width: auto;
+}
+#userListThead th:nth-child(2), th:nth-child(6), #userListTbody td:nth-child(2), td:nth-child(6) {
+    width: auto;
+}
 
 </style>
 <script type="text/javascript">
@@ -11,16 +19,18 @@
     		firstDay : 1,
     		defaultDate: '2016-05-12',
 			editable: true,
-			eventLimit: true, // allow "more" link when too many events
+			eventLimit: true,
+			eventLimit: 4,
     		events : getEvents(),
     		resources : getResources(),
-    		//schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
+    		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
     		header : {
     			left : 'title',
-    			center : 'agendaWeek, month',
-    			right : 'today prev,next'
-    		},
+    			center : '',
+    			right : 'agendaWeek month prev next'
+    		}
         });
        // var test = scheduleData.options;
 </script>
+<div ng-include="'app/schedule/dialogAddEvent.tmpl.html'"></div>
 <div width="600"><div id="calendar"></div></div>

@@ -1,0 +1,47 @@
+<button onclick="document.getElementById('id01').style.display='block'" class="w3-btn">Lägg till ett event</button>
+
+<div id="id01" class="w3-modal">
+  <div class="w3-modal-content" style="width: 30%">
+    <header class="w3-container w3-teal"> 
+      <span onclick="document.getElementById('id01').style.display='none'" 
+      class="w3-closebtn">&times;</span>
+      <h2>Lägg till ett Event</h2>
+    </header>
+    <div class="w3-container">
+      
+      <div>
+      	<br>
+      	<!-- AVDELNING -->
+      	<label for="departmentInput">AVDELNING -</label><br>
+      	<select id="departmentInput">
+      		<option disabled selected>Avdelning</option>
+      		<option ng-repeat="x in departments">{{x.name}}</option>
+      	</select><br>
+      	
+      	<!-- MEDARBETARE -->
+      	<label for="employeeInput">MEDARBETARE -</label><br>
+      	<select id="employeeInput">	
+      		<option disabled selected>Medarbetare</option>
+      		<option ng-repeat="x in employees">{{x.name}}</option>
+      	</select><br>
+      	
+      	<label for="dateInput">DATUM -</label><br>
+      	<input type="date" name="dateInput" id="dateInput" validate/><br><br>
+      	
+      </div>
+      
+      <div>
+      	<label>Starttid -</label>
+      	<input type="time"/><br><br>
+      	<label>Sluttid -</label>
+      	<input type="time"/><br><br>
+      	<input type="submit" /><br><br>
+      </div>
+      
+    </div>
+    <footer class="w3-container w3-teal">
+      <p>Schema Applikation - SET</p>
+    </footer>
+  </div>
+</div>
+         

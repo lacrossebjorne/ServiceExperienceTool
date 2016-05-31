@@ -2,49 +2,16 @@
 
 angular.module('schedule')
 
-    .controller('ScheduleController', ['$scope', '$location', 'schedule.data', '$mdDialog', '$mdMedia', function ($scope, $location, scheduleData, $mdDialog, $mdMedia) {
+    .controller('ScheduleController', ['$scope', '$location', 'schedule.data', function ($scope, $location, scheduleData) {
 
         $scope.options = scheduleData.options;
-        $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
+        
         $scope.status = ' ';
         $scope.departmentSelected;
         $scope.employeeSelected;
 
-        $scope.showAdvanced = function (ev) {
-            var useFullScreen = ($mdMedia('sm') || $mdMedia('xs')) && $scope.customFullscreen;
-            $mdDialog.show({
-                controller: ScheduleController,
-                templateUrl: 'dialog1.tmpl.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                fullscreen: useFullScreen
-            })
-                .then(function (answer) {
-                    $scope.status = 'You said the information was "' + answer + '".';
-                }, function () {
-                    $scope.status = 'You cancelled the dialog.';
-                });
-            $scope.$watch(function () {
-                return $mdMedia('xs') || $mdMedia('sm');
-            }, function (wantsFullScreen) {
-                $scope.customFullscreen = (wantsFullScreen === true);
-            });
-        };
-
-
         $scope.departments = getDepartments();
         $scope.employees = getEmployees();
-
-        $scope.hide = function () {
-            $mdDialog.hide();
-        };
-        $scope.cancel = function () {
-            $mdDialog.cancel();
-        };
-        $scope.answer = function (answer) {
-            $mdDialog.hide(answer);
-        };
 
         function getDepartments() {
             return [
@@ -69,7 +36,14 @@ angular.module('schedule')
             ];
         }
         function getEmployees() {
-            return ['Mats Heed', 'Ingvar Kamprad', 'Anders Filipsson', 'Kalle Eriksson'];
+            return [
+                   {id: 1, name: 'Mats Heed', workId: 1},
+                   {id: 2, name: 'Staffan Adolfsson', workId: 1},
+                   {id: 3, name: 'Richard Strandberg', workId: 2},
+                   {id: 4, name: 'Gunde Svan', workId: 2},
+                   {id: 5, name: 'Elsa Eriksson', workId: 1},
+                   {id: 6, name: 'Natalie Hansson', workId: 1},
+                   ];
         }
 
     }]);
