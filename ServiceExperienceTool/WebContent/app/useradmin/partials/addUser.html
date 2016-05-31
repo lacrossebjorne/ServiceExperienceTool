@@ -7,100 +7,94 @@
 					<input type="hidden" name="userId" ng-model="userForm.userId" />
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label> <b>Förnamn</b></label> <input
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.firstname.$touched && newUserForm.firstname.$invalid}"
-								ng-minlength="2" ng-maxlength="45" type="text" name="firstname"
-								placeholder="Förnamn" required
-								ng-model="userForm.firstName"> <span
-								ng-messages="newUserForm.firstname.$error">
-								<div ng-messages-include="static/messages.html"></div>
-							</span>
+							<label>Förnamn</label>
+							<input name="firstname" class="w3-input w3-border"
+								ng-class="newUserForm.firstname.$invalid && newUserForm.firstname.$touched ? 'has-error' : 'w3-hover-border-black'"
+								ng-minlength="2" ng-maxlength="45" type="text" placeholder="Förnamn"
+								required ng-model="userForm.firstName">
+							<div ng-messages="newUserForm.firstname.$error" ng-if="newUserForm.firstname.$touched">
+								<span ng-messages-include="static/messages.html"></span>
+							</div>
 						</div>
 						<div class="w3-col s6">
-							<label> <b>Efternamn</b></label> <input name="lastname"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.lastname.$touched && newUserForm.lastname.$invalid}"
-								ng-minlength="2" ng-maxlength="45" type="text"
-								placeholder="Efternamn" required
-								ng-model="userForm.lastName">
-							<div ng-messages="newUserForm.lastName.$error">
-								<div ng-messages-include="static/messages.html"></div>
+							<label>Efternamn</label>
+							<input name="lastname" class="w3-input w3-border"
+								ng-class="newUserForm.lastname.$touched && newUserForm.lastname.$invalid ? 'has-error': 'w3-hover-border-black'"
+								ng-minlength="2" ng-maxlength="45" type="text" placeholder="Efternamn"
+								required ng-model="userForm.lastName">
+							<div ng-messages="newUserForm.lastName.$error" ng-show="newUserForm.lastname.$touched">
+								<span ng-messages-include="static/messages.html"></span>
 							</div>
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label><b>Användarnamn</b></label> <input name="username"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.username.$touched && newUserForm.username.$invalid }"
-								type="text" ng-pattern="regexUserName" ng-minlength="5"
-								ng-maxlength="45"
-								placeholder="fornamn.efternamn" required
-								ng-model="userForm.username">
-							<div ng-messages="newUserForm.username.$error">
-								<span ng-message="pattern">Username must have the form
-									fornamn.efternamn</span> <span
-									ng-messages-include="static/messages.html"></span>
+							<label>Användarnamn</label> 
+							<input name="username" class="w3-input w3-border"
+								ng-class="newUserForm.username.$touched && newUserForm.username.$invalid ? 'has-error': 'w3-hover-border-black'"
+								type="text" ng-pattern="regexUserName" ng-minlength="5" ng-maxlength="45" 
+								placeholder="fornamn.efternamn" required ng-model="userForm.username">
+							<div ng-messages="newUserForm.username.$error" ng-if="newUserForm.username.$touched">
+								<span class="w3-text-red" ng-message="pattern">Måste ha formen: fornamn.efternamn. Endast a-z</span> 
+								<span ng-messages-include="static/messages.html"></span>
 							</div>
 						</div>
 						<div class="w3-col s6">
-							<label> <b>Epost</b></label> <input name="email"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.email.$touched && newUserForm.email.$invalid }"
-								type="email" placeholder="Epostadress"
-								ng-model="userForm.email">
-							<div ng-messages="newUserForm.email.$error">
-								<span ng-message="email">Enter a valid email address</span>
+							<label>Epost</label>
+							<input name="email" class="w3-input w3-border"
+								ng-class="newUserForm.email.$touched && newUserForm.email.$invalid ? 'has-error': 'w3-hover-border-black'"
+								type="email" placeholder="Epostadress" ng-model="userForm.email">
+							<div ng-messages="newUserForm.email.$error" ng-if="newUserForm.email.$touched">
+								<span class="w3-text-red" ng-message="email">Ange en giltig e-postadress</span>
 							</div>
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label><b>Telefonnummer</b> </label> <input name="phoneNumber"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.phoneNumber.$touched && newUserForm.phoneNumber.$invalid }"
-								type="text" ng-pattern="regexNumber"
-								placeholder="Telefonnummer - 0701234567" ng-model="userForm.phoneNumber">
-							<div ng-messages="newUserForm.phoneNumber.$error">
-								<span ng-message="pattern">Can only contain digits no - or space</span>
+							<label>Telefonnummer</label>
+							<input name="phoneNumber" class="w3-input w3-border"
+								ng-class="newUserForm.phoneNumber.$touched && newUserForm.phoneNumber.$invalid ? 'has-error': 'w3-hover-border-black'"
+								type="text" ng-pattern="regexNumber" placeholder="Telefonnummer - 0701234567"
+								ng-model="userForm.phoneNumber">
+							<div ng-messages="newUserForm.phoneNumber.$error" ng-if="newUserForm.phoneNumber.$touched">
+								<span class="w3-text-red" ng-message="pattern">Endast siffror är tillåtet</span>
 							</div>
 						</div>
 						<div class="w3-col s6">
-							<label><b>Aktiv</b></label> <input type="checkbox"
-								class="w3-check w3-input" name="enable" ng-model="userForm.enabled">
+							<label>Aktiv</label>
+							<input type="checkbox" class="w3-check w3-input" name="enable" ng-model="userForm.enabled">
 						</div>
 					</div>
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
-							<label> <b>Lösenord</b>
-							</label> <input name="password"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'w3-validate': newUserForm.password.$touched && newUserForm.password.$invalid }"
+							<label>Lösenord</label>
+							<input name="password" class="w3-input w3-border"
+								ng-class="newUserForm.password.$touched && newUserForm.password.$invalid ? 'has-error': 'w3-hover-border-black'"
 								type="password" placeholder="Lösenord" ng-minlength="6" ng-maxlength="45" 
 								ng-required="!userForm.userId" ng-model="userForm.password">
-							<div ng-messages="newUserForm.password.$error">
-								<div ng-messages-include="static/messages.html"></div>
+							<div ng-messages="newUserForm.password.$error" ng-if="newUserForm.password.$touched">
+								<span ng-messages-include="static/messages.html"></span>
 							</div>
 						</div>
 						<div class="w3-col s6">
-							<label> <b>Verifiera lösenord</b>
-							</label> <input name="verifypass"
-								class="w3-input w3-border w3-hover-border-black"
-								ng-class="{'has-error': newUserForm.verifypass.$touched && newUserForm.password != newUserForm.verifypass}"
+							<label>Verifiera lösenord</label>
+							<input name="verifypass" class="w3-input w3-border"
+								ng-class="newUserForm.verifypass.$touched && newUserForm.password != newUserForm.verifypass ? 'has-error': 'w3-hover-border-black'"
 								type="password" placeholder="Verifiera lösenord" ng-required="!userForm.userId"
 								ng-model="userForm.verifypassword">
-							<div ng-messages="newUserForm.verifypass.$error.required">
-								<span ng-message="verifypassword">The passwords doesn't match</span>
+							<div ng-messages="newUserForm.verifypass.$error" ng-if="newUserForm.verifypass.$touched">
+								<span class="w3-text-red" ng-message="verifypassword">Lösenorden överensstämmer inte</span>
 							</div>
 						</div>
 					</div>
 					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">
-					<span class="w3-col"> <b>Roller</b></span><br>
-						<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
-							<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
-							type="checkbox" ng-model="userForm.roles[$index][role.name]" ng-if="role.enabled !== false">
-							<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
+						<div class="w3-col">
+							<p>Roller</p>
+							<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
+								<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
+								type="checkbox" ng-model="userForm.roles[$index][role.name]" ng-if="role.enabled !== false">
+								<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
+							</div>
 						</div>
 					</div>
 					<button type="submit"
