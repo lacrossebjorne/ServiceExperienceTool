@@ -11,19 +11,20 @@ angular.module('useradmin')
 	$scope.addUserShowHide = true;
 	$scope.userRoles = [];
 	$scope.user = {
-        id: null,
-        firstname: '',
-        lastname: '',
+		/*userId: null,
+        firstName: '',
+        lastName: '',
         username: '',
         email: '',
-        phone: '',
+        phoneNumber: '',
         enabled: false,
         password: '',
         resetPassword: null,
-        userRoles: null
+        roles: null*/
     };
-	$scope.userForm = {};
-	$scope.userForm.roles = [];
+	$scope.form = {};
+	//$scope.userForm = {};
+	$scope.user.roles = [];
 	$scope.roleForm = {};
 	$scope.today = new Date();
 	$scope.isExpanded = false;
@@ -35,20 +36,20 @@ angular.module('useradmin')
 	//Local variables
 	self.users = [];
 	self.resetPassword = "";
-	self.userForm = {};
-	self.userForm.roles = [];
+	self.user = {};
+	//self.user.roles = [];
 	self.roleList = [];
 	self.userRoles = [];
 	
 	//User Functions
 	$scope.submitUser = function() {
-    	if ($scope.userForm.password === $scope.userForm.verifypassword) {
-    		if ($scope.newUserForm.$valid) {
-    			if ($scope.userForm.userId == null)
-    				self.createUser($scope.userForm);
+    	if ($scope.user.password === $scope.user.verifypassword) {
+    		if ($scope.form.newUserForm.$valid) {
+    			if ($scope.user.userId == null)
+    				self.createUser($scope.user);
     			else
-    				self.updateUser($scope.userForm)
-    			self.close($scope.newUserForm);
+    				self.updateUser($scope.user)
+    			self.close('addUserView');
     		}
     	}
     };
@@ -62,24 +63,24 @@ angular.module('useradmin')
     	});
     };
 
-    self.createUser = function(userForm) {
-        AdminFactory.createUser({user : userForm})
+    self.createUser = function(user) {
+        AdminFactory.createUser({user : user})
             .$promise.then(function(data) {
             	if(data.isValid)
-            		alert("Ny användare (" + userForm.username + ") skapad med AnvändarID: " + data.userId);
+            		alert("Ny användare (" + user.username + ") skapad med AnvändarID: " + data.user.userId);
             	else {
             		alert('Ett fel upstod när användaren skulle skapas');
                 }
             });
     };
 
-    self.updateUser = function(userForm) {
-        AdminFactory.updateUser({user : userForm})
+    self.updateUser = function(user) {
+        AdminFactory.updateUser({user : user})
             .$promise.then(function(data) {
             	self.showHide('addUserView');
             	if(data.isUpdated) {
             		self.listAllUsers();
-            		alert('Användare (' + userForm.username + ') har uppdaterats');
+            		alert('Användare (' + user.username + ') har uppdaterats');
             	}
             	else {
             		alert('Ett fel uppstod när användaren skulle uppdateras');
@@ -89,7 +90,7 @@ angular.module('useradmin')
     
     $scope.editUser = function() {
     	var user = this.user;
-    	self.userForm = angular.copy(user);
+    	self.user = angular.copy(user);
     	self.listAllRoles().then(function(roleList) {
     		var roleObj = {};
     		for (var i = 0; i < roleList.length; i++) {
@@ -102,11 +103,11 @@ angular.module('useradmin')
     		for (var item in roleObj) {
     			var obj = {};
     			obj[item] = roleObj[item];
-    			self.userForm.roles[j] = obj;
+    			self.user.roles[j] = obj;
     			j++;
     		}
     		self.showHide('addUserView');
-    		$scope.userForm = self.userForm;
+    		$scope.user = self.user;
     	});
     };
 
@@ -199,26 +200,30 @@ angular.module('useradmin')
     	$scope.searchIsExpanded = false;
     	$scope.search = {};
     	$scope.isExpanded = false;
-    	$scope.userRoles = [];
-    	self.userRoles = [];
     	$scope.roleForm = {};
-    	$scope.user = {
-            userId: null,
-            firstName: '',
-            lastName: '',
-            username: '',
-            email: '',
-            password: '',
-            phoneNumber:'',
-            enable: false,
-            resetPassword: null,
-            userRoles: null
-        };
     	if (view == 'addUserView') {
-    		$scope.userForm = {};
-    		$scope.userForm.roles = [];
-    		self.userForm = {};
-    		self.userForm.roles = [];
+    		$scope.user = {
+    	            /*userId: null,
+    	            firstName: '',
+    	            lastName: '',
+    	            username: '',
+    	            email: '',
+    	            password: '',
+    	            phoneNumber:'',
+    	            enable: false,
+    	            resetPassword: null,
+    	            roles: null*/
+    	        };
+    		//$scope.form = {};
+    		//$scope.userForm = {};
+    		//$scope.userForm.roles = [];
+    		//self.userForm = {};
+    		//self.userForm.roles = [];
+    		$scope.user.roles = [];
+        	//self.user.roles = [];
+    		self.user = {};
+    		$scope.form.newUserForm.$setPristine();
+    		$scope.form.newUserForm.$setUntouched();
     	} else if (view == 'manageRolesView') {
     		$scope.roleList = [];
     	} else if (view == 'userListView') {

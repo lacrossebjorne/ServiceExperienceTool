@@ -57,11 +57,14 @@ public class UserAdminServlet extends HttpServlet {
 		final Gson gson = builder.create();
 
 		if (request.getParameter("insertUser") != null) {
+			System.out.println(request.getParameter("insertUser"));
 			User user = getDAOFactory().getUserDAO().createUser(gson.fromJson(request.getParameter("insertUser"), User.class));
 			Map<String, Object> map = new HashMap<>();
 			boolean isValid = false;
-			if(user != null)
+			if(user != null) {
 				map.put("user", user);
+				isValid = true;
+			}
 			map.put("isValid", isValid);
 			writeJson(response, map);
 		}
