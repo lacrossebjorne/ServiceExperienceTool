@@ -1,7 +1,7 @@
 #sideNav {
 	z-index: 3; 
 	width: 250px;
-	max-height: 75%;
+	max-height: 70%;
 	posistion: relative; 
 	clear: both;
 }
@@ -35,8 +35,9 @@
 
 #checkDiv {	text-transform: capitalize; }
 
-#userform button {
-	margin-bottom: 8px;
+#checkDiv p { 
+	margin-top: 5px;
+	margin-bottom: -5px;
 }
 
 /* Scrollable table list */
@@ -124,4 +125,4 @@ li { list-style-type: none; }
 	float:left;
 }
 
-.has-error { border: red; }
+.has-error { border-color: red!important; }
