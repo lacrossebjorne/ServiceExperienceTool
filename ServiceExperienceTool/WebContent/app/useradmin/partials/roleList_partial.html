@@ -89,8 +89,8 @@
 						<input type="hidden" name="roleId" ng-model="roleForm.roleId" />
 							<div class="w3-col s2 w3-padding-tiny">
 								<label class="labelLeft">Roll</label>
-								<input id="roleName" type="text" class="w3-input w3-border w3-hover-border-black"
-									ng-class="{'has-error': newRoleForm.name.$pristine && newRoleForm.name.$invalid}"
+								<input id="roleName" type="text" class="w3-input w3-border"
+									ng-class="newRoleForm.name.$pristine && newRoleForm.name.$invalid ? 'has-error': 'w3-hover-border-black'"
 									placeholder="Enter role name" name="name" ng-model="roleForm.name"
 									ng-minlenght="3" ng-maxlength="20" required>
 								<div ng-messeges="newRoleForm.name.$error" ng-if="newRoleForm.name.$pristine">
@@ -99,8 +99,8 @@
 							</div>
 							<div class="w3-col s7 w3-padding-tiny">
 								<label class="labelLeft">Beskrivning</label>
-								<input id="roleDescription" type="text"	class="w3-input w3-border w3-hover-border-black"
-									ng-class="{'has-error': newRoleForm.description.$pristine && newRoleForm.description.$invalid}" 
+								<input id="roleDescription" type="text"	class="w3-input w3-border"
+									ng-class="newRoleForm.description.$pristine && newRoleForm.description.$invalid ? 'has-error': 'w3-hover-border-black'" 
 									name="description" ng-maxlength="45" placeholder="Enter role description"
 									ng-model="roleForm.description">
 								<div ng-messeges="newRoleForm.description.$error" ng-if="newRoleForm.description.$pristine">
