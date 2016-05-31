@@ -1,0 +1,24 @@
+<!-- Documents -->
+<div>
+  <br>
+  <span class="w3-large">Dokument</span>
+  <br>
+  <!-- Docs list -->
+  <ul class="w3-ul">
+    <li ng-repeat="doc in documents" class="w3-padding-hor-16" style="min-height: 100px">
+      <span ng-click="removeDocument($index)" class="w3-closebtn w3-padding"> <i class="fa fa-remove"></i>
+      </span> <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round"> <i class="fa w3-xxlarge" ng-class="doc.icon"></i>
+      </span> <span class="w3-large">{{doc.title}}</span>
+      <br>
+      <a ng-href="{{doc.url}}">{{doc.url}}</a>
+    </li>
+    <!-- Add doc -->
+    <li class="w3-padding-hor-16" style="min-height: 100px">
+      <span ng-click="addDocument(newDocTitle,upFileName)" class="w3-closebtn w3-padding"> <i class="fa fa-plus"></i>
+      </span> <span class="w3-left w3-margin-right w3-padding-hor-8 w3-padding-ver-8 w3-grey w3-round"> <i class="fa fa-file-text w3-xxlarge"></i>
+      </span>
+      <input id="title" class="w3-small" type="text" placeholder="Title" ng-model="newDocTitle" style="width: 50%">
+      <input id="url" class="w3-small w3-margin-top" type="file" ng-model="upFileName" onchange="angular.element(this).scope().setFile(this)" style="width: 50%">
+    </li>
+  </ul>
+</div>

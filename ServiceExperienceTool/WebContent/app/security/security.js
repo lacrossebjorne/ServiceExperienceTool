@@ -35,10 +35,10 @@ angular.module('security', [
         }],
 
     imgUris: [
-      'img/set_mock-img_01.jpg',
-      'img/set_mock-img_02.jpg',
-      'img/set_mock-img_03.jpg',
-      'img/set_mock-img_04.jpg'
+      'img/set_mock-img_16.jpg',
+      'img/set_mock-img_17.jpg',
+      'img/set_mock-img_18.jpg',
+      'img/set_mock-img_19.jpg'
     ]
   });
 });
