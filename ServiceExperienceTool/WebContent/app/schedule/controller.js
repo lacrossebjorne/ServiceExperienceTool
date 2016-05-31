@@ -3,8 +3,35 @@
 angular.module('schedule')
 
     .controller('ScheduleController', ['$scope', '$location', 'schedule.data', '$mdDialog', '$mdMedia', function ($scope, $location, scheduleData, $mdDialog, $mdMedia) {
+    	
+    	/*//testar och köra document ready på kalendern i Angular.
+    	angular.element(document).ready(function () {
+            document.getElementById('calendar').fullCalendar({
+            	weekNumbers : true,
+            	fixedWeekCount: true,
+            	defaultView : 'month',
+            	firstDay : 1,
+            	defaultDate: '2016-05-12',
+            	editable: true,
+            	eventLimit: true, // allow "more" link when too many events
+            	events : getEvents(),
+            	resources : getResources(),
+            	schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
+            	header : {
+            		left : 'title',
+            		center : 'agendaWeek, month',
+            		right : 'today prev,next'
+            	}
+            });
+        });*/
+    	
+    	$scope.events = scheduleData.events;
+    	$scope.resources = scheduleData.resources;
 
-        $scope.options = scheduleData.options;
+    	$scope.test = "Jag Testar";
+    	$scope.testArr = ['Mats', 'Arne', 'Erik'];
+    	
+    	
         $scope.customFullscreen = $mdMedia('xs') || $mdMedia('sm');
         $scope.status = ' ';
         $scope.departmentSelected;

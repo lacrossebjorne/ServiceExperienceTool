@@ -1,26 +1,67 @@
-<style>
-	body { margin: 40px 10px; padding: 0; font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif; font-size: 14px; }
-	#calendar { max-width: 900px; margin: 0 auto;}
 
-</style>
+<html>
+<head>
+
+</head>
 <script type="text/javascript">
-    angular.element(calendar).fullCalendar({
-        	weekNumbers : true,
-        	fixedWeekCount: true,
-    		defaultView : 'month',
-    		firstDay : 1,
-    		defaultDate: '2016-05-12',
-			editable: true,
-			eventLimit: true, // allow "more" link when too many events
-    		events : getEvents(),
-    		resources : getResources(),
-    		//schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
-    		header : {
-    			left : 'title',
-    			center : 'agendaWeek, month',
-    			right : 'today prev,next'
-    		},
-        });
-       // var test = scheduleData.options;
+
+$(document).ready(function(){
+	
+	$("#calendar").fullCalendar({
+		weekNumbers : true,
+		defaultView : 'month',
+		firstDay : 1,
+		defaultDate: '2016-05-12',
+		editable: true,
+		eventLimit: true, // allow "more" link when too many events
+		eventLimit: 4,
+		events : getEvents(),
+		resources : getResources(),
+		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
+		header : {
+			left : 'title',
+			center : 'agendaWeek, month',
+			right : 'today prev,next'
+		}
+	});
+});
 </script>
-<div width="600"><div id="calendar"></div></div>
+
+<body>
+	<div id="calendar" style="overflow: hidden"></div>
+	
+	<div id="data" class="w3-container">
+		<h3>Events (plockad ur en array bara)</h3>
+		<table class="w3-table w3-bordered w3-border w3-margin w3-striped w3-card-4 w3-small">
+			<thead>	
+				<tr class="w3-blue">
+					<th>Titel</th>
+					<th>Start</th>
+					<th>Slut</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="x in events">
+				<td width="50">{{x.title}}</td>
+				<td width="100">{{x.start}}</td>
+				<td width="100">{{x.end}}</td>
+			</tr>
+		</table>
+		<h3>Resources (plockad ur en array bara)</h3>	
+		<table class="w3-table w3-bordered w3-border w3-margin w3-striped w3-card-4 w3-small">
+			<thead>	
+				<tr class="w3-blue">
+					<th>Id</th>
+					<th>Titel</th>
+					<th>Children</th>
+				</tr>
+			</thead>
+			<tr ng-repeat="x in resources">
+				<td>{{x.id}}</td>
+				<td>{{x.title}}</td>
+				<td>{{x.children}}</td>
+			</tr>
+		</table>
+		
+	</div>
+</body>
+</html>

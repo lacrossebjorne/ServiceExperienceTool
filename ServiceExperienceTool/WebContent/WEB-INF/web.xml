@@ -28,43 +28,43 @@
     <url-pattern>/newsServlet</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>UploadServlet</servlet-name>
-  	<servlet-class>com.set.servlets.UploadServlet</servlet-class>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>com.set.servlets.UploadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>UploadServlet</servlet-name>
-  	<url-pattern>/uploadServlet</url-pattern>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/uploadServlet</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>ImageServlet</servlet-name>
-  	<servlet-class>com.set.servlets.ImageServlet</servlet-class>
+    <servlet-name>ImageServlet</servlet-name>
+    <servlet-class>com.set.servlets.ImageServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>ImageServlet</servlet-name>
-  	<url-pattern>/images/*</url-pattern>
+    <servlet-name>ImageServlet</servlet-name>
+    <url-pattern>/images/*</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>SMSServlet</servlet-name>
-  	<servlet-class>com.set.servlets.SMSServlet</servlet-class>
+    <servlet-name>SMSServlet</servlet-name>
+    <servlet-class>com.set.servlets.SMSServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>SMSServlet</servlet-name>
-  	<url-pattern>/smsServlet</url-pattern>
+    <servlet-name>SMSServlet</servlet-name>
+    <url-pattern>/smsServlet</url-pattern>
   </servlet-mapping>
   <filter>
-  	<filter-name>CORSFilter</filter-name>
-  	<filter-class>com.set.filters.CORSFilter</filter-class>
+    <filter-name>CORSFilter</filter-name>
+    <filter-class>com.set.filters.CORSFilter</filter-class>
   </filter>
   <filter-mapping>
-  	<filter-name>CORSFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+    <filter-name>CORSFilter</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
   <filter>
-  	<filter-name>CharacterEncodingFilter</filter-name>
-  	<filter-class>com.set.filters.CharacterEncodingFilter</filter-class>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <filter-class>com.set.filters.CharacterEncodingFilter</filter-class>
   </filter>
   <filter-mapping>
-  	<filter-name>CharacterEncodingFilter</filter-name>
-  	<url-pattern>/*</url-pattern>
+    <filter-name>CharacterEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
   </filter-mapping>
 </web-app>

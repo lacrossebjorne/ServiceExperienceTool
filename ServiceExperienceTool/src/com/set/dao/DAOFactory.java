@@ -88,4 +88,7 @@ public abstract class DAOFactory {
 	public RoleDAO getRoleDAO() {
 		return new RoleDAOJDBC(this);
 	}
+	public EventsDAO getEventDAO(){
+		return new EventsDAOJDBC(this);
+	}
 }

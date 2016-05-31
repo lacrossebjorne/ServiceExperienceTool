@@ -1,7 +1,6 @@
 // Self invoking function
 // Injects jQuery
 (function ($) {
-
     $.extend(window, {
         "Calendar":
         {
@@ -12,7 +11,6 @@
     });
 
     function initCalendar(initOptions) {
-
         $(initOptions.elementId).fullCalendar({
             weekNumbers: true,
             defaultView: 'timelineDay',
@@ -28,7 +26,6 @@
             },
 
             events: getEvents(initOptions.eventLoadUrl),
-
             resourceOrder: '-type1,type2',
             resources: getResources(initOptions.resourceLoadUrl),
             eventClick: function (event, jsEvent, view) {
@@ -47,14 +44,7 @@
             }
         });
     }
-    function getResources(url) {
-        // $.ajax({
-        //  url: 'http://www.w3schools.com/website/customers_mysql.php',
-        //  type: 'GET',
-        //  success: function(data){
-        //   console.log(JSON.parse(data));
-        //  }    
-        // });
+    function getResources() {
         return [
             {
                 id: 1,
@@ -102,7 +92,7 @@
             },
         ];
     }
-    function getEvents(url) {
+    function getEvents() {
         return [
             { id: 1, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1a' },
             { id: 2, title: 'Tjena', start: '2016-05-13T10:00:00Z', end: '2016-05-13T21:00:00Z', resourceId: '1b' },
