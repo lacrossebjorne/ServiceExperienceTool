@@ -176,19 +176,6 @@ function getOptions() {
 			center: 'timelineDay, agendaWeek, month',
 			right: 'today prev,next'
 		},
-		views: {
-			basic: {
-				eventLimit: 4,
-				allDayText: 'Antal gäster',
-			},
-			week: {
-				eventLimit: 4,
-				allDayText: 'Antal gäster',
-			},
-			month: {
-				eventLimit: 5,
-			}
-		}
 	}];
 }
 

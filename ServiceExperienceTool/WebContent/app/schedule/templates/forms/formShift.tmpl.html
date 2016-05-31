@@ -1,0 +1,26 @@
+<div>
+	<br>
+	<!-- AVDELNING -->
+	<label for="departmentInput">AVDELNING -</label><br> <select
+		id="departmentInput">
+		<option disabled selected>Avdelning</option>
+		<option ng-repeat="x in departments">{{x.name}}</option>
+	</select><br>
+
+	<!-- MEDARBETARE -->
+	<label for="employeeInput">MEDARBETARE -</label><br> <select
+		id="employeeInput">
+		<option disabled selected>Medarbetare</option>
+		<option ng-repeat="x in employees">{{x.name}}</option>
+	</select><br> <label for="dateInput">DATUM -</label><br> <input
+		type="date" name="dateInput" id="dateInput" validate /><br>
+	<br>
+
+</div>
+
+<div>
+	<label>Starttid -</label> <input type="time" /><br>
+	<br> <label>Sluttid -</label> <input type="time" /><br>
+	<br> <input type="submit" /><br>
+	<br>
+</div>
