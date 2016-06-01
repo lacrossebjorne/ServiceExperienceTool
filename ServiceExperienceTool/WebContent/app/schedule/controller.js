@@ -13,18 +13,22 @@ angular.module('schedule')
         $scope.departments = getDepartments();
         $scope.employees = getEmployees();
         
-        $scope.getDataFromServer = function() {
+        $scope.allEvents = function() {
             $http({
                     method : 'GET',
-                    url : '/schedule'
+                    url : '/schedule',
+                    action: 'getAllEvents'
             }).success(function(data, status, headers, config) {
                     $scope.person = data;
+                    console.log(data);
             }).error(function(data, status, headers, config) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
             });
 
         };
+        $scope.allEvents();
+       
         function getDepartments() {
             return [
                 {

@@ -1,6 +1,8 @@
 package com.set.servlets;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.set.dao.DAOFactory;
 import com.set.dao.EventDAO;
 import com.set.entities.Event;
+import com.set.entities.News;
 
 /**
  * Servlet implementation class ScheduleServlet
@@ -53,12 +56,33 @@ public class ScheduleServlet extends HttpServlet {
 	protected void getAllEvents(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		
 		//Hämtar alla event i Databasen. Printar ut det i en JSON-string
+		List<Event> allEvents = null;
+		PrintWriter out = null;
 		
-		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
-		EventDAO eventFetch = daoFactory.getEventDAO();
-		List<Event> list = eventFetch.getEventList();
-		response.setContentType("application/json");
-		response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(list));
+		try {
+			out = response.getWriter();
+			
+			DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+			EventDAO eventFetch = daoFactory.getEventDAO();
+			
+			
+			allEvents = eventFetch.getEventList();
+			
+			if(allEvents != null){
+				HashMap<String, List<Event>> jsonMap = new HashMap<String, List<Event>>();
+				jsonMap.put("events", allEvents);
+				
+				System.out.println(jsonMap.get("events"));
+				
+				response.setContentType("application/json");
+				response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(jsonMap));
+			}
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	protected void deleteEvent(HttpServletRequest request, HttpServletResponse response){
 		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
