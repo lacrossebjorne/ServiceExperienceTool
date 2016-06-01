@@ -26,7 +26,7 @@ public interface UserDAO {
 	
 	public boolean deleteUser(User user);
 	
-	public boolean existUserName(String username);
+	public boolean existUsername(String username);
 	
 	public void changePassword(User user);
 	

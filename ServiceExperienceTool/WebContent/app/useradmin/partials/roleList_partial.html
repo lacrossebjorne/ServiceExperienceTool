@@ -68,7 +68,7 @@
 							<td colspan="5">
 								<div class="hiddenRow w3-row">
 									<div class="w3-col l11 m11 s12">
-										<p>Användare</p>
+										<p>Medlemmar</p>
 										<ul>
 											<li ng-repeat="user in role.userList">{{ user.username }}</li>
 										</ul>
@@ -84,26 +84,26 @@
 				</table>
 			</div>
 			<div>
-				<div colspan="5" id="inputRolesDiv" class="w3-display-bottommiddle">
-					<form name="newRoleForm" ng-submit="submitRole()">
+				<div colspan="5" id="inputRolesDiv" class="w3-display-bottommiddle w3-light-grey w3-border">
+					<form name="form.newRoleForm" ng-submit="submitRole()">
 						<input type="hidden" name="roleId" ng-model="roleForm.roleId" />
 							<div class="w3-col s2 w3-padding-tiny">
 								<label class="labelLeft">Roll</label>
 								<input id="roleName" type="text" class="w3-input w3-border"
-									ng-class="newRoleForm.name.$pristine && newRoleForm.name.$invalid ? 'has-error': 'w3-hover-border-black'"
+									ng-class="form.newRoleForm.name.$touched && form.newRoleForm.name.$invalid ? 'has-error': 'w3-hover-border-black'"
 									placeholder="Enter role name" name="name" ng-model="roleForm.name"
 									ng-minlenght="3" ng-maxlength="20" required>
-								<div ng-messeges="newRoleForm.name.$error" ng-if="newRoleForm.name.$pristine">
+								<div ng-messeges="form.newRoleForm.name.$error" ng-if="form.newRoleForm.name.$touched">
 									<span ng-messeges-include="static/messeges.html"></span>
 								</div>
 							</div>
 							<div class="w3-col s7 w3-padding-tiny">
 								<label class="labelLeft">Beskrivning</label>
 								<input id="roleDescription" type="text"	class="w3-input w3-border"
-									ng-class="newRoleForm.description.$pristine && newRoleForm.description.$invalid ? 'has-error': 'w3-hover-border-black'" 
+									ng-class="form.newRoleForm.description.$touched && form.newRoleForm.description.$invalid ? 'has-error': 'w3-hover-border-black'" 
 									name="description" ng-maxlength="45" placeholder="Enter role description"
 									ng-model="roleForm.description">
-								<div ng-messeges="newRoleForm.description.$error" ng-if="newRoleForm.description.$pristine">
+								<div ng-messeges="form.newRoleForm.description.$error" ng-if="form.newRoleForm.description.$touched">
 									<span ng-messeges-include="static/messeges.html"></span>
 								</div>
 							</div>
@@ -115,7 +115,7 @@
 							<div class="w3-col s2 w3-padding-tiny">
 								<label>&nbsp;</label>
 									<button type="submit" class="w3-btn w3-btn-block w3-blue-grey"
-										ng-disabled="newRoleForm.$invalid">Spara</button>
+										ng-disabled="form.newRoleForm.$invalid">Spara</button>
 							</div>
 					</form>
 				</div>

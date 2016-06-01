@@ -1,4 +1,4 @@
-<div class="w3-blue-grey w3-padding-ver-16">
+			<div class="w3-blue-grey w3-padding-ver-16">
 				<span ng-click="showHide('addUserView')" class="w3-closebtn">&times;</span>
 				<h3>Skapa SET-användare</h3>
 			</div>
@@ -30,12 +30,24 @@
 					<div class="w3-row-padding">
 						<div class="w3-col s6">
 							<label>Användarnamn</label> 
-							<input name="username" class="w3-input w3-border"
-								ng-class="form.newUserForm.username.$touched && form.newUserForm.username.$invalid ? 'has-error': 'w3-hover-border-black'"
-								type="text" ng-pattern="regexUserName" ng-minlength="5" ng-maxlength="45" 
-								placeholder="fornamn.efternamn" required ng-model="user.username">
-							<div ng-messages="form.newUserForm.username.$error" ng-if="form.newUserForm.username.$touched">
-								<span class="w3-text-red" ng-message="pattern">Måste ha formen: fornamn.efternamn. Endast a-z</span> 
+							<input 
+								type="text"
+								name="username" 
+								ng-model="user.username"
+								class="w3-input w3-border"
+								ng-class="form.newUserForm.username.$touched && form.newUserForm.username.$invalid? 'has-error': 'w3-hover-border-black'"
+								ng-pattern="regexUserName"
+								ng-minlength="5"
+								ng-maxlength="45" 
+								ng-model-options="{ updateOn: 'blur', allowInvalid: true }"
+								username-validation
+								username-validation-key="{{ user.userId }}"
+								placeholder="fornamn.efternamn"
+								required>
+							<!-- <div class="w3-text-red" ng-if="form.newUserForm.username.$error.unique">Användarnamnet är upptaget</div> -->
+							<div class="w3-text-red" ng-messages="form.newUserForm.username.$error" ng-if="form.newUserForm.username.$touched">
+								<span ng-message="pattern">Måste ha formen: fornamn.efternamn. Endast a-z</span>
+								<span ng-message="unique">Användarnamnet är upptaget</span>
 								<span ng-messages-include="static/messages.html"></span>
 							</div>
 						</div>
@@ -87,17 +99,19 @@
 							</div>
 						</div>
 					</div>
-					<div id="checkDiv" class="w3-row-padding w3-margin-bottom">
+					<div id="checkDiv" class="w3-row">
 						<div class="w3-col">
-							<p>Roller</p>
-							<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
-								<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
-								type="checkbox" ng-model="user.roles[$index][role.name]" ng-if="role.enabled !== false">
-								<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
+							<span>Roller</span><!-- <span id="scrollUp" class="w3-content"><i class="fa fa-angle-double-up w3-content" aria-hidden="true"></i></span> -->
+							<div id="innerCheck">
+								<div class="w3-col l3 m4 s6" ng-repeat="role in roleList">
+									<input id="{{ role.name }}" class="w3-check" name="{{ role.name }}" 
+									type="checkbox" ng-model="user.roles[$index][role.name]" ng-if="role.enabled !== false">
+									<label for="{{ role.name }}" ng-if="role.enabled !== false">{{ role.name }}</label>
+								</div>
 							</div>
 						</div>
-						<span>User.roles: {{ user.roles }}</span>
 					</div>
+					<!-- <p id="scrollDown" class="w3-content" ng-hide="roleList.length > 8"><i class="fa fa-angle-double-down w3-content" aria-hidden="true"></i></p> -->
 					<button type="submit"
 						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="form.newUserForm.$invalid">Spara</button>
 					<button type="button"

@@ -38,6 +38,11 @@ angular.module('useradmin')
             params: { 'deleteUser' : '@user'}
     	},
     	
+    	existUsername: {
+    		method: 'POST',
+    		params: { 'existUsername' : '@username'}
+    	},
+    	
     	createRole: {
             method: 'POST',
             params: { 'insertRole': '@role'},
