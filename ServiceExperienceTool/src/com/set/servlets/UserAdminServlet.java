@@ -38,7 +38,6 @@ public class UserAdminServlet extends HttpServlet {
 		}
 		
 		if (request.getParameter("existUsername") != null) {
-			System.out.println("Bingo!");
 			boolean exists = getDAOFactory().getUserDAO().existUsername(request.getParameter("existUsername"));
 			Map<String, Object> map = new HashMap<>();
 			map.put("exists", exists);

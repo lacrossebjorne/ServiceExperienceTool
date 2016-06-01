@@ -21,6 +21,7 @@ angular.module('useradmin')
 	$scope.regexUserName = '([a-z])\\w+\\.([a-z])\\w+';
 	$scope.regexNumber = '\\d+';
 	$scope.sortReverse = false;
+	$scope.usernameValidationCheckKey = '';
 	
 	//Local variables
 	self.users = [];
@@ -51,28 +52,19 @@ angular.module('useradmin')
     };
 
     self.createUser = function(user) {
-    	/*self.existUsername(user.username).then(function(exists) {
-    		if(!exists) {*/
-    			AdminFactory.createUser({user : user})
-    	    	.$promise.then(function(data) {
-    	    		if(data.isValid) {
-    	    			alert("Användare (" + user.username + ") skapad med AnvändarID: " + data.user.userId);
-    	    			self.reset('addUserView');
-    	    		} else
-    	    			alert('Ett fel upstod när användaren skulle skapas');
-    	    	});
-    		/*} else
-    			$scope.usernameAvailable = false;
-    	})*/
-    	
+    	AdminFactory.createUser({user : user})
+    	.$promise.then(function(data) {
+    		if(data.isValid) {
+    			alert("Användare (" + user.username + ") skapad med AnvändarID: " + data.user.userId);
+    			self.reset('addUserView');
+    		} else
+    			alert('Ett fel upstod när användaren skulle skapas');
+    	});    	
     };
     
-    /*self.existUsername = function() {
-    	return AdminFactory.existUsername({existUsername : 'bjorn.dalberg'})
-    	.$promise.then(function(data) {
-    		return data.exists;
-    	});
-    };*/
+    $scope.usernameUpdated = function() {
+    	$scope.usernameChanged = true; 
+    };
 
     self.updateUser = function(user) {
         AdminFactory.updateUser({user : user})
@@ -92,6 +84,7 @@ angular.module('useradmin')
     $scope.editUser = function() {
     	var user = this.user;
     	self.user = angular.copy(user);
+    	$scope.usernameValidationCheckKey = user.username;
     	self.listAllRoles().then(function(roleList) {
     		var roleObj = {};
     		for (var i = 0; i < roleList.length; i++) {
@@ -181,10 +174,12 @@ angular.module('useradmin')
     };
     
     self.deleteRole = function(role) {
-    	AdminFactory.deleteRole({role : role.roleId})
+    	AdminFactory.deleteRole({roleId : role.roleId})
     	.$promise.then(function(data) {
-    		if(data.isDeleted)
+    		if(data.isDeleted) {
+    			self.listAllRoles();
     			alert('Rollen ' + role.name + '  har raderats');
+    		}
     		else
     			alert('Ett fel uppstod när rollen ' + role.name + ' skulle raderas');
     	});
@@ -208,6 +203,7 @@ angular.module('useradmin')
     		$scope.user.roles = [];
     		$scope.user.resetPassword = [];
     		self.user = {};
+    		$scope.usernameValidationCheckKey = '';
     		$scope.form.newUserForm.$setPristine();
     		$scope.form.newUserForm.$setUntouched();
     	} else if (view == 'manageRolesView') {

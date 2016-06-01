@@ -31,7 +31,7 @@ public class UserDAOJDBC implements UserDAO {
 	private static final String SQL_LIST_USERS = "CALL setdb.listUsers()";
 	private static final String SQL_EXIST_USERNAME = "CALL setdb.listUserByUsername(?)";
 	private static final String SQL_INSERT_USER = "INSERT INTO user (first_name, last_name, email, user_name, password, phone_number, enabled) VALUES (?, ?, ?, ?, MD5(?), ?, ?)";
-	private static final String SQL_UPDATE_USER = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_name = ?, phone_number = ?,  enabled = ? WHERE user_id = ?";
+	private static final String SQL_UPDATE_USER = "UPDATE user SET first_name = ?, last_name = ?, email = ?, user_name = ?, phone_number = ?,  enabled = ?, profilepicture = ?, description = ? WHERE user_id = ?";
 	private static final String SQL_CHANGE_PASSWORD = "UPDATE user SET password = MD5(?) WHERE user_id = ?";
 	private static final String SQL_ENABLE_USER = "UPDATE user SET enable = 1 WHERE user_id = ?";
 	private static final String SQL_DISABLE_USER = "UPDATE user SET enable = 0 WHERE user_id = ?";
@@ -374,8 +374,8 @@ public class UserDAOJDBC implements UserDAO {
 		user.setCreatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("created_at")));
 		if (resultSet.getDate("updated_at") != null)
 			user.setUpdatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("updated_at")));
-		user.setDescription(resultSet.getString("description"));
 		user.setProfilePicture(resultSet.getString("profilepicture"));
+		user.setDescription(resultSet.getString("description"));
 		List<Role> roles = new ArrayList<>();
 		Long roleID = null;
 		if ((roleID = resultSet.getLong("role_id")) != 0) {

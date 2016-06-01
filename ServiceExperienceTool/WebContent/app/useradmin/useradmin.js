@@ -8,6 +8,7 @@ angular.module('useradmin', [
 .config(['$routeProvider', function($routeProvider) {
 		$routeProvider.when('/useradmin', {
 		templateUrl : 'app/useradmin/user_admin.html',
-		controller : 'AdminController'
+		controller : 'AdminController',
+		directive : 'usernameValidation'
 	});
 }]);
