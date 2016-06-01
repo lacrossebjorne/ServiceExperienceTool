@@ -2,7 +2,7 @@
 
 angular.module('schedule')
 
-    .controller('ScheduleController', ['$scope', '$location', 'schedule.data', function ($scope, $location, scheduleData) {
+    .controller('ScheduleController', ['$scope', '$http', '$location', 'schedule.data', function ($scope, $http, $location, scheduleData) {
 
         $scope.options = scheduleData.options;
         
@@ -12,7 +12,19 @@ angular.module('schedule')
 
         $scope.departments = getDepartments();
         $scope.employees = getEmployees();
+        
+        $scope.getDataFromServer = function() {
+            $http({
+                    method : 'GET',
+                    url : '/schedule'
+            }).success(function(data, status, headers, config) {
+                    $scope.person = data;
+            }).error(function(data, status, headers, config) {
+                    // called asynchronously if an error occurs
+                    // or server returns response with an error status.
+            });
 
+        };
         function getDepartments() {
             return [
                 {

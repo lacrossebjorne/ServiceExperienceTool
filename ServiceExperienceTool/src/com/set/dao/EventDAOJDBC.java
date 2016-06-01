@@ -13,6 +13,8 @@ import com.set.entities.Menu;
 public class EventDAOJDBC implements EventDAO {
 	
 	private static final String SQL_LIST_EVENTS = "SELECT * FROM event";
+	private static final String SQL_DELETE_FROM_EVENT = "DELETE FROM event WHERE id=?";
+	
 	
 	private DAOFactory daoFactory;
 	
@@ -35,7 +37,25 @@ public class EventDAOJDBC implements EventDAO {
 	@Override
 	public boolean deleteEvent(int id) {
 		// TODO Auto-generated method stub
-		return false;
+		
+		Connection connection = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try{
+			connection = daoFactory.getConnection();
+			ps = connection.prepareStatement(SQL_DELETE_FROM_EVENT);
+			ps.setInt(1, id);
+			rs = ps.executeQuery();
+			return true;
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}finally{
+			try { if(rs != null) rs.close(); } catch (SQLException e) {e.printStackTrace();};
+			try { if(ps != null) ps.close(); } catch (SQLException e) {e.printStackTrace();};
+			try { if(connection != null) connection.close(); } catch (SQLException e) {e.printStackTrace();};
+		}
 	}
 
 	@Override

@@ -1,26 +1,28 @@
-<div>
+<form action="" method="get">
 	<br>
 	<!-- AVDELNING -->
-	<label for="departmentInput">AVDELNING -</label><br> <select
-		id="departmentInput">
-		<option disabled selected>Avdelning</option>
+	<label for="departmentInput" class="w3-label">Avdelning -</label>
+	<select class="w3-select" id="departmentInput" required>
+		<option disabled selected value="">Avdelning</option>
 		<option ng-repeat="x in departments">{{x.name}}</option>
 	</select><br>
 
 	<!-- MEDARBETARE -->
-	<label for="employeeInput">MEDARBETARE -</label><br> <select
-		id="employeeInput">
-		<option disabled selected>Medarbetare</option>
+	<label for="employeeInput" class="w3-label">Medarbetare -</label>
+	<select class="w3-select" id="employeeInput" required>
+		<option disabled selected value="">Medarbetare</option>
 		<option ng-repeat="x in employees">{{x.name}}</option>
-	</select><br> <label for="dateInput">DATUM -</label><br> <input
-		type="date" name="dateInput" id="dateInput" validate /><br>
+	</select>
+		
+	<label for="dateInput" class="w3-label">Datum -</label>
+	<input type="date" name="dateInput" id="dateInput" class="w3-input" required/>
 	<br>
+	<label class="w3-label">Starttid -</label> 
+	<input type="time" required class="w3-input"/>
+	<br> 
+	<label class="w3-label">Sluttid -</label> 
+	<input type="time" required class="w3-input"/>
+	<br> 
+	<input type="submit" /><input type="reset" /><br>
 
-</div>
-
-<div>
-	<label>Starttid -</label> <input type="time" /><br>
-	<br> <label>Sluttid -</label> <input type="time" /><br>
-	<br> <input type="submit" /><br>
-	<br>
-</div>
+</form>

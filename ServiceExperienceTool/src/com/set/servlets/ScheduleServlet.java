@@ -43,6 +43,8 @@ public class ScheduleServlet extends HttpServlet {
 			case "getAllEvents":
 				getAllEvents(request, response);
 				break;
+			case "deteleEvent":
+				deleteEvent(request, response);
 				default: 
 					break;
 			}
@@ -57,6 +59,10 @@ public class ScheduleServlet extends HttpServlet {
 		List<Event> list = eventFetch.getEventList();
 		response.setContentType("application/json");
 		response.getWriter().write(new GsonBuilder().setPrettyPrinting().create().toJson(list));
+	}
+	protected void deleteEvent(HttpServletRequest request, HttpServletResponse response){
+		DAOFactory daoFactory = DAOFactory.getInstance("setdb.jndi");
+		
 	}
 
 	/**

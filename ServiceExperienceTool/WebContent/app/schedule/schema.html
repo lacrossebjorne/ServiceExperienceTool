@@ -10,6 +10,23 @@
     width: auto;
 }
 
+#myMeny ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#myMeny li {
+    float: left;
+}
+
+#myMeny li a {
+    display: block;
+    padding: 8px;
+    background-color: #dddddd;
+}
+
 </style>
 <script type="text/javascript">
     angular.element(calendar).fullCalendar({
@@ -17,19 +34,21 @@
         	fixedWeekCount: true,
     		defaultView : 'month',
     		firstDay : 1,
-    		defaultDate: '2016-05-12',
 			eventLimit: true,
-			eventLimit: 4,
+			eventLimit: 2,
     		events : getEvents(),
     		resources : getResources(),
     		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
     		header : {
-    			left : 'title',
-    			center : '',
+    			left : '',
+    			center : 'title',
     			right : 'agendaWeek month prev next'
     		}
+    		
         });
-       // var test = scheduleData.options;
 </script>
-<div ng-include="'app/schedule/templates/dialogAddEvent.tmpl.html'"></div>
-<div width="600"><div id="calendar"></div></div>
+<ul id="myMeny">
+	<li><div ng-include="'app/schedule/templates/dialogAddEvent.tmpl.html'"></div></li>
+	<li><div ng-include="'app/schedule/templates/dialogAddShift.tmpl.html'"></div></li>
+</ul>
+<div id="calendar"></div>
