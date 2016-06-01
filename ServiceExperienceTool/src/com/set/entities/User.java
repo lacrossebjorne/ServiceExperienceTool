@@ -21,6 +21,8 @@ public class User implements java.io.Serializable {
 	private boolean enabled;
 	private List<Role> roles = new ArrayList<>();
 	private Set<ResetPassword> resetPasswords = new HashSet<ResetPassword>(0);
+	private String profilePicture;
+	private String description;
 
 	public User() {
 	}
@@ -37,7 +39,8 @@ public class User implements java.io.Serializable {
 	}
 
 	public User(Role role, String firstName, String lastName, String email, String username, String password,
-			String phoneNumber, String createdAt, String updatedAt, boolean enabled, Set<ResetPassword> resetPasswords) {
+			String phoneNumber, String createdAt, String updatedAt, boolean enabled, Set<ResetPassword> resetPasswords,
+			String profilePicture, String description) {
 		this.role = role;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -49,8 +52,9 @@ public class User implements java.io.Serializable {
 		this.updatedAt = updatedAt;
 		this.enabled = enabled;
 		this.resetPasswords = resetPasswords;
+		this.profilePicture = profilePicture;
+		this.setDescription(description);
 	}
-
 
 	public Long getUserId() {
 		return this.userId;
@@ -156,40 +160,59 @@ public class User implements java.io.Serializable {
 		this.resetPasswords = resetPasswords;
 	}
 
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public User merge(User other) {
-		this.roles.addAll(other.roles);
-		this.resetPasswords.addAll(other.resetPasswords);
+		for (Role role : other.roles)
+			if (!this.roles.contains(role))
+				this.roles.add(role);
 		return this;
 	}
-	
-	 // Object overrides ---------------------------------------------------------------------------
 
-    /**
-     * The user ID is unique for each User. So this should compare User by ID only.
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object other) {
-        return (other instanceof User) && (userId != null)
-             ? userId.equals(((User) other).userId)
-             : (other == this);
-    }
+	// Object overrides
+	// ---------------------------------------------------------------------------
 
-    /**
-     * The user ID is unique for each User. So User with same ID should return same hashcode.
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return (userId != null) 
-             ? (this.getClass().hashCode() + userId.hashCode()) 
-             : super.hashCode();
-    }
-	
+	/**
+	 * The user ID is unique for each User. So this should compare User by ID
+	 * only.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object other) {
+		return (other instanceof User) && (userId != null) ? userId.equals(((User) other).userId) : (other == this);
+	}
+
+	/**
+	 * The user ID is unique for each User. So User with same ID should return
+	 * same hashcode.
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return (userId != null) ? (this.getClass().hashCode() + userId.hashCode()) : super.hashCode();
+	}
+
 	@Override
 	public String toString() {
-		return ("ID:" + userId + " First name: " +firstName + " Last name: " + lastName + " Username: " + username + " Email: "
-				+ email + " Roles: " + roles + " Created date: " + createdAt + " Enabled: " + enabled + " Resetpass requests: " + resetPasswords);
-		
+		return ("ID:" + userId + " First name: " + firstName + " Last name: " + lastName + " Username: " + username
+				+ " Email: " + email + " Roles: " + roles + " Created date: " + createdAt + " Enabled: " + enabled
+				+ " Resetpass requests: " + resetPasswords);
+
 	}
 }

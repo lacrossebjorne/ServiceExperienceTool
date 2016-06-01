@@ -28,21 +28,45 @@
 	 width: 800px;
 }
 
+#manageRolesModal {	height: 600px; }
+
+#checkDiv {
+	margin: 0 16px 0 16px;
+	text-transform: capitalize;
+}
+
+#checkDiv span { 
+	margin-top: 5px;
+}
+
+#innerCheck  {	
+	height: 60px;
+	overflow: hidden;
+	margin-bottom: 5px;	
+}
+
+#innerCheck:hover {
+	overflow: auto;
+}
+
+/* #scrollup {
+	display: flex;
+	margin-bottom: 2px;
+}
+
+#scrollDown {
+	display: flex;
+	margin-bottom: 2px;
+} */
+
 /* Makes the addUserView overlay the userListView */
 #addUserView { z-index: 4; }
 
-#manageRolesModal {	height: 550px; }
 
-#checkDiv {	text-transform: capitalize; }
-
-#checkDiv p { 
-	margin-top: 5px;
-	margin-bottom: -5px;
-}
 
 /* Scrollable table list */
 .tableScroll {
-	height: 410px;
+	height: 450px;
 	overflow: auto;
 }
 
@@ -87,6 +111,13 @@ li { list-style-type: none; }
 
 #userListThead th:last-child, #userListTbody td:last-child { width: 50px; text-align: center; }
 
+#userListTbody img {
+	width: 60px;
+	height: 60px;
+	margin-left: -40px;
+}
+
+
 /* Role list table styling */
 #rolesThead th:first-child, th:nth-last-child(2), #rolesTbody td:first-child, td:nth-last-child(2) { width: 115px; text-align: center;}
 
@@ -104,14 +135,7 @@ li { list-style-type: none; }
 
 #inputRolesDiv {
 	width: 100%;
-	padding: 6px;
-}
-
-#inputRolesDiv form div label { font-weight: bold; }
-
-#inputRolesDiv .labelLeft {
-	float: left;
-	margin-left: 3px;
+	padding: 0 6px 6px 6px;
 }
 
 #rolesTbody .hiddenRow ul {
@@ -123,6 +147,13 @@ li { list-style-type: none; }
 #rolesTbody li {
 	width: 20%;
 	float:left;
+}
+
+#inputRolesDiv form div label { font-weight: bold; }
+
+#inputRolesDiv .labelLeft {
+	float: left;
+	margin-left: 3px;
 }
 
 .has-error { border-color: red!important; }

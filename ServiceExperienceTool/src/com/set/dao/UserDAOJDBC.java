@@ -158,7 +158,8 @@ public class UserDAOJDBC implements UserDAO {
 			e.printStackTrace();
 		} finally {
 			try {
-				userKeys.close();
+				if(userKeys != null)
+					userKeys.close();
 				statement.close();
 				connection.setAutoCommit(true);
 				connection.close();
@@ -176,7 +177,7 @@ public class UserDAOJDBC implements UserDAO {
 			throw new IllegalArgumentException("User does not exists");
 		boolean isUpdated = false;
 		Object[] userObject = { user.getFirstName(), user.getLastName(), user.getEmail(), user.getUserName(),
-				user.getPhoneNumber(), user.isEnabled(), user.getUserId() };
+				user.getPhoneNumber(), user.isEnabled(), user.getProfilePicture(), user.getDescription(), user.getUserId() };
 		Connection connection = null;
 		PreparedStatement statement = null;
 		try {
@@ -251,7 +252,7 @@ public class UserDAOJDBC implements UserDAO {
 	}
 
 	@Override
-	public boolean existUserName(String username) {
+	public boolean existUsername(String username) {
 		Object[] values = { username };
 		boolean userExists = false;
 		Connection connection = null;
@@ -373,6 +374,8 @@ public class UserDAOJDBC implements UserDAO {
 		user.setCreatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("created_at")));
 		if (resultSet.getDate("updated_at") != null)
 			user.setUpdatedAt(isoDateConverter.parseToUTCString(resultSet.getDate("updated_at")));
+		user.setDescription(resultSet.getString("description"));
+		user.setProfilePicture(resultSet.getString("profilepicture"));
 		List<Role> roles = new ArrayList<>();
 		Long roleID = null;
 		if ((roleID = resultSet.getLong("role_id")) != 0) {

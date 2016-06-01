@@ -50,6 +50,30 @@ public class ResetPassword implements java.io.Serializable {
 		this.expirationTime = experationTime;
 	}
 	
+	 // Object overrides ---------------------------------------------------------------------------
+
+    /**
+     * The role ID is unique for each Role. So this should compare Role by ID only.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof Role) && (resetPasswordId != null)
+             ? resetPasswordId.equals(((ResetPassword) other).resetPasswordId)
+             : (other == this);
+    }
+
+    /**
+     * The role ID is unique for each Role. So Role with same ID should return same hashcode.
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return (resetPasswordId != null) 
+             ? (this.getClass().hashCode() + resetPasswordId.hashCode()) 
+             : super.hashCode();
+    }
+	
 	public String toString() {
 		return "ResetID: " + resetPasswordId + " Securitycode: " + securitycode + " Expiration time: " + expirationTime;
 		

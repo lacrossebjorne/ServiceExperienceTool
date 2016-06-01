@@ -10,20 +10,9 @@ angular.module('useradmin')
 	$scope.userListShowHide = true;
 	$scope.addUserShowHide = true;
 	$scope.userRoles = [];
-	$scope.user = {
-		/*userId: null,
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        phoneNumber: '',
-        enabled: false,
-        password: '',
-        resetPassword: null,
-        roles: null*/
-    };
+	$scope.user = {};
 	$scope.form = {};
-	//$scope.userForm = {};
+	/*$scope.usernameAvailable = true;*/
 	$scope.user.roles = [];
 	$scope.roleForm = {};
 	$scope.today = new Date();
@@ -37,7 +26,6 @@ angular.module('useradmin')
 	self.users = [];
 	self.resetPassword = "";
 	self.user = {};
-	//self.user.roles = [];
 	self.roleList = [];
 	self.userRoles = [];
 	
@@ -49,7 +37,6 @@ angular.module('useradmin')
     				self.createUser($scope.user);
     			else
     				self.updateUser($scope.user)
-    			self.close('addUserView');
     		}
     	}
     };
@@ -64,15 +51,28 @@ angular.module('useradmin')
     };
 
     self.createUser = function(user) {
-        AdminFactory.createUser({user : user})
-            .$promise.then(function(data) {
-            	if(data.isValid)
-            		alert("Ny användare (" + user.username + ") skapad med AnvändarID: " + data.user.userId);
-            	else {
-            		alert('Ett fel upstod när användaren skulle skapas');
-                }
-            });
+    	/*self.existUsername(user.username).then(function(exists) {
+    		if(!exists) {*/
+    			AdminFactory.createUser({user : user})
+    	    	.$promise.then(function(data) {
+    	    		if(data.isValid) {
+    	    			alert("Användare (" + user.username + ") skapad med AnvändarID: " + data.user.userId);
+    	    			self.reset('addUserView');
+    	    		} else
+    	    			alert('Ett fel upstod när användaren skulle skapas');
+    	    	});
+    		/*} else
+    			$scope.usernameAvailable = false;
+    	})*/
+    	
     };
+    
+    /*self.existUsername = function() {
+    	return AdminFactory.existUsername({existUsername : 'bjorn.dalberg'})
+    	.$promise.then(function(data) {
+    		return data.exists;
+    	});
+    };*/
 
     self.updateUser = function(user) {
         AdminFactory.updateUser({user : user})
@@ -81,6 +81,7 @@ angular.module('useradmin')
             	if(data.isUpdated) {
             		self.listAllUsers();
             		alert('Användare (' + user.username + ') har uppdaterats');
+            		self.reset('addUserView');
             	}
             	else {
             		alert('Ett fel uppstod när användaren skulle uppdateras');
@@ -132,12 +133,12 @@ angular.module('useradmin')
     
     //Role functions
     $scope.submitRole = function() {
-    	if ($scope.newRoleForm.$valid) {
+    	if ($scope.form.newRoleForm.$valid) {
     		if($scope.roleForm.roleId == null)
     			self.createRole($scope.roleForm);
     		else
     			self.updateRole($scope.roleForm);
-    		self.close($scope.newRoleForm);
+    		self.reset('manageRolesView');
     	}
     };
     
@@ -145,8 +146,10 @@ angular.module('useradmin')
     	AdminFactory.createRole({role : roleForm})
     	.$promise.then(function(data) {
     		if (data.isValid) {
-    			$scope.roleList.push(data.role);
-    		}
+    			self.listAllRoles();
+    			alert('Rollen (' + roleForm.name + ') skapad med Roll-ID: ' + data.role.roleId);
+    		} else
+    			alert('Ett fel uppstod när rollen skulle skapas.')
     	});
     };
     
@@ -161,12 +164,11 @@ angular.module('useradmin')
     };
     
     self.updateRole = function(roleForm) {
-    	console.log(roleForm);
     	AdminFactory.updateRole({role : roleForm})
     	.$promise.then(function(data) {
     		if(data.isUpdated) {
     			self.listAllRoles();
-    			alert('Rollen ' + roleForm.name + ' har uppdaterats');
+    			alert('Rollen ' + roleForm.name + ' har uppdaterats.');
     		}
     		else
     			alert('Ett fel uppstod när rollen uppdaterades.');
@@ -196,36 +198,22 @@ angular.module('useradmin')
     
     
     //Clean up the lists and tables when you close them
-    self.close = function(view) {
+    self.reset = function(view) {
     	$scope.searchIsExpanded = false;
     	$scope.search = {};
     	$scope.isExpanded = false;
     	$scope.roleForm = {};
     	if (view == 'addUserView') {
-    		$scope.user = {
-    	            /*userId: null,
-    	            firstName: '',
-    	            lastName: '',
-    	            username: '',
-    	            email: '',
-    	            password: '',
-    	            phoneNumber:'',
-    	            enable: false,
-    	            resetPassword: null,
-    	            roles: null*/
-    	        };
-    		//$scope.form = {};
-    		//$scope.userForm = {};
-    		//$scope.userForm.roles = [];
-    		//self.userForm = {};
-    		//self.userForm.roles = [];
+    		$scope.user = {};
     		$scope.user.roles = [];
-        	//self.user.roles = [];
+    		$scope.user.resetPassword = [];
     		self.user = {};
     		$scope.form.newUserForm.$setPristine();
     		$scope.form.newUserForm.$setUntouched();
     	} else if (view == 'manageRolesView') {
     		$scope.roleList = [];
+    		$scope.form.newRoleForm.$setPristine();
+    		$scope.form.newRoleForm.$setUntouched();
     	} else if (view == 'userListView') {
     		$scope.users = [];
     	}
@@ -245,7 +233,7 @@ angular.module('useradmin')
     		}
     		else {
     			$scope.addUserShowHide = true;
-    			self.close('addUserView');
+    			self.reset('addUserView');
     		}
     	    break;
     	case 'userListView':
@@ -256,7 +244,7 @@ angular.module('useradmin')
     		}
     		else{
     			$scope.userListShowHide = true;
-    			self.close('userListView');
+    			self.reset('userListView');
     		}
     	    break;
     	case 'manageRolesView':
@@ -267,8 +255,7 @@ angular.module('useradmin')
     		}
     		else {
     			$scope.manageRolesShowHide = true;
-    			
-    			self.close('manageRolesView');
+    			self.reset('manageRolesView');
     		}
     	    break;
     	}		

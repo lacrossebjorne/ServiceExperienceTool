@@ -37,6 +37,14 @@ public class UserAdminServlet extends HttpServlet {
 			writeJson(response, map);
 		}
 		
+		if (request.getParameter("existUsername") != null) {
+			System.out.println("Bingo!");
+			boolean exists = getDAOFactory().getUserDAO().existUsername(request.getParameter("existUsername"));
+			Map<String, Object> map = new HashMap<>();
+			map.put("exists", exists);
+			writeJson(response, map);
+		}
+		
 		if (request.getParameter("getRolesList") != null) {
 			List<Role> roleList = getDAOFactory().getRoleDAO().listRoles();
 			Map<String, Object> map = new HashMap<>();
