@@ -20,14 +20,27 @@ function($resource, paths, AdminFactory) {
         });
       });
       return arr;
-    }, sendSMS : function(smsWrapper, callback) {
-    	var resource = $resource(paths.local + "smsServlet", {}, {
+    }, checkCredits : function(callback) {
+    	var resource = $resource(paths.api + "smsServlet", { action: 'checkCredits'}, { get: { timeout: 2000}});
+    	resource.get().$promise.then(function(data) {
+    		if (data.isValid) {
+    			callback(data.creditsLeft);
+    		} else {
+    			callback("Okänt svar från servern");
+    		}
+    	}, function(error) {
+    			callback("Kunde inte nå servern");
+    	});
+    },
+    sendSMS : function(smsWrapper, callback) {
+    	var resource = $resource(paths.api + "smsServlet", {}, {
     	  sendSMS: {
     	  	method: 'POST',
     	  	params: {
     	  		action: 'sendSMS',
     	  		smsWrapper: '@smsWrapper'
-    	  	}
+    	  	},
+    	  	timeout : 2000
     	  }
     	});
     	
@@ -36,13 +49,13 @@ function($resource, paths, AdminFactory) {
     	// Staffan: added return statements in else-if
     	//to block obsolete call to server
     	if (smsWrapper.recipients.length == 0) {
-    		callback("Inga mottagare valda!");
+    		callback({statusMessage: "Inga mottagare valda!"});
     		return;
     	} else if (smsWrapper.message.length > 160) {
-    		callback("För många tecken!")
+    		callback({statusMessage: "För många tecken!"})
     		return;
     	} else if (smsWrapper.message.length == 0) {
-    		callback("För få tecken!");
+    		callback({statusMessage: "För få tecken!"});
     		return;
     	}
     	
@@ -50,12 +63,36 @@ function($resource, paths, AdminFactory) {
   		//all recipients at once. Right now it's only 1 recipient at a time
     	//also need to implement a check to see how many credits are left
     	
-    	resource.sendSMS({ 'smsWrapper': smsWrapper });
-    	
-//  		for (var i = 0; i < recipients.length; i++) {
-//  			var recipient = recipients[i];
-//  			resource.sendSMS({ 'recipient': recipient, 'message': message});
-//  		}
+    	resource.sendSMS({ 'smsWrapper': smsWrapper }).$promise.then(function(data) {
+    		console.log("promise success");
+    		
+    		console.log("data.isValid: " + (data.isValid));
+    		
+    		if (data.isValid) {
+    			console.log("data.statusCode: " + (data.statusCode));
+    			
+    			switch(data.statusCode) {
+    			case 'SUCCESSFUL':
+    				data.statusMessage = "SMS har skickats till alla mottagare!";
+    				break;
+    			case 'COMPLETED_WITH_ERRORS':
+    				data.statusMessage = "Fel har uppkommit, SMS har inte skickats till alla!";
+    				break;
+    			case 'NOT_ENOUGH_CREDITS':
+    				data.statusMessage = "För få krediter för att skicka till alla mottagare!";
+    				break;
+    			case 'UNSUCCESSFUL':
+    				data.statusMessage = "Kunde inte skicka SMS!";
+    				break;
+    			}
+    			
+    			callback(data);
+    		}
+    		
+    	}, function(error) {
+    		console.log("error");
+    		callback({statusMessage: "Kunde ej få svar från servern, SMS har inte skickats!", isValid: false});
+    	});
     }
   }
   
