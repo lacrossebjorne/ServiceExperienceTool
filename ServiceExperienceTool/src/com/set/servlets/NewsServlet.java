@@ -64,9 +64,20 @@ public class NewsServlet extends HttpServlet {
 	}
 
 	/**
-	 * Parameters to put in request:<br>
-	 * action: getNews; resultsPerPage: number, selectedPage: number.<br>
-	 * action: publishNews; newsHeader: text, newsContent: text
+	 * <strong>Parameters usable in request:</strong><br>
+	 * action - which action to take <em>(possible actions: getTags, getNews, publishNews, disableNews, fileUpload)</em><br>
+     * type - json or html<br>
+     * tags - a json containing tags<br>
+     * selectedPage - which page to select<br>
+     * resultsPerPage - results to show for every page<br>
+     * showDisabled - show disabled news-entries<br>
+     * selectImportant - only select important news-entries<br>
+     * newsHeader - the news-header<br>
+     * newsContent - the news-content<br>
+     * importantUntil - the date until a news-entry will be important<br>
+     * newsId - the id of a news-entry<br>
+     * urlList - the url-list of an news-entry <br>
+     * tagData - the tag-data of a news-entry<br>
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -89,7 +100,7 @@ public class NewsServlet extends HttpServlet {
 			return;
 		} else {
 			switch (action) {
-			case "getTags": 
+			case "getTags": //getTags, getNews, publishNews, disableNews, fileUpload
 				getTags(request, response);
 				break;
 			case "getNews":

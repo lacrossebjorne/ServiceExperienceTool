@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 import com.set.dao.RecipientError;
 
 /**
- * A class with static methods to handle: sending SMS-messages, errors and status
+ * A class with static methods to handle: sending SMS-messages, checking SMS-credits, errors and status
  * @author Emil
  *
  */
