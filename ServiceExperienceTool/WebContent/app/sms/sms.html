@@ -51,12 +51,37 @@
 			<button type="button" ng-click="sendSMS()" class="w3-btn w3-theme-d1">Send
 				SMS</button>
 
-			<span class="w3-small w3-right"> {{smsMessage.length}} av
-				maximalt 160 tecken </span>
+			<span class="w3-right"> 
+				<div class="w3-small">
+					{{smsMessage.length}} av maximalt 160 tecken</div> 
+				<div>
+					<strong>SMS-krediter kvar:</strong> {{creditsLeft}}
+				</div>
+			</span>
 
 			<p>
 				{{statusMessage}}
 			</p>
+			
+			<div ng-show="isErrorSending">
+				<button type="button" ng-click="toggleErrorModal()"
+				class="w3-btn">Se felmeddelande</button>
+			</div>
+			
+			<div id="errorScreen" ng-class="{'w3-show': isShowingErrorMessage}" class="w3-modal">
+				<div class="w3-modal-content w3-card-8 w3-animate-zoom">
+					<div class="w3-container">
+						<span ng-click="toggleErrorModal()" class="w3-closebtn">&times;</span>
+						<h4>
+							Errors:
+						</h4>
+						<div ng-repeat="errorLine in errorLog" ng-class="{'w3-margin-bottom': $last}">
+							<span ng-bind="errorLine"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</form>
 		<br>
 	</div>
