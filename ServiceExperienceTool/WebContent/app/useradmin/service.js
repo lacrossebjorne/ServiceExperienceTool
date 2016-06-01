@@ -3,7 +3,7 @@
 angular.module('useradmin')
 
 .factory('AdminFactory', ['$resource','app.paths', function($resource, paths) {
-    return $resource(paths.local + 'userAdminServlet', {}, {
+    return $resource(paths.api + 'userAdminServlet', {}, {
         
     	listAllUsers: {
         	method: 'GET',
