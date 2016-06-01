@@ -1,0 +1,23 @@
+
+<form name="catForm">
+
+<!-- CategorySelection -->
+<div class="w3-margin-bottom w3-margin-top">
+	<div class="w3-row" ng-if="categoryForm.data.parent > 0">
+		<label  for="CategorySelect">Huvudkategori:</label>
+		<select id="CategorySelect" class="w3-input" ng-model="categoryForm.data.parent" ng-options="cat.id as cat.name for cat in getValidCategories(categoryForm.data)"> <!--  | filter:{parent: 0}:true track by cat.id -->
+<!-- 	 		<option value=""> Ingen </option>  -->
+		</select>
+	</div>
+</div>
+
+<div class="w3-margin-bottom">
+		<label>Namn: </label>
+		<input type="text" class="w3-input w3-border w3-hover-border-black" required ng-model="categoryForm.data.name">
+</div>
+
+<div class="w3-row w3-margin-bottom">
+	<button class="w3-btn w3-green" ng-click="submitCategoryForm()">Spara</button>
+</div>
+
+</form>

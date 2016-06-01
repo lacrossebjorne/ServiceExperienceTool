@@ -1,0 +1,69 @@
+
+<div class="w3-container w3-card-2 w3-white w3-round w3-margin-right w3-margin-bottom w3-margin-left">
+
+	<div class="w3-row w3-margin-top w3-margin-bottom">
+		<button class="w3-btn w3-theme-d2" ng-click="changeView(1)">Redigera Meny</button>
+		<button class="w3-btn w3-theme-d2" ng-click="changeView(2)">Redigera Kategorier</button>
+		<button class="w3-btn w3-theme-d2" ng-click="changeView(3)">Redigera Allergener</button>
+	</div>
+	<br>
+
+<!-- Menu Edit View -->
+	<div ng-if="selectedView == 1" class="w3-margin">
+		<div class="w3-theme-d2 w3-padding-ver-16 w3-margin-bottom">
+    		<h1>
+        	Menyhantering
+	    	</h1>
+		</div>
+	
+		<div class="w3-row w3-margin-bottom">
+			<div class="w3-twothird">
+			<label for="menuSelect">Välj meny</label>
+			<select id="menuSelect" class="w3-select" ng-model="selectedMenu">
+				<option ng-repeat="menu in menuList" value="{{menu.id}}">{{menu.name}}</option>
+			</select>
+			</div>
+			<div class="w3-third">
+				<button class="w3-btn w3-green w3-right">Lägg till menu</button>
+			</div>
+		</div>
+	
+	<!--
+	<div class="w3-row w3-margin-bottom" ng-if="selectedMenu > 0">
+		<div class="w3-half">
+			<label for="categorySelect">Huvudkategori</label>
+			<select id="categorySelect" class="w3-select" ng-model="selectedCategory">
+				<option ng-repeat="cat in categoryList | filter:{parent: 0}" value="{{cat.id}}">{{cat.name}}</option>
+			</select>
+		</div>
+		<div class="w3-half">
+			<label for="subCategorySelect">Subkategori</label>
+			<select id="subCategorySelect" class="w3-select" ng-model="selectedSubCategory">
+				<option ng-repeat="cat in categoryList | filter:{parent: selectedCategory}:true " value="{{cat.id}}">{{cat.name}}</option>
+			</select>
+		</div>
+	</div>
+	-->
+	
+	
+	<!-- Menu display part -->
+		<div class="w3-margin-top w3-margin-bottom" ng-if="selectedMenu > 0" ng-include="'app/menu/edit/menuitempart.html'">
+		</div>
+	
+	</div>
+
+
+	<!-- Category Edit View -->
+	<div ng-if="selectedView == 2" class="w3-margin" ng-include="'app/menu/edit/categorypart.html'">
+	</div>
+
+
+
+
+
+	<!-- Allergen Edit View -->
+	<div ng-if="selectedView == 3" class="w3-margin" ng-include="'app/menu/edit/allergenpart.html'">
+	</div>
+
+</div>
+
