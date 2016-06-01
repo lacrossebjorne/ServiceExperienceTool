@@ -20,7 +20,7 @@ import com.set.entities.News;
 /**
  * Servlet implementation class ScheduleServlet
  */
-@WebServlet("/schedule")
+@WebServlet("/ScheduleServlet")
 public class ScheduleServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

@@ -19,6 +19,7 @@
 
 #myMeny li {
     float: left;
+    padding: 5px;
 }
 
 #myMeny li a {
@@ -29,30 +30,78 @@
 
 </style>
 <script type="text/javascript">
-    angular.element(calendar).fullCalendar({
-        	weekNumbers : true,
+    $(document).ready(function(){
+    	$("#calendar").fullCalendar({
+    		googleCalendarApiKey: 'AIzaSyDYCuH7w2QXk7i17vHyFoYRD2jZxKXniQ8',
+    		weekNumbers : true,
         	fixedWeekCount: true,
     		defaultView : 'month',
     		firstDay : 1,
+    		defaultDate: '2016-05-15',
 			eventLimit: true,
 			eventLimit: 2,
-    		events : getEvents(),
     		resources : getResources(),
     		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
     		header : {
     			left : '',
     			center : 'title',
-    			right : 'agendaWeek month prev next'
-    		}
-    		
-        });
+    			right : 'agendaWeek timelineWeek month prev next'
+    		},
+            eventSources: [{
+                               	url: 'ScheduleServlet?action=getAllEvents',
+                               	type: 'GET',
+                               	data: {
+                                   custom_param1: 'something',
+                                   custom_param2: 'somethingelse'
+                               	},
+                               	success: function(data){
+       								events : data;                        		
+                              	}, 
+                               	error: function() {
+                               	    alert('there was an error while fetching events!');
+                              	 }    
+                          	 },
+                          	 {
+                                 googleCalendarId: 'heed.mats@gmail.com',
+                                 className: 'mitt googlekalenderEvent'
+                             }] 
+    	});
+    	$("#calendar").fullCalendar('refetchEvents');
+    	
+    	var url2 = 'ScheduleServlet?action=getAllEvents';
+    	var list = $.ajax({
+    		dataType: 'json',
+    		url: url2,
+    		success: function(data){
+            	console.log(data.events[0]); 
+            	$('#calendar').fullCalendar('refetchEvents');
+           	} 
+    	});
+    	console.log(list);
+    	$("#calendar").fullCalendar( 'addEventSource', list);
+    });
 </script>
-<ul id="myMeny">
-	<li><div ng-include="'app/schedule/templates/dialogAddEvent.tmpl.html'"></div></li>
-	<li><div ng-include="'app/schedule/templates/dialogAddShift.tmpl.html'"></div></li>
-</ul>
-<div id="calendar"></div>
 
-<div ng-repeat="x in person">{{x}}</div>
+
+<div class="w3-container">
+  <div class="w3-col s4 w3-left w3-padding-8">
+  
+    <ul id="myMeny">
+		<li><div ng-include="'app/schedule/templates/dialogAddEvent.tmpl.html'"></div></li>
+		<li><div ng-include="'app/schedule/templates/dialogAddShift.tmpl.html'"></div></li>
+	</ul>
+	
+	<table class="w3-table w3-bordered w3-border w3-padding-8 w3-left w3-tiny">
+		<tr><th>Titel</th><th>Beskrivning</th><th>Startar</th><th>Slutar</th></tr>
+		<tr ng-repeat="x in person.events"><td>{{x.title}}</td><td>{{x.description}}</td><td>{{x.startAt}}</td><td>{{x.endAt}}</td></tr>
+	</table>
+	
+  </div>
+  <div class="w3-col s8 w3-center">
+    <div id="calendar"></div>
+  </div>
+</div>
+<p style="height: 800px"></p>
+
 
 

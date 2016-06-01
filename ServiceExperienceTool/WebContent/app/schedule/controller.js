@@ -2,11 +2,9 @@
 
 angular.module('schedule')
 
-    .controller('ScheduleController', ['$scope', '$http', '$location', 'schedule.data', function ($scope, $http, $location, scheduleData) {
+    .controller('ScheduleController', ['$scope', '$http', '$location', 'schedule.data', 'app.paths', function ($scope, $http, $location, scheduleData, paths) {
 
         $scope.options = scheduleData.options;
-        
-        $scope.status = ' ';
         $scope.departmentSelected;
         $scope.employeeSelected;
 
@@ -16,11 +14,10 @@ angular.module('schedule')
         $scope.allEvents = function() {
             $http({
                     method : 'GET',
-                    url : '/schedule',
-                    action: 'getAllEvents'
+                    url : paths.local +'/ScheduleServlet?action=getAllEvents',
             }).success(function(data, status, headers, config) {
                     $scope.person = data;
-                    console.log(data);
+                   
             }).error(function(data, status, headers, config) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
