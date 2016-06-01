@@ -1,0 +1,17 @@
+.tableLeft td {
+	text-align: left;
+}
+
+.tableLeft2col td {
+	text-align: left;
+	width: 50%;
+}
+
+.tableLeft3col td {
+	text-align: left;
+	width: 33%;
+}
+
+.tableCenter td {
+	text-align: center;
+}

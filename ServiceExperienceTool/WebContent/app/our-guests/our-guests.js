@@ -29,10 +29,10 @@ angular.module('our-guests', [
     }],
 
     imgUris: [
-      'img/set_mock-img_01.jpg',
-      'img/set_mock-img_02.jpg',
-      'img/set_mock-img_03.jpg',
-      'img/set_mock-img_04.jpg'
+      'img/set_mock-img_12.jpg',
+      'img/set_mock-img_13.jpg',
+      'img/set_mock-img_14.jpg',
+      'img/set_mock-img_15.jpg'
     ]
   });
 });

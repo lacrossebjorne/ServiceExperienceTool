@@ -29,10 +29,10 @@ angular.module('other-products', [
     }],
 
     imgUris: [
-      'img/set_mock-img_01.jpg',
-      'img/set_mock-img_02.jpg',
-      'img/set_mock-img_03.jpg',
-      'img/set_mock-img_04.jpg'
+      'img/set_mock-img_05.jpg',
+      'img/set_mock-img_06.jpg',
+      'img/set_mock-img_07.jpg',
+      'img/set_mock-img_08.jpg'
     ]
   });
 });
