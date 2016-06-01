@@ -192,7 +192,7 @@ angular.module('menu')
     		});
     		if(!empty) return;
     	}
-    	angular.forEach($scope.itemList1, function(item){
+    	angular.forEach($scope.menuItemList1, function(item){
     		if(item.category == category.id){
     			item.category = null;
     		}
@@ -205,6 +205,15 @@ angular.module('menu')
     	var index = $scope.menuItemList1.indexOf(item);
     	$scope.menuItemList1.splice(index, 1);
     }
+    
+    $scope.nullCategoryFilter = function(){
+  	  return function(item){
+  		  if(item.category == null || item.category.isEmpty == ''){
+  			  return true;
+  		  }
+  		  return  false;
+  	  }
+    };
     
 /*
  * Inline test data
