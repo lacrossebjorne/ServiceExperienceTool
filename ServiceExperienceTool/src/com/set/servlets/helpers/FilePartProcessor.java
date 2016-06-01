@@ -9,12 +9,22 @@ import java.util.Set;
 
 import javax.servlet.http.Part;
 
+/**
+ * This class is responsible of turning Http-parts into Inputstreams
+ * @author Emil
+ *
+ */
 public class FilePartProcessor {
 
 	Hashtable<InputStream, String> inputstreamFilenames;
 	private boolean isError;
 	private int errorCode;
 	
+    /**
+     * Tries to convert the Collection<Part> into streams stores in a HashTable<InputStream, String>
+     * @param allParts
+     * @return if the operation was successful
+     */
 	public boolean processParts(Collection<Part> allParts) {
 		this.isError = false;
 		this.errorCode = -1;

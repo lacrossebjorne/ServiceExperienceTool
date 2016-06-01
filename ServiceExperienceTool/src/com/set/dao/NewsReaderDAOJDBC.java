@@ -14,6 +14,11 @@ import com.set.entities.News;
 import com.set.entities.NewsUrl;
 import com.set.entities.Tag;
 
+/**
+ * This class will handle all database-calls related to reading news
+ * @author Emil
+ *
+ */
 public class NewsReaderDAOJDBC implements NewsReaderDAO {
 
 	private final String SQL_NEWS_SELECT_ALL = "SELECT news_id, header, content, created_at, updated_at, important_until FROM news ORDER BY created_at DESC, news_id DESC LIMIT ? OFFSET ?";

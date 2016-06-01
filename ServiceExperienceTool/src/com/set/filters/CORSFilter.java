@@ -10,6 +10,11 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Sets the allowed headers to be used in the responses.
+ * @author Emil
+ *
+ */
 public class CORSFilter implements Filter {
 
 	@Override

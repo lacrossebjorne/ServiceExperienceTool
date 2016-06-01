@@ -18,6 +18,11 @@ import com.set.entities.News;
 import com.set.entities.NewsUrl;
 import com.set.entities.Tag;
 
+/**
+ * This class will handle all database-calls related to publishing or editing news
+ * @author Emil
+ *
+ */
 public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 	private final String SQL_INSERT_INTO_NEWS = "INSERT INTO news(header, content, created_at, important_until) VALUES(?, ?, NOW(), ?)";
 	private final String SQL_INSERT_INTO_IMAGE = "INSERT INTO image (image_uri) VALUE (?)";
@@ -39,7 +44,13 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 	public NewsPublisherDAOJDBC(DAOFactory daoFactory) {
 		this.daoFactory = daoFactory;
 	}
-
+	
+	/**
+	 * This method will publish or edit news
+	 * @param news the news to publish or edit. If the news-instance contains a newsId that's not null, 
+	 * it will try to edit an existing entry the from database and if not publish a new one.
+	 * @return if the operation was successful
+	 */
 	@SuppressWarnings("resource")
 	@Override
 	public boolean publishNews(News news) {
@@ -228,7 +239,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		statement.executeUpdate();
 	}
 
-	public void addImageUris(List<String> imgUris, Long newsID, Connection connection, PreparedStatement statement,
+	private void addImageUris(List<String> imgUris, Long newsID, Connection connection, PreparedStatement statement,
 			ResultSet result, int[] batchResult) throws SQLException {
 		if (imgUris != null && imgUris.size() > 0) {
 			Set<Long> imageKeySet = new HashSet<Long>();
@@ -340,7 +351,7 @@ public class NewsPublisherDAOJDBC implements NewsPublisherDAO {
 		}
 	}
 
-	public boolean isBatchSuccessful(int[] updateCounts) {
+	private boolean isBatchSuccessful(int[] updateCounts) {
 		for (int i = 0; i < updateCounts.length; i++) {
 			if (updateCounts[i] <= 0) {
 				return false;

@@ -9,6 +9,11 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * Enforces all requests and responses to have a character-encoding of 'UTF-8'
+ * @author Emil
+ *
+ */
 public class CharacterEncodingFilter implements Filter {
 
 	@Override
