@@ -1,0 +1,43 @@
+
+<form name="menuItemForm">
+
+<!-- CategorySelection -->
+<div class="w3-margin-bottom w3-margin-top">
+	<div class="w3-row">
+		<label  for="CategorySelect">Kategori:</label>
+		<select id="CategorySelect" class="w3-input" ng-model="itemForm.data.category" ng-options="cat.id as cat.name for cat in categoryList">
+		</select>
+	</div>
+</div>
+
+<div class="w3-margin-bottom">
+		<label>Namn: </label>
+		<input type="text" class="w3-input w3-border w3-hover-border-black" required ng-model="itemForm.data.name">
+		<br/>
+		<label>Beskrivning:</label>
+		<br/>
+		<textarea rows="4" cols="50" 
+			class="w3-input w3-border w3-hover-border-black " style="resize: none" ng-model="itemForm.data.description"></textarea>
+		<br/>
+		<label>Detaljer:</label>
+		<br/>
+		<textarea rows="4" cols="50"
+			class="w3-input w3-border w3-hover-border-black " style="resize: none" ng-model="itemForm.data.details"></textarea>
+			
+</div>
+
+<div class="w3-margin-bottom">
+<p>Allergener:</p>
+	<label class="w3-tag w3-white" style="font-weight: normal" ng-repeat="al in allergenList">
+	<input class="w3-check" type="checkbox" ng-checked="isChecked(al.id, itemForm.data.allergens)" ng-model="flag"
+		ng-change="syncCheckboxSelection(flag, al, itemForm.data.allergens)" />
+		{{al.name}}</label>
+</div>
+
+
+
+<div class="w3-row w3-margin-bottom w3-margin-top">
+<button class="w3-btn w3-green" ng-click="submitItemForm()">Spara</button>
+</div>
+
+</form>

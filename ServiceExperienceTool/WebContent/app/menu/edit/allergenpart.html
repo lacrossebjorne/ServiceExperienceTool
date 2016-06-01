@@ -1,0 +1,30 @@
+<div class="w3-theme-d2 w3-padding-ver-16 w3-margin-bottom">
+   	<h1>
+       	Allergener
+   	</h1>
+</div>
+<ul class="w3-ul w3-margin ">
+  	<li ng-repeat="allergen in allergenList track by allergen.id">
+  		<div class ="w3-row">
+  		<span class="w3-large">{{allergen.name}}</span>
+  		<span class="w3-right w3-closebtn w3-margin-left fa fa-remove w3-xlarge" ng-click="deleteAllergen(allergen)"></span>
+  		<span class="w3-right w3-closebtn fa fa-pencil-square-o w3-xlarge" ng-click="prepopulateAndToggle(allergen, allergenForm)"></span>
+  		</div>
+  	</li>
+  	<li>
+  		<button class="w3-btn w3-green" ng-click="prepopulateAndToggle({}, allergenForm)">Lägg till allergen</button>
+  	</li>
+</ul>
+	
+<!-- Allergen Edit Form Modal -->
+<div class="modal" ng-show="allergenForm.visible">
+	<div class="w3-modal-content w3-card-8">
+		<div class="w3-theme-d2 w3-padding-ver-16">
+			<span ng-click="toggleModal(allergenForm)" class="w3-closebtn fa fa-times w3-xlarge w3-padding-hor-4"></span>
+			<h3>Redigera kategori</h3>
+		</div>
+		<div class="w3-container">
+			<div ng-include="'app/menu/edit/allergenform.html'"></div>
+		</div>
+	</div>
+</div>

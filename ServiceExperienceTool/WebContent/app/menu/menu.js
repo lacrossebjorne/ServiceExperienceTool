@@ -9,5 +9,9 @@ angular.module('menu', [
   $routeProvider.when('/menu', {
     templateUrl: 'app/menu/menu.html',
     controller: 'MenuController'
+  })
+  .when('/menu/edit', {
+    templateUrl: 'app/menu/edit/menuedit.html',
+    controller: 'MenuEditController'
   });
 }]);

@@ -4,8 +4,18 @@
 </div>
 
 <div ng-if="!selectedMenu" class="w3-container w3-card-2 w3-margin-right w3-margin-bottom w3-margin-left">
-	<ul>
+	<div class="w3-theme-d2 w3-padding-ver-16 w3-margin-bottom">
+    		<h1>
+        	Menyval
+	    	</h1>
+		</div>
+	<ul class="w3-ul w3-margin-bottom">
 		<li ng-repeat="menu in menus" ng-click="showMenu(menu.id)">{{menu.name}}</li>
+		<li>
+		<div class="w3-theme-d2 w3-half w3-btn w3-margin-bottom">
+			<a href="#/menu/edit">Editera menyer</a>
+		</div>
+		</li>
 	</ul>
 </div>
 
