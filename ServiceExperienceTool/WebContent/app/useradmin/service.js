@@ -39,7 +39,7 @@ angular.module('useradmin')
     	},
     	
     	existUsername: {
-    		method: 'POST',
+    		method: 'GET',
     		params: { 'existUsername' : '@username'}
     	},
     	
@@ -56,6 +56,7 @@ angular.module('useradmin')
     	deleteRole: {
             method: 'POST',
             params: { 'deleteRole' : '@roleId'}
-    	}
+    	},
+    	
     });
 }]);
