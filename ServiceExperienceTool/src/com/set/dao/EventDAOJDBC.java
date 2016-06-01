@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.set.entities.Event;
-import com.set.entities.Menu;
 
 public class EventDAOJDBC implements EventDAO {
 	
