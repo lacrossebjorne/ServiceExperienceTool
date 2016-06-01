@@ -69,16 +69,17 @@
     	$("#calendar").fullCalendar('refetchEvents');
     	
     	var url2 = 'ScheduleServlet?action=getAllEvents';
-    	var list = $.ajax({
+    	var res = [];
+    	$.ajax({
     		dataType: 'json',
     		url: url2,
     		success: function(data){
-            	console.log(data.events[0]); 
+            	console.log(data.events[0]);
             	$('#calendar').fullCalendar('refetchEvents');
            	} 
     	});
-    	console.log(list);
-    	$("#calendar").fullCalendar( 'addEventSource', list);
+    	console.log(res);
+    	
     });
 </script>
 
