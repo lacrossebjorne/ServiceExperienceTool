@@ -40,6 +40,7 @@
     		defaultDate: '2016-05-15',
 			eventLimit: true,
 			eventLimit: 2,
+			events: getEvents(),
     		resources : getResources(),
     		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
     		header : {
@@ -52,7 +53,7 @@
                                	type: 'GET',
                                	data: {
                                    custom_param1: 'something',
-                                   custom_param2: 'somethingelse'
+                                   color: 'yellow'
                                	},
                                	success: function(data){
        								events : data;                        		
@@ -63,7 +64,8 @@
                           	 },
                           	 {
                                  googleCalendarId: 'heed.mats@gmail.com',
-                                 className: 'mitt googlekalenderEvent'
+                                 className: 'mitt googlekalenderEvent',
+                                 color: 'grey'
                              }] 
     	});
     	$("#calendar").fullCalendar('refetchEvents');

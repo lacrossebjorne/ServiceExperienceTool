@@ -84,37 +84,37 @@ function getEvents() {
 	return [
 		{
 			id: 1,
-			title: 'Tjena',
+			title: 'Arne',
 			start: '2016-05-27T10:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '1a'
 		}, {
 			id: 2,
-			title: 'Tjena',
+			title: 'Erik Svensson',
 			start: '2016-05-27T10:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '1b'
 		}, {
 			id: 3,
-			title: 'Tjena',
+			title: 'Berit Berg',
 			start: '2016-05-27T10:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '1c'
 		}, {
 			id: 4,
-			title: 'Tjena',
+			title: 'Niklas Eriksson',
 			start: '2016-05-27T09:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '2a'
 		}, {
 			id: 5,
-			title: 'Tjena',
+			title: 'Annika Dahl',
 			start: '2016-05-27T14:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '2b'
 		}, {
 			id: 6,
-			title: 'Tjena',
+			title: 'Pernilla Eriksson',
 			start: '2016-05-27T14:00:00Z',
 			end: '2016-05-27T21:00:00Z',
 			resourceId: '2c'
@@ -122,37 +122,37 @@ function getEvents() {
 
 		{
 			id: 7,
-			title: 'Tjena',
+			title: 'Hannes Göransson',
 			start: '2016-05-26T10:00:00Z',
 			end: '2016-05-26T21:00:00Z',
 			resourceId: '3a'
 		}, {
 			id: 8,
-			title: 'Tjena',
+			title: 'Erik Svensson',
 			start: '2016-05-26T12:00:00Z',
 			end: '2016-05-26T21:00:00Z',
 			resourceId: '3b'
 		}, {
 			id: 9,
-			title: 'Tjena',
+			title: 'Angelica Näsman',
 			start: '2016-05-26T12:00:00Z',
 			end: '2016-05-26T21:00:00Z',
 			resourceId: '3c'
 		}, {
 			id: 10,
-			title: 'Tjena',
+			title: 'Anna Hansson',
 			start: '2016-05-27T13:00:00Z',
 			end: '2016-05-27T23:00:00Z',
 			resourceId: '4a'
 		}, {
 			id: 11,
-			title: 'Tjena',
+			title: 'Lisa Gullbrandsen',
 			start: '2016-05-27T13:00:00Z',
 			end: '2016-05-27T23:00:00Z',
 			resourceId: '4b'
 		}, {
 			id: 12,
-			title: 'Tjena',
+			title: 'Erika Olofsdotter',
 			start: '2016-05-27T13:00:00Z',
 			end: '2016-05-27T23:00:00Z',
 			resourceId: '4c'
