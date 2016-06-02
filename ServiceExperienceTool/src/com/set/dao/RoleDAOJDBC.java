@@ -23,7 +23,7 @@ public class RoleDAOJDBC implements RoleDAO {
 	private static final String SQL_CREATE_ROLE = "INSERT INTO role (name, description, enabled) VALUES (?, ?, ?)";
 	private static final String SQL_FIND_BY_ID = "CALL setdb.listRolesByID(?)";
 	private static final String SQL_FIND_BY_ROLE_NAME = "SELECT * FROM role WHERE name = ? ORDER BY role_id";
-	private static final String SQL_LIST_ALL_ROLES = "SELECT * FROM role ORDER BY role_id";
+	private static final String SQL_LIST_ALL_ROLES = "CALL setdb.listRoles()";
 	private static final String SQL_UPDATE_ROLE = "UPDATE role SET name = ?, description = ?, enabled = ? WHERE role_id = ?";
 	private static final String SQL_DELETE_ROLE = "DELETE FROM role WHERE role_id = ?";
 	private DAOFactory daoFactory;
