@@ -14,7 +14,7 @@ angular.module('schedule')
         $scope.allEvents = function() {
             $http({
                     method : 'GET',
-                    url : paths.local +'/ScheduleServlet?action=getAllEvents',
+                    url : paths.api +'/ScheduleServlet?action=getAllEvents',
             }).success(function(data, status, headers, config) {
                     $scope.person = data;
                    
