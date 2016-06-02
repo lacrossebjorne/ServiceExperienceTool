@@ -1,3 +1,12 @@
+/*
+ * @author Björn Dalberg
+ * 
+ * useradmin module
+ * Controller AdminController
+ * Custom directive usernameValidation
+ * 
+ */
+
 'use strict'
 
 angular.module('useradmin', [ 

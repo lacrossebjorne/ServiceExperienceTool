@@ -1,17 +1,22 @@
+/*
+ * @author Björn Dalberg
+ * 
+ * Custom directive for useradmin module extends ngModelController
+ * Checks if an username already exists
+ * When editing a user the directive uses the usernameValidationKey
+ * to exclude the existing username.
+ * Uses AdminFactory for lookup usernames in the system
+ * 
+ */
+
 'use strict';
 
 angular.module('useradmin')
 
-.directive('usernameValidation', [ 'AdminFactory', '$q', function(AdminFactory, $q, $timeout) {
+.directive('usernameValidation', [ 'AdminFactory', '$q', function(AdminFactory, $q) {
 	return {
 		require : 'ngModel',
-		//scope:{ onChangeCallback: '&onChange' },
 		link : function(scope, element, attrs, ctrl) {
-			
-			/*if(angular.isFunction(scope.onChangeCallback)){
-		          //Adding the function to the watched Array
-		          ctrl.$viewChangeListeners.push(scope.onChangeCallback);
-			}*/
 			
 			ctrl.$asyncValidators.unique = function(modelValue, viewValue) {
 				

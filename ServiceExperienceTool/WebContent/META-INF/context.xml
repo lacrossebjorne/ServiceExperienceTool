@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<Context path="/ServiceExperienceTool_DOA_Login">
-	<Resource 
-		name="jdbc/setdb" 
-		auth="Container"
-		type="javax.sql.DataSource"
-		driverClassName="com.mysql.jdbc.Driver"  
-		url="jdbc:mysql://localhost:3306/setdb?autoReconnect=true&amp;useSSL=false"
-		username="setdb_user"
-		password="$YJ5*7[R%/16!lE" 
-		maxTotal="1000"
-		maxIdle="30"
-		maxWaitMillis="1000"/>
-		<Environment name="homePath" value="${catalina.home}/conf/Catalina/localhost/ServiceExperienceTool_DOA_Login" type="java.lang.String"/>
-		<Environment name="generalUploadPath" value="${catalina.home}/conf/Catalina/localhost/ServiceExperienceTool_DOA_Login/generalUpload" type="java.lang.String"/>
-	<Environment name="imagesUploadPath" value="${catalina.home}/conf/Catalina/localhost/ServiceExperienceTool_DOA_Login/images" type="java.lang.String"/>
+<Context>
+	<Resource name="jdbc/setdb"
+	auth="Container"
+	type="javax.sql.DataSource"
+	username="master"
+	password="nosecrets#"
+	driverClassName="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://78.68.50.137:3306/setdb?useUnicode=true&amp;characterEncoding=UTF-8"
+	connectionProperties="useUnicode=yes;characterEncoding=utf8;"
+	maxTotal="100"
+	maxIdle="30" />
+	<Environment name="homePath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool" type="java.lang.String"/>
+	<Environment name="generalUploadPath" 
+		value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\generalUpload" type="java.lang.String"/>
+	<Environment name="imagesUploadPath" value="${catalina.home}\conf\Catalina\localhost\ServiceExperienceTool\images" type="java.lang.String"/>
+	<Environment name="temporaryImagesNewsPath" value="http://78.68.50.137:8080/ServiceExperienceTool/images/news/" type="java.lang.String"/>
 </Context>

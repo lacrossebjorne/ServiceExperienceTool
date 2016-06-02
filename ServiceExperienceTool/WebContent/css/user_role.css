@@ -157,3 +157,5 @@ li { list-style-type: none; }
 }
 
 .has-error { border-color: red!important; }
+
+.w3-code {border-color:#2196f3 !important}

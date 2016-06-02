@@ -1,5 +1,7 @@
 package com.set.servlets;
 
+
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,12 @@ import com.set.entities.User;
 import com.set.servlets.helpers.UserDeserializer;
 
 
+/**
+ * @author Björn Dalberg
+ * @created 2 juni 2016
+ * 
+ * 
+ */
 @WebServlet("/userAdminServlet")
 public class UserAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

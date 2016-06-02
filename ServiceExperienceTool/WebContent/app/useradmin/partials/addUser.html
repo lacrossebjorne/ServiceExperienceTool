@@ -1,4 +1,4 @@
-			<div class="w3-blue-grey w3-padding-ver-16">
+			<div class="w3-theme w3-padding-ver-16">
 				<span ng-click="showHide('addUserView')" class="w3-closebtn">&times;</span>
 				<h3>Skapa SET-användare</h3>
 			</div>
@@ -73,9 +73,13 @@
 								<span class="w3-text-red" ng-message="pattern">Endast siffror är tillåtet</span>
 							</div>
 						</div>
-						<div class="w3-col s6">
+						<div class="w3-col s2">
 							<label>Aktiv</label>
 							<input type="checkbox" class="w3-check w3-input" name="enable" ng-model="user.enabled">
+						</div>
+						<div class="w3-col s4">
+							<label class="w3-margin-left">Profilbild</label>
+							<input type="file" class="w3-input w3-border-0" name="profilepicture" ng-model="user.profilepicture">
 						</div>
 					</div>
 					<div class="w3-row-padding">
@@ -100,6 +104,12 @@
 							</div>
 						</div>
 					</div>
+					<div class="w3-row-padding">
+						<div class="w3-col s12">
+							<label>Beskrivning</label>
+							<input class="w3-input w3-border" name="description" type="textarea" ng-model="user.description">
+						</div>
+					</div>
 					<div id="checkDiv" class="w3-row">
 						<div class="w3-col">
 							<span>Roller</span>
@@ -113,9 +123,9 @@
 						</div>
 					</div>
 					<button type="submit"
-						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom" ng-disabled="form.newUserForm.$invalid">Spara</button>
+						class="w3-btn w3-btn-block w3-theme w3-margin-bottom" ng-disabled="form.newUserForm.$invalid">Spara</button>
 					<button type="button"
-						class="w3-btn w3-btn-block w3-blue-grey w3-margin-bottom"
+						class="w3-btn w3-btn-block w3-theme w3-margin-bottom"
 						ng-click="showHide('addUserView')">Avbryt</button>
 				</form>
 			</div>

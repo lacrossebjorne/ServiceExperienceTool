@@ -1,3 +1,10 @@
+/*
+ * @author Björn Dalberg
+ * 
+ * API for connectivity to the backend.
+ * 
+ */
+
 'use strict';
 
 angular.module('useradmin')

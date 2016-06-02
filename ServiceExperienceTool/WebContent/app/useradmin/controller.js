@@ -1,3 +1,14 @@
+/**
+ * @author Björn Dalberg
+ * 
+ * Controller for useradmin module.
+ * Handles new user role input, editing of existing users and roles,
+ * listing of users and roles
+ * Uses AdminFactory for backend connections
+ *  
+ */
+
+
 'use strict'
 
 angular.module('useradmin')
@@ -14,6 +25,8 @@ angular.module('useradmin')
 	$scope.form = {};
 	/*$scope.usernameAvailable = true;*/
 	$scope.user.roles = [];
+	$scope.user.profilepicture = '';
+	$scope.user.description = '';
 	$scope.roleForm = {};
 	$scope.today = new Date();
 	$scope.isExpanded = false;
@@ -202,6 +215,8 @@ angular.module('useradmin')
     		$scope.user = {};
     		$scope.user.roles = [];
     		$scope.user.resetPassword = [];
+    		$scope.user.profilepicture = '';
+    		$scope.user.description = '';
     		self.user = {};
     		$scope.usernameValidationCheckKey = '';
     		$scope.form.newUserForm.$setPristine();
