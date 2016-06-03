@@ -108,8 +108,10 @@ public class MenuServlet extends HttpServlet {
 	}
 	
 	
-	/*
-	 * Inner class for parsing RESTful URLs
+
+	/**
+	 * An attempt at an URL parser for RESTful URLs associated with the menu service.
+	 *
 	 */
 	private class RestRequest {
 
@@ -126,7 +128,12 @@ public class MenuServlet extends HttpServlet {
 		private Integer allergenId;
 		private ResourceType resourceType;
 
-		public RestRequest(String pathInfo) throws ServletException {
+		/**
+		 * Parses an URL and returns an instance containing the parsed parameters
+		 * @param pathInfo		the pathInfo from the servlet request
+		 * @throws ServletException
+		 */
+		public RestRequest(String pathInfo) {
 
 			if(pathInfo == null){
 				resourceType = ResourceType.MENU;
