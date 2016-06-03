@@ -34,29 +34,34 @@
     	$("#calendar").fullCalendar({
     		googleCalendarApiKey: 'AIzaSyDYCuH7w2QXk7i17vHyFoYRD2jZxKXniQ8',
     		weekNumbers : true,
+    		weekends: true,
         	fixedWeekCount: true,
     		defaultView : 'month',
     		firstDay : 1,
     		defaultDate: '2016-05-15',
+    		minTime: '10:00:00',
+    		maxTime: '22:00:00',
 			eventLimit: true,
-			eventLimit: 2,
+			eventLimit: 4,
 			events: getEvents(),
     		resources : getResources(),
     		schedulerLicenseKey : 'CC-Attribution-NonCommercial-NoDerivatives',
     		header : {
     			left : '',
     			center : 'title',
-    			right : 'agendaWeek timelineWeek month prev next'
+    			right : 'myCustomButton timelineDay basicWeek month prev next'
     		},
+    		resourceAreaWidth: "15%",
             eventSources: [{
                                	url: 'ScheduleServlet?action=getAllEvents',
                                	type: 'GET',
                                	data: {
-                                   custom_param1: 'something',
-                                   color: 'yellow'
+                                   custom_param1: 'something'
                                	},
                                	success: function(data){
-       								events : data;                        		
+                               		
+       								console.log('Det gick ladda datan');
+       								console.log(data);
                               	}, 
                                	error: function() {
                                	    alert('there was an error while fetching events!');
@@ -66,28 +71,36 @@
                                  googleCalendarId: 'heed.mats@gmail.com',
                                  className: 'mitt googlekalenderEvent',
                                  color: 'grey'
-                             }] 
+                             }],
+                             eventClick: function(date, jsEvent, view) {
+
+                                 alert('Clicked on: ' + date.format());
+
+                                 alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                                 alert('Current view: ' + view.name);
+
+                                 // change the day's background color just for fun
+                                 $(this).css('background-color', 'red');
+
+                             },
+                             customButtons: {
+                                 myCustomButton: {
+                                     text: 'Custom',
+                                     click: function() {
+                                         alert('clicked the custom button!');
+                                     }
+                                 }
+                             },
     	});
-    	$("#calendar").fullCalendar('refetchEvents');
-    	
-    	var url2 = 'ScheduleServlet?action=getAllEvents';
-    	var res = [];
-    	$.ajax({
-    		dataType: 'json',
-    		url: url2,
-    		success: function(data){
-            	console.log(data.events[0]);
-            	$('#calendar').fullCalendar('refetchEvents');
-           	} 
-    	});
-    	console.log(res);
+    	//$("#calendar").fullCalendar('refetchEvents');
     	
     });
 </script>
 
 
 <div class="w3-container">
-  <div class="w3-col s4 w3-left w3-padding-8">
+  <div class="w3-col s4 w3-left w3-padding-8" ng-hide="true">
   
     <ul id="myMeny">
 		<li><div ng-include="'app/schedule/templates/dialogAddEvent.tmpl.html'"></div></li>
@@ -101,9 +114,10 @@
 	
   </div>
   <div class="w3-col s8 w3-center">
-    <div id="calendar"></div>
+    
   </div>
 </div>
+<div id="calendar"></div>
 <p style="height: 800px"></p>
 
 
