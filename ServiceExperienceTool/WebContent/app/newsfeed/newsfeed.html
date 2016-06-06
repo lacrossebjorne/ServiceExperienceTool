@@ -23,7 +23,6 @@ name="theName" id="theId" ng-model="theModel">
     <span class="w3-tiny w3-right">
     	<tag-display tags="x.tagData" title="Tags:" />
     	<div ng-if="x.isImportant" class="w3-container w3-blue"><strong>Viktig nyhet!</strong></div>
-    	<div>newsId: {{x.newsId}}</div>
     </span>
     <p>{{ x.content | limitTo:articleTextLimit}}</p>
     <button type="button" ng-click="expandArticle(articleTextLimit)" class="w3-btn w3-theme-d1 w3-margin-bottom">
