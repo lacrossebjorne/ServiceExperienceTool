@@ -7,11 +7,11 @@ function($scope, Newsfetch, newsfeedservice) {
   var minArticleTextLimit = 50;
   var initialStatusMessage = "Enter you news.";
   $scope.TEST = "Newsfetch.get";
-  $scope.limit = 1;
+  $scope.limit = 0;
   $scope.maxLimit = 100;
   $scope.articleTextLimit = minArticleTextLimit;
   $scope.news = [];
-  $scope.selectedPage = 0;
+  $scope.selectedPage = 1;
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
