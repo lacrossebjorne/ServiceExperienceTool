@@ -7,7 +7,7 @@ function($scope, Newsfetch, newsfeedservice) {
   var minArticleTextLimit = 50;
   var initialStatusMessage = "Enter you news.";
   $scope.TEST = "Newsfetch.get";
-  $scope.limit = 0;
+  $scope.limit = 1;
   $scope.maxLimit = 100;
   $scope.articleTextLimit = minArticleTextLimit;
   $scope.news = [];
