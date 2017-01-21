@@ -15,7 +15,7 @@ function($scope, Newsfetch, newsfeedservice) {
   $scope.isEditing = false;
   $scope.statusMessage = initialStatusMessage;
   $scope.isShowingDisabledEntries = false;
-  $scope.isShowingImportantEntries = false;
+  $scope.isShowingImportantEntries = true;
   $scope.bundle = {};
   $scope.testScope = { file: null};
   $scope.buttonsTemplate = "app/partials/editbuttons.html";
@@ -27,9 +27,7 @@ function($scope, Newsfetch, newsfeedservice) {
   getActiveNewsTags();
   
   function expand() {
-    if ($scope.limit == 0) {
-      $scope.isShowingImportantEntries = true;
-    } else {
+    if (!$scope.isShowingImportantEntries) {
       $scope.limit += 5;
       $scope.selectedPage++;
     }
@@ -60,7 +58,6 @@ function($scope, Newsfetch, newsfeedservice) {
       if ($scope.isShowingImportantEntries) {
         //turn $scope.isShowingImportantEntries to false
         $scope.isShowingImportantEntries = false;
-        //increase limit to avoid an endless loop
         $scope.limit = $scope.news.length;
         //call expand, since more news-entries should be fetched
         expand();
